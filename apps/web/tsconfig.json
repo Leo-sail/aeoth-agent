@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "lib/types",
+    "jsx": "react-jsx",
+    "lib": [
+      "ES2024",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+  ],
+  "references": [
+    {
+      "path": "../../packages/experimental/auto-review"
+    },
+    {
+      "path": "../../packages/client/store"
+    },
+    {
+      "path": "../../packages/client/web"
+    },
+    {
+      "path": "../../packages/client/modules"
+    }
+  ]
+}
