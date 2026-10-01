@@ -1,0 +1,55 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types",
+    "tsBuildInfoFile": "lib/tsconfig.host.tsbuildinfo",
+    "noEmitOnError": true
+  },
+  "files": [
+    "src/index.ts",
+    "src/types.ts",
+    "src/skills.ts"
+  ],
+  "references": [
+    {
+      "path": "../../../vendor/cordis"
+    },
+    {
+      "path": "../../../vendor/schemastery"
+    },
+    {
+      "path": "../../memory/memory"
+    },
+    {
+      "path": "../../skill/skill"
+    },
+    {
+      "path": "../../session-query/session-query"
+    },
+    {
+      "path": "../../typert/protocol"
+    },
+    {
+      "path": "../../typert/registry"
+    },
+    {
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../preset/agent-preset-registry"
+    },
+    {
+      "path": "../../util/atomic-write"
+    },
+    {
+      "path": "../../util/home-paths"
+    },
+    {
+      "path": "../../skill/curator"
+    },
+    {
+      "path": "../../memory/migration"
+    }
+  ]
+}

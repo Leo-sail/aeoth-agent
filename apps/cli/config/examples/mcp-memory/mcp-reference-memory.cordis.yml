@@ -1,0 +1,32 @@
+# Opt-in reference for @modelcontextprotocol/server-memory 2026.7.4. Install
+# the pinned executable first; DSH starts it but does not run a package manager.
+# This overlay also selects the Aeoth provider adapter: the reference server's
+# knowledge graph is namespaced into Aeoth MEMORY/USER entries.
+- id: memory
+  config:
+    provider: mcp:reference-memory
+    memoryCharLimit: 2200
+    userCharLimit: 1375
+    maxSearchResults: 10
+
+- id: memory-mcp
+  disabled: false
+  config:
+    mode: reference-memory
+    providerName: mcp:reference-memory
+    serverName: reference_memory
+    readGraphTool: read_graph
+    createEntitiesTool: create_entities
+    deleteEntitiesTool: delete_entities
+
+- insert:
+    - id: memory-mcp-reference
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: reference_memory
+        transport: stdio
+        command: mcp-server-memory
+        cwd: !!js process.cwd()
+        env:
+          MEMORY_FILE_PATH: !!js >-
+            process.env.MEMORY_FILE_PATH?.trim() || (() => { throw new Error('Set MEMORY_FILE_PATH to an isolated absolute path for this profile') })()
