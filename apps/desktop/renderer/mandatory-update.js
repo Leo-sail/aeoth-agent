@@ -16,7 +16,6 @@ function render(view) {
   const failed = update.phase === 'error'
   const ready = update.phase === 'ready' || (failed && update.failedOperation === 'install')
   const downloadable = update.phase === 'available' || (failed && update.failedOperation === 'download')
-  const authenticationRequired = policy.error === 'authentication-required'
   const preparationMessages = {
     'stop-failed': messages.updateStopFailed,
     'tasks-changed': messages.updateTasksChanged,
@@ -44,7 +43,7 @@ function render(view) {
     detail = view.restart === 'stopping-tasks' ? messages.mandatoryStopping : messages.mandatoryRestarting
     status = ''; primary = ''; action = ''
   }
-  const error = localError ?? view.error ?? (authenticationRequired ? messages.policyLoginRequired : failed
+  const error = localError ?? view.error ?? (failed
     ? update.failedOperation === 'download' ? messages.mandatoryDownloadFailed
       : update.failedOperation === 'install'
         ? preparationMessages[update.preparationFailure] ?? messages.mandatoryInstallFailed
@@ -72,8 +71,8 @@ function render(view) {
   element('update').disabled = busy && !confirming
   element('later').textContent = messages.updateLater
   element('later').hidden = !confirmation?.active
-  element('refresh').textContent = authenticationRequired ? messages.policyLogin : messages.mandatoryRefresh
-  element('refresh').hidden = confirming || view.restart !== undefined || (!authenticationRequired && (!!primary || !fallback))
+  element('refresh').textContent = messages.mandatoryRefresh
+  element('refresh').hidden = confirming || view.restart !== undefined || (!!primary || !fallback)
   element('refresh').disabled = busy || policy.checking
   element('page').textContent = navigation ? messages.mandatoryReopen : messages.mandatoryPage
   element('page').hidden = !fallback || confirming || policy.page === undefined
