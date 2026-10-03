@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 47fe2f1f1aa0fd4d
+  zh: 47fe2f1f1aa0fd4d
+/deepseek-ai-dsh-office-to-pdf:
+  en: fc7d38b1fd8bd1d0
+  zh: 580c51545286af31
+/deepseek-ai-dsh-office-to-pdf/summary:
+  en: 5c24116c62ea3102
+  zh: 82579a531f501463
+/deepseek-ai-dsh-office-to-pdf/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: a134331a31395608
+/deepseek-ai-dsh-office-to-pdf/use-this-package:
+  en: c73fa332e8991a85
+  zh: 03472b39fb3cb4f4
+/deepseek-ai-dsh-office-to-pdf/understand-the-implementation:
+  en: 2cd10fdd5204d64a
+  zh: 769a79b7d684fda4
+/deepseek-ai-dsh-office-to-pdf/further-exploration:
+  en: 4d5e635227d14056
+  zh: 6c72a032786acd55
+/deepseek-ai-dsh-office-to-pdf/model-experience:
+  en: b03ae5780f8495eb
+  zh: 2a5428663141e3db
+/deepseek-ai-dsh-office-to-pdf/model-experience/kv-cache-effect:
+  en: e77332dfb6691852
+  zh: 2d7ce43f908b35ef
+/deepseek-ai-dsh-office-to-pdf/known-limitations-and-deferred-work:
+  en: 6cd56e2c8255ffd9
+  zh: 75891a4136f929e0
+/deepseek-ai-dsh-office-to-pdf/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: cd404984195992ec
+/deepseek-ai-dsh-office-to-pdf/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

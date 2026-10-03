@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: f3a2507c14c39ab5
+  zh: f3a2507c14c39ab5
+/deepseek-ai-dsh-typert-loader:
+  en: a36dc226bf1f8372
+  zh: 043fb410e2037c71
+/deepseek-ai-dsh-typert-loader/summary:
+  en: 23a25533f3e8fcf2
+  zh: 86ffea4fb4336da8
+/deepseek-ai-dsh-typert-loader/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-typert-loader/use-this-package:
+  en: a755161460d28bd2
+  zh: 15db6beb30e87926
+/deepseek-ai-dsh-typert-loader/use-this-package/minimal-configuration:
+  en: d98e0b2fbcacaa2e
+  zh: c8f23b8e4130ac4e
+/deepseek-ai-dsh-typert-loader/use-this-package/what-gets-registered:
+  en: 01318fcba39e9b0f
+  zh: c5f6528a91b335ac
+/deepseek-ai-dsh-typert-loader/use-this-package/observable-behavior-and-failures:
+  en: 01494e9fbd469ec8
+  zh: 3025d870c0f36e2b
+/deepseek-ai-dsh-typert-loader/understand-the-implementation:
+  en: 519c0242ef4d9e21
+  zh: a72967feb0ea1b41
+/deepseek-ai-dsh-typert-loader/understand-the-implementation/design-concept:
+  en: 03fc077e58271e18
+  zh: 20f8fc02008cee5e
+/deepseek-ai-dsh-typert-loader/understand-the-implementation/manifest-validation:
+  en: eb246aef15ea0532
+  zh: 7a4a7bcc788b3ba3
+/deepseek-ai-dsh-typert-loader/understand-the-implementation/caching-and-ownership:
+  en: 38e781e052fdf44e
+  zh: d8f6b4d119bf9856
+/deepseek-ai-dsh-typert-loader/understand-the-implementation/source-map:
+  en: 40a8a6723d33b335
+  zh: 5b806e49b6279818
+/deepseek-ai-dsh-typert-loader/further-exploration:
+  en: 21639e3f8d443d71
+  zh: d89e20a61ee756e3
+/deepseek-ai-dsh-typert-loader/model-experience:
+  en: d3555a846d0b19a6
+  zh: eb4815fbd81a3561
+/deepseek-ai-dsh-typert-loader/model-experience/kv-cache-effect:
+  en: f8a0ad3d0fc0eb32
+  zh: 7649a694b279f5f3
+/deepseek-ai-dsh-typert-loader/known-limitations-and-deferred-work:
+  en: a7e281826b58b218
+  zh: b4347c965151a1a9
+/deepseek-ai-dsh-typert-loader/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-typert-loader/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

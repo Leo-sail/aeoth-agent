@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: dbd24dfa152c1cbc
+  zh: dbd24dfa152c1cbc
+/deepseek-ai-dsh-client-ui-settings-agent-loop:
+  en: 375e454589cac6c8
+  zh: 7d609e69bc62fa77
+/deepseek-ai-dsh-client-ui-settings-agent-loop/summary:
+  en: b99804be16355cb5
+  zh: 0b2edfc09a33bc90
+/deepseek-ai-dsh-client-ui-settings-agent-loop/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-settings-agent-loop/use-this-package:
+  en: 189a3f8d22570043
+  zh: 6bda29a5eff7d4bd
+/deepseek-ai-dsh-client-ui-settings-agent-loop/understand-the-implementation:
+  en: 6eecfb205f540f65
+  zh: 530d8b53c355efba
+/deepseek-ai-dsh-client-ui-settings-agent-loop/further-exploration:
+  en: 14267229f22a17b0
+  zh: e59359820f0c2c2f
+/deepseek-ai-dsh-client-ui-settings-agent-loop/model-experience:
+  en: 6b7c6f82ab6c8435
+  zh: 4517689c899abcbe
+/deepseek-ai-dsh-client-ui-settings-agent-loop/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: 6e1c9a8fdde89577
+/deepseek-ai-dsh-client-ui-settings-agent-loop/known-limitations-and-deferred-work:
+  en: 2696c3c3a1328b84
+  zh: 10274e668ec7ea02
+/deepseek-ai-dsh-client-ui-settings-agent-loop/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 1d018d360d563cca
+/deepseek-ai-dsh-client-ui-settings-agent-loop/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

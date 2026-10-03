@@ -1,0 +1,54 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 478a06ea25b24fdb
+  zh: 478a06ea25b24fdb
+/deepseek-ai-dsh-home-paths:
+  en: 6a18bcb84ce35987
+  zh: f26144b659925421
+/deepseek-ai-dsh-home-paths/summary:
+  en: e323d76943ccff00
+  zh: e6dbada925107b58
+/deepseek-ai-dsh-home-paths/table-of-contents:
+  en: 80b31a934611cb4a
+  zh: 05f3f7f9cb2fd881
+/deepseek-ai-dsh-home-paths/use-this-package:
+  en: 2474a5735016258e
+  zh: d5cba67f4ea3e429
+/deepseek-ai-dsh-home-paths/use-this-package/resolving-the-home:
+  en: fafb7db51ac61b55
+  zh: 48067760e07f676f
+/deepseek-ai-dsh-home-paths/use-this-package/displaying-a-home:
+  en: a671bbe310756540
+  zh: e75bc399cce91429
+/deepseek-ai-dsh-home-paths/use-this-package/expanding-user-paths:
+  en: 80bf5dead177c1d8
+  zh: 6faf257afbb9c246
+/deepseek-ai-dsh-home-paths/use-this-package/canonicalizing-watch-paths:
+  en: 55c5d8179de704c5
+  zh: b86395e9605807cd
+/deepseek-ai-dsh-home-paths/understand-the-implementation:
+  en: a3896db883f77b47
+  zh: 45c71eccc31682b5
+/deepseek-ai-dsh-home-paths/understand-the-implementation/source-map:
+  en: ab001f10961a5a98
+  zh: 2209a79d2d5d9b68
+/deepseek-ai-dsh-home-paths/understand-the-implementation/resolution-rules:
+  en: 3a0e32c24c7b6323
+  zh: 9faf402fe1b4d11f
+/deepseek-ai-dsh-home-paths/understand-the-implementation/canonicalization-mechanics:
+  en: a79aecd162317dc2
+  zh: 342f9bae0231c3de
+/deepseek-ai-dsh-home-paths/further-exploration:
+  en: 04778ce6fc4d0a55
+  zh: 0e702a6a927716ef
+/deepseek-ai-dsh-home-paths/known-limitations-and-deferred-work:
+  en: aa4aecf31a596da0
+  zh: 22dea997610fae2d
+/deepseek-ai-dsh-home-paths/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-home-paths/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

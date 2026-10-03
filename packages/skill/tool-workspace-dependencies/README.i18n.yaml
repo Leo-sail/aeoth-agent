@@ -1,0 +1,69 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 6fcf284a0665601d
+  zh: 6fcf284a0665601d
+/deepseek-ai-dsh-tool-workspace-dependencies:
+  en: 36dcf46cd91bba1f
+  zh: 576d796ea71f640c
+/deepseek-ai-dsh-tool-workspace-dependencies/summary:
+  en: 1b99bf97d4663fce
+  zh: f9112064fbfd663b
+/deepseek-ai-dsh-tool-workspace-dependencies/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 43ad67236ccda19a
+/deepseek-ai-dsh-tool-workspace-dependencies/use-this-package:
+  en: 5e244ff5e354bc47
+  zh: 2ab0c4288708a59c
+/deepseek-ai-dsh-tool-workspace-dependencies/use-this-package/minimal-configuration:
+  en: 2597057dd23a3ca8
+  zh: bf6c6ce74073413f
+/deepseek-ai-dsh-tool-workspace-dependencies/use-this-package/payload-layout:
+  en: 5cf9926fb545fae1
+  zh: 33655d2e6a11d3bb
+/deepseek-ai-dsh-tool-workspace-dependencies/use-this-package/build-a-carrier-payload:
+  en: 0f3e570525053f09
+  zh: 1b0cd3b653e1bd5d
+/deepseek-ai-dsh-tool-workspace-dependencies/understand-the-implementation:
+  en: 6483ea7f648cf57f
+  zh: 772c40e5cbed21f7
+/deepseek-ai-dsh-tool-workspace-dependencies/further-exploration:
+  en: e78508a7d92652c4
+  zh: 5788b94b7af15ada
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-schema:
+  en: e4c7376d4f29dbd5
+  zh: 6b7a9eaf69c9ea53
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-schema/what-the-model-sees:
+  en: 5e004798009885c4
+  zh: e80c616c7ece2b08
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-schema/token-effect:
+  en: 615cce9c7fcb746d
+  zh: 6b9f58e263a38d61
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-schema/kv-cache-effect:
+  en: 4ee92571a5f8a71a
+  zh: 6fa2a5b21b9f0150
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-result:
+  en: f8ffc2b983f05ffc
+  zh: 8573891441963be4
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-result/what-the-model-sees:
+  en: c25c9db51e7d06da
+  zh: a4cdcd37bd501503
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-result/token-effect:
+  en: 0efada793d1e65b1
+  zh: 3eed908f43174b88
+/deepseek-ai-dsh-tool-workspace-dependencies/model-experience/tool-result/kv-cache-effect:
+  en: 42325f307b6c259d
+  zh: d53a45f1c00ba16f
+/deepseek-ai-dsh-tool-workspace-dependencies/known-limitations-and-deferred-work:
+  en: 8aeacc5404854231
+  zh: 43d970fa23ac2473
+/deepseek-ai-dsh-tool-workspace-dependencies/known-limitations-and-deferred-work/dev-note:
+  en: b130789a3f66dc17
+  zh: 065b8c8a44d29a17
+/deepseek-ai-dsh-tool-workspace-dependencies/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

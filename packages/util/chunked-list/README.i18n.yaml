@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: e1f355d61153aaaf
+  zh: e1f355d61153aaaf
+/deepseek-ai-dsh-chunked-list:
+  en: 5a07c629854f4bd6
+  zh: bc82f5005c4f447e
+/deepseek-ai-dsh-chunked-list/summary:
+  en: 077eaa5ca57f3bf6
+  zh: 01d4e2a8300a5a43
+/deepseek-ai-dsh-chunked-list/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 75f067b4c4218355
+/deepseek-ai-dsh-chunked-list/use-this-package:
+  en: 6808bfba89c5ffbf
+  zh: f80761fdcd3db317
+/deepseek-ai-dsh-chunked-list/understand-the-implementation:
+  en: 4cfe354721f48975
+  zh: 11bb4726e89dd80b
+/deepseek-ai-dsh-chunked-list/further-exploration:
+  en: b4d3a385f587367e
+  zh: d737d762c10c1fbd
+/deepseek-ai-dsh-chunked-list/model-experience:
+  en: bc7e4d8a0c8b8ebb
+  zh: e11fe3bd45d4354a
+/deepseek-ai-dsh-chunked-list/model-experience/kv-cache-effect:
+  en: e7ba08477bf22c4e
+  zh: c38c528fe563bb51
+/deepseek-ai-dsh-chunked-list/known-limitations-and-deferred-work:
+  en: fdc87d52574748eb
+  zh: e1e7cbd86cd2bde0
+/deepseek-ai-dsh-chunked-list/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-chunked-list/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

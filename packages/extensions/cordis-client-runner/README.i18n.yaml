@@ -1,0 +1,84 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 8a2f112354ee3ec0
+  zh: 8a2f112354ee3ec0
+/deepseek-ai-dsh-cordis-client-runner:
+  en: ea84dfc91fbdbf90
+  zh: 3c70bc4bb1b1a7ab
+/deepseek-ai-dsh-cordis-client-runner/summary:
+  en: 7dd485b0fe319379
+  zh: ca515d3d74eea46c
+/deepseek-ai-dsh-cordis-client-runner/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-cordis-client-runner/use-this-package:
+  en: 81f07e2cdf12ca0f
+  zh: 6aa113070967571f
+/deepseek-ai-dsh-cordis-client-runner/use-this-package/what-the-page-does:
+  en: c488f7d2b89b8414
+  zh: c6e60cf498da3c4e
+/deepseek-ai-dsh-cordis-client-runner/use-this-package/what-the-run-surface-offers:
+  en: 155c8371306a5cda
+  zh: 8b4cd48a0fc3f545
+/deepseek-ai-dsh-cordis-client-runner/use-this-package/lifecycle-boundaries:
+  en: 8444eaa96ee05a5e
+  zh: 621bb78731bd0138
+/deepseek-ai-dsh-cordis-client-runner/understand-the-implementation:
+  en: 44609502c8c2a2a6
+  zh: a4d3bb2e541b222a
+/deepseek-ai-dsh-cordis-client-runner/understand-the-implementation/design-philosophy:
+  en: 338b045de81df831
+  zh: ddaa4bd98359bd30
+/deepseek-ai-dsh-cordis-client-runner/understand-the-implementation/source-map:
+  en: 5ae44bbbaa6a8fed
+  zh: 392e5cace2db6194
+/deepseek-ai-dsh-cordis-client-runner/understand-the-implementation/inspecting-slot-inputs:
+  en: 33f14a7fff7835e6
+  zh: 53838ac8d4a79600
+/deepseek-ai-dsh-cordis-client-runner/understand-the-implementation/how-a-run-is-carried-out:
+  en: a6916d47719acae5
+  zh: 7949755b8a782b08
+/deepseek-ai-dsh-cordis-client-runner/further-exploration:
+  en: 6e58f2c820e4e27e
+  zh: 726b4ed7e61a8e67
+/deepseek-ai-dsh-cordis-client-runner/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-cordis-client-runner/model-experience/run-resolution-relayed-by-the-host:
+  en: 4573c6b269e4fecb
+  zh: 7f76baf2f74bf9cc
+/deepseek-ai-dsh-cordis-client-runner/model-experience/run-resolution-relayed-by-the-host/what-the-model-sees:
+  en: 0f941f02680ba2ed
+  zh: d62dd787dea11f5f
+/deepseek-ai-dsh-cordis-client-runner/model-experience/run-resolution-relayed-by-the-host/token-effect:
+  en: 37462821d8e35933
+  zh: bb94b21eff2911e8
+/deepseek-ai-dsh-cordis-client-runner/model-experience/run-resolution-relayed-by-the-host/kv-cache-effect:
+  en: da210ff9eb982144
+  zh: 633a73ac9bc9e5e6
+/deepseek-ai-dsh-cordis-client-runner/model-experience/render-failure-after-the-run-settled:
+  en: 524d638584142d72
+  zh: 3ffc463419fba2e1
+/deepseek-ai-dsh-cordis-client-runner/model-experience/render-failure-after-the-run-settled/what-the-model-sees:
+  en: f347bd0b5f9e297e
+  zh: 0b7bc88659e38306
+/deepseek-ai-dsh-cordis-client-runner/model-experience/render-failure-after-the-run-settled/token-effect:
+  en: c8c1657fa4e37ca4
+  zh: d03af1593a9b4d3a
+/deepseek-ai-dsh-cordis-client-runner/model-experience/render-failure-after-the-run-settled/kv-cache-effect:
+  en: d2d35b83beb936b2
+  zh: 604aa6929c7a9c76
+/deepseek-ai-dsh-cordis-client-runner/known-limitations-and-deferred-work:
+  en: 3bc7c1227ca61e9e
+  zh: b596309cd6707da7
+/deepseek-ai-dsh-cordis-client-runner/known-limitations-and-deferred-work/dev-note:
+  en: c4cff307d238c93a
+  zh: d1a9ff4164056741
+/deepseek-ai-dsh-cordis-client-runner/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-cordis-client-runner/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: c816d3655f06aa9b
+  zh: c816d3655f06aa9b
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice:
+  en: 636635d9dabcf16d
+  zh: e331bf5314446b3e
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/summary:
+  en: a4471485c1fb6222
+  zh: 4d74dbe788b50f28
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 364c80ee00a374ff
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/use-this-package:
+  en: 569056b6483a5ed9
+  zh: ed9dbcb71d48eb98
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/understand-the-implementation:
+  en: bb96ebc59b8ed6a5
+  zh: e59452eb0ddd9fe6
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/further-exploration:
+  en: 5c64426add9d79d6
+  zh: 4e06aa2ead8d2ccd
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/model-experience:
+  en: 3c5a85f8b7129ce8
+  zh: d5f491ca88d9a810
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/model-experience/kv-cache-effect:
+  en: b5ec79db2e1d0dbc
+  zh: e5aff567ae5ee6fc
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/known-limitations-and-deferred-work:
+  en: c9a41fba4d25fe72
+  zh: 9453cca1d6806549
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/known-limitations-and-deferred-work/dev-note:
+  en: 9b9e73fe7bb2077d
+  zh: dfab9ff65dadbef0
+/deepseek-ai-dsh-experimental-speech-to-text-sensevoice/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

@@ -1,0 +1,69 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 901a140201af8612
+  zh: 901a140201af8612
+/deepseek-ai-dsh-storage:
+  en: 1cc96581ed1fb1f8
+  zh: 20a7efe7e52ef7f9
+/deepseek-ai-dsh-storage/summary:
+  en: 2b50be8669cf5f39
+  zh: 11db42c426a21730
+/deepseek-ai-dsh-storage/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-storage/use-this-package:
+  en: 1328892ee0bc22ed
+  zh: a49eab5e48a7e70b
+/deepseek-ai-dsh-storage/use-this-package/when-to-use-it:
+  en: 6e4ea48645af5d26
+  zh: cfe3e192216030d1
+/deepseek-ai-dsh-storage/use-this-package/a-minimal-composition:
+  en: 13a046a070842dc7
+  zh: d72aa6b5cd515c99
+/deepseek-ai-dsh-storage/use-this-package/what-you-get:
+  en: 240ae33969a3b666
+  zh: e9efb4a5d9a599e2
+/deepseek-ai-dsh-storage/use-this-package/failures-and-recovery:
+  en: 6dd7336d5970b6dd
+  zh: 7a729ff667dff0ff
+/deepseek-ai-dsh-storage/understand-the-implementation:
+  en: c0990f4e7806a4c4
+  zh: 5250e7b6a80653a4
+/deepseek-ai-dsh-storage/understand-the-implementation/design-concept:
+  en: bbdc4833afb85dad
+  zh: 7494de01d5a4aecf
+/deepseek-ai-dsh-storage/understand-the-implementation/the-backend-contract:
+  en: edf51e7f55dfd65c
+  zh: 52b70d5413943c13
+/deepseek-ai-dsh-storage/understand-the-implementation/source-map:
+  en: baba5e402ec2735c
+  zh: f383e37592f25864
+/deepseek-ai-dsh-storage/further-exploration:
+  en: e109e62d79ff584e
+  zh: 3060da2bbb96eb04
+/deepseek-ai-dsh-storage/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-storage/model-experience/backend-and-form-registrations:
+  en: 28a0394f484bf87b
+  zh: 9a08192ffdbb8ac3
+/deepseek-ai-dsh-storage/model-experience/backend-and-form-registrations/what-the-model-sees:
+  en: fda1261c4b916ad3
+  zh: f8f4974cbf427621
+/deepseek-ai-dsh-storage/model-experience/backend-and-form-registrations/token-effect:
+  en: 5b83ac7ce1ea1346
+  zh: 04b7d01da48ec90d
+/deepseek-ai-dsh-storage/model-experience/backend-and-form-registrations/kv-cache-effect:
+  en: 5126a2c239cb5913
+  zh: 0869bc380ea1dc1a
+/deepseek-ai-dsh-storage/known-limitations-and-deferred-work:
+  en: 9b859664790011f1
+  zh: da1d6fdb7552fe93
+/deepseek-ai-dsh-storage/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-storage/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

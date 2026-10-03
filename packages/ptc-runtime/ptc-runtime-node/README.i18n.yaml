@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 988d2f1d1e945ab8
+  zh: 988d2f1d1e945ab8
+/deepseek-ai-dsh-ptc-runtime-node:
+  en: 7e1a8657a212c70b
+  zh: afb7a8c6a3afd718
+/deepseek-ai-dsh-ptc-runtime-node/summary:
+  en: c3cee830554687a0
+  zh: c6bc7062b3242a1e
+/deepseek-ai-dsh-ptc-runtime-node/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 725b47765ee8f30b
+/deepseek-ai-dsh-ptc-runtime-node/use-this-package:
+  en: 246231cf2a529550
+  zh: 2b4ed96194acc639
+/deepseek-ai-dsh-ptc-runtime-node/use-this-package/configuration:
+  en: 0d8ce3fa280bf8c5
+  zh: b4a71ff080c046da
+/deepseek-ai-dsh-ptc-runtime-node/use-this-package/execution-and-results:
+  en: 6d65b39223ca9f7a
+  zh: 96f96341ecab1317
+/deepseek-ai-dsh-ptc-runtime-node/use-this-package/deadlines-and-cancellation:
+  en: 803c1a6e876c68e6
+  zh: 646232ebc4770680
+/deepseek-ai-dsh-ptc-runtime-node/use-this-package/failures:
+  en: 7682e50f9dcfa25c
+  zh: ddcb3502e12be06f
+/deepseek-ai-dsh-ptc-runtime-node/understand-the-implementation:
+  en: 9020b491a39e4bf5
+  zh: bcd1b2b1a3bde7f3
+/deepseek-ai-dsh-ptc-runtime-node/understand-the-implementation/launch-and-control:
+  en: 6a7822f7625b1031
+  zh: c1e1179391e89a3f
+/deepseek-ai-dsh-ptc-runtime-node/understand-the-implementation/source-and-built-bootstraps:
+  en: c01071304a9d563a
+  zh: 2938a64b13a257d8
+/deepseek-ai-dsh-ptc-runtime-node/understand-the-implementation/source-map:
+  en: a6702856dec3d449
+  zh: 0c442a74c8005571
+/deepseek-ai-dsh-ptc-runtime-node/further-exploration:
+  en: 13fa20f210bd1b51
+  zh: b808771ca61857a9
+/deepseek-ai-dsh-ptc-runtime-node/model-experience:
+  en: 860e85b43c71bd0e
+  zh: 69b0fb05f9c5e43c
+/deepseek-ai-dsh-ptc-runtime-node/model-experience/kv-cache-effect:
+  en: 40294c1c31b74824
+  zh: d91e7b78c0619c7e
+/deepseek-ai-dsh-ptc-runtime-node/known-limitations-and-deferred-work:
+  en: 88eac5d4119c11f6
+  zh: ba0861bf07c5e9df
+/deepseek-ai-dsh-ptc-runtime-node/known-limitations-and-deferred-work/dev-note:
+  en: d5ba9639b94a980e
+  zh: 13bf2f5c1a9da69b
+/deepseek-ai-dsh-ptc-runtime-node/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

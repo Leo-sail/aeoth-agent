@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 987905e6148ff7bf
+  zh: 987905e6148ff7bf
+/deepseek-ai-dsh-lsp:
+  en: bb557e65ee422869
+  zh: c08d0c2e9b2ee2ef
+/deepseek-ai-dsh-lsp/summary:
+  en: 30ac03ff33731529
+  zh: a166cd4942b3a912
+/deepseek-ai-dsh-lsp/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 2d021b7a4a4677d8
+/deepseek-ai-dsh-lsp/use-this-package:
+  en: 39ddcc57203b5a43
+  zh: ee46b6bb58434337
+/deepseek-ai-dsh-lsp/use-this-package/when-to-choose-it:
+  en: 104953d3732e7d81
+  zh: 54acd5d4742bd728
+/deepseek-ai-dsh-lsp/use-this-package/composing-a-navigation-stack:
+  en: 64b371f995cde1fa
+  zh: 7193378b7500fbc3
+/deepseek-ai-dsh-lsp/use-this-package/the-four-operations:
+  en: 201a9b2f8dfb13eb
+  zh: c9041adde15602c1
+/deepseek-ai-dsh-lsp/use-this-package/failures-and-recovery:
+  en: eeeff6f68bba6807
+  zh: a83372441c505bb6
+/deepseek-ai-dsh-lsp/understand-the-implementation:
+  en: 1e0acac55fc6c314
+  zh: fe4ebe8a86dc480f
+/deepseek-ai-dsh-lsp/understand-the-implementation/design-philosophy:
+  en: d58827b4d7c92eb2
+  zh: a71cef5e4c58dd38
+/deepseek-ai-dsh-lsp/understand-the-implementation/source-map:
+  en: 25af1e58f8ab8854
+  zh: 90aec5ee2441bd96
+/deepseek-ai-dsh-lsp/understand-the-implementation/registration-and-selection-lifecycle:
+  en: 549e97f436b1570c
+  zh: df0436c58dd31175
+/deepseek-ai-dsh-lsp/further-exploration:
+  en: 68ddb41fb1af51fb
+  zh: 6a68fc24a6a06d0c
+/deepseek-ai-dsh-lsp/model-experience:
+  en: c3bcb4f1107907d4
+  zh: 961e245182fac6d7
+/deepseek-ai-dsh-lsp/model-experience/kv-cache-effect:
+  en: 64354484a5367fbc
+  zh: aec3e5c7933389b6
+/deepseek-ai-dsh-lsp/known-limitations-and-deferred-work:
+  en: e7ba99257e4da9e6
+  zh: e384e82d4c707af1
+/deepseek-ai-dsh-lsp/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-lsp/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

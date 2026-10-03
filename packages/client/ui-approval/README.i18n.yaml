@@ -1,0 +1,33 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 37ec6ea8bd073936
+  zh: 37ec6ea8bd073936
+/deepseek-ai-dsh-client-ui-approval:
+  en: b2f2246f0d0ce69c
+  zh: e4919920818c09b5
+/deepseek-ai-dsh-client-ui-approval/summary:
+  en: 106de6f77b12afdb
+  zh: b8bd292d3e14aeec
+/deepseek-ai-dsh-client-ui-approval/table-of-contents:
+  en: 2bfa677a50bd924c
+  zh: 2f4b55ab42747bea
+/deepseek-ai-dsh-client-ui-approval/model-experience:
+  en: 8161dce49e9f899c
+  zh: a17401e1e78ba6be
+/deepseek-ai-dsh-client-ui-approval/model-experience/kv-cache-effect:
+  en: adf7112e0691b89e
+  zh: 14eeddcff985119f
+/deepseek-ai-dsh-client-ui-approval/known-limitations-and-deferred-work:
+  en: ae644102ed52f7ee
+  zh: e109de1d517a3a94
+/deepseek-ai-dsh-client-ui-approval/known-limitations-and-deferred-work/dev-note:
+  en: 240c92ce5e544116
+  zh: 5bfae598cc20a3af
+/deepseek-ai-dsh-client-ui-approval/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-approval/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

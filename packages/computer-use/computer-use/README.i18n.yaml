@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 10932e46e060d620
+  zh: 10932e46e060d620
+/deepseek-ai-dsh-computer-use:
+  en: 2efee0c5f0d577bc
+  zh: fef4b81bfc121052
+/deepseek-ai-dsh-computer-use/summary:
+  en: b1efc7cd9478fdb2
+  zh: 5db31dc1577e1309
+/deepseek-ai-dsh-computer-use/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 405b30feaf48c087
+/deepseek-ai-dsh-computer-use/use-this-package:
+  en: 0a298fbbcd8dbc00
+  zh: 950de2af46c87f82
+/deepseek-ai-dsh-computer-use/understand-the-implementation:
+  en: c8a8d72c6944586c
+  zh: 0b216f8e9599543d
+/deepseek-ai-dsh-computer-use/further-exploration:
+  en: b1bdbcbc150036b3
+  zh: 1d356e0522587abc
+/deepseek-ai-dsh-computer-use/model-experience:
+  en: 8780c250dfaefaaa
+  zh: 1c4b3598a131fb65
+/deepseek-ai-dsh-computer-use/model-experience/kv-cache-effect:
+  en: 0cc866a67a19d08b
+  zh: e1c3bb5ee2fed596
+/deepseek-ai-dsh-computer-use/known-limitations-and-deferred-work:
+  en: 6b8a90585a227a46
+  zh: 7e0e3bf026fd67e9
+/deepseek-ai-dsh-computer-use/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: d2157f53bf08eeb4
+/deepseek-ai-dsh-computer-use/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

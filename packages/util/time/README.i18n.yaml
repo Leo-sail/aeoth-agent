@@ -1,0 +1,36 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: a7f295fb20c0c81a
+  zh: a7f295fb20c0c81a
+/dsh-util-time:
+  en: bc299a9b8fe7717f
+  zh: 896661ee0c4edf25
+/dsh-util-time/summary:
+  en: e1c56533cdc43242
+  zh: fba954db8b3e6bb1
+/dsh-util-time/table-of-contents:
+  en: cd2a60a905c978d6
+  zh: cc71d387d0cbd442
+/dsh-util-time/use-this-package:
+  en: 1472cf19b0bd7447
+  zh: 73bf36759bc2d492
+/dsh-util-time/api:
+  en: cbb4b726e939fc03
+  zh: e9df4a7487433146
+/dsh-util-time/model-experience:
+  en: 02d997b5c1318f27
+  zh: 5c55d060adea756d
+/dsh-util-time/model-experience/kv-cache-effect:
+  en: f63edbd9621eee70
+  zh: 5e3982508b32b039
+/dsh-util-time/known-limitations-and-deferred-work:
+  en: 130db809b9a6db90
+  zh: 5b0b72ada5b131dd
+/dsh-util-time/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 1d018d360d563cca
+/dsh-util-time/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

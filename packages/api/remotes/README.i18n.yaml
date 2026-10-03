@@ -1,0 +1,42 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 1de81f36c648ef18
+  zh: 1de81f36c648ef18
+/deepseek-ai-dsh-api-remotes:
+  en: b5349178e12f23fe
+  zh: dfdb4de9d99fbc7b
+/deepseek-ai-dsh-api-remotes/summary:
+  en: dc5760aebe485b72
+  zh: 750e8aafbfb24d4b
+/deepseek-ai-dsh-api-remotes/table-of-contents:
+  en: a7a78c6d1aeebeb3
+  zh: 4bb69f32d8b05ba3
+/deepseek-ai-dsh-api-remotes/use-this-package:
+  en: b3b6bff516fff1a8
+  zh: 1678531175f496f1
+/deepseek-ai-dsh-api-remotes/forwarded-host-events:
+  en: d6d82bf0e55ae5e9
+  zh: c3a0c80f8b115039
+/deepseek-ai-dsh-api-remotes/build-boundary:
+  en: 7a9934a3ba5b185f
+  zh: 40457fd5707f57f0
+/deepseek-ai-dsh-api-remotes/model-experience:
+  en: 6a60ae036c71e76f
+  zh: bf5e86a5ac5b4be4
+/deepseek-ai-dsh-api-remotes/model-experience/kv-cache-effect:
+  en: 6b51b98ce6368599
+  zh: 3d7a63126352741d
+/deepseek-ai-dsh-api-remotes/known-limitations-and-deferred-work:
+  en: 00a837c9e7b5a800
+  zh: 1b86e789327b7798
+/deepseek-ai-dsh-api-remotes/known-limitations-and-deferred-work/dev-note:
+  en: 947ba019d2a6a7e7
+  zh: ad4d687f3bc77dbb
+/deepseek-ai-dsh-api-remotes/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-api-remotes/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

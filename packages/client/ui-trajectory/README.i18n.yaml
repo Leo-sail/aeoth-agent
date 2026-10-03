@@ -1,0 +1,54 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 3b963333b0d17f48
+  zh: 3b963333b0d17f48
+/deepseek-ai-dsh-client-ui-trajectory:
+  en: 60e3cab036a4a8c6
+  zh: 2a400cd0efd99284
+/deepseek-ai-dsh-client-ui-trajectory/summary:
+  en: 30ac03ff33731529
+  zh: cdf06239c21f4397
+/deepseek-ai-dsh-client-ui-trajectory/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-trajectory/use-this-package:
+  en: 4bd17d05b8385675
+  zh: 5174e27f754f2a03
+/deepseek-ai-dsh-client-ui-trajectory/use-this-package/inspecting-records:
+  en: b44db137e0e33f5a
+  zh: 72a826a759aaec9f
+/deepseek-ai-dsh-client-ui-trajectory/use-this-package/the-timing-overview:
+  en: 0331f90cbd904862
+  zh: bdc2d4ed1c3c1f5e
+/deepseek-ai-dsh-client-ui-trajectory/understand-the-implementation:
+  en: 25d6535322df684f
+  zh: ebe85c5acdbea3b1
+/deepseek-ai-dsh-client-ui-trajectory/understand-the-implementation/virtual-rows:
+  en: c85e342bc7eee4e6
+  zh: 9feab66ef1755b94
+/deepseek-ai-dsh-client-ui-trajectory/understand-the-implementation/layout:
+  en: b9693a54b800d439
+  zh: cd9b84382ae0b181
+/deepseek-ai-dsh-client-ui-trajectory/further-exploration:
+  en: a324740cfbe62c1e
+  zh: 53077c3ffc69b510
+/deepseek-ai-dsh-client-ui-trajectory/model-experience:
+  en: 3120df665299c634
+  zh: 1d9f365d091d0d2a
+/deepseek-ai-dsh-client-ui-trajectory/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: de54f3467ef3b9be
+/deepseek-ai-dsh-client-ui-trajectory/known-limitations-and-deferred-work:
+  en: d7da620f56eb3c65
+  zh: fb030b68322b94cd
+/deepseek-ai-dsh-client-ui-trajectory/known-limitations-and-deferred-work/dev-note:
+  en: f1893e3a6c69cc58
+  zh: b6e0dfe20567c35f
+/deepseek-ai-dsh-client-ui-trajectory/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-trajectory/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

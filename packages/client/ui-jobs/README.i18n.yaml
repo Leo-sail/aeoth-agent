@@ -1,0 +1,48 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 16a9858cd332e159
+  zh: 16a9858cd332e159
+/deepseek-ai-dsh-client-ui-jobs:
+  en: faa1eecdc7f06930
+  zh: c6e7b06ccb434f0b
+/deepseek-ai-dsh-client-ui-jobs/summary:
+  en: 68c283774922b7cd
+  zh: dc1316f542ebaf10
+/deepseek-ai-dsh-client-ui-jobs/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-jobs/use-this-package:
+  en: bbff250eba0f1b89
+  zh: 0a618f05cc88ee2b
+/deepseek-ai-dsh-client-ui-jobs/use-this-package/one-row-per-job:
+  en: 218204fbde668250
+  zh: 6935408b87644eda
+/deepseek-ai-dsh-client-ui-jobs/use-this-package/the-expanded-panel:
+  en: c34dad62fee63306
+  zh: 167d9da7928a9488
+/deepseek-ai-dsh-client-ui-jobs/understand-the-implementation:
+  en: f6f5d497ab340b9e
+  zh: 94832761177f12ca
+/deepseek-ai-dsh-client-ui-jobs/further-exploration:
+  en: 01eaaecb5850f391
+  zh: 2eabd14cde191ab8
+/deepseek-ai-dsh-client-ui-jobs/model-experience:
+  en: 84ad94ba940f17af
+  zh: 0199b09d360df0d8
+/deepseek-ai-dsh-client-ui-jobs/model-experience/kv-cache-effect:
+  en: 47f982e326fe77fd
+  zh: 9f2be5c9af23d759
+/deepseek-ai-dsh-client-ui-jobs/known-limitations-and-deferred-work:
+  en: 8be824a877852373
+  zh: bf4ae00ee70273b5
+/deepseek-ai-dsh-client-ui-jobs/known-limitations-and-deferred-work/dev-note:
+  en: 2e50937c500fbfd6
+  zh: 8b86762471d56dcc
+/deepseek-ai-dsh-client-ui-jobs/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-jobs/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

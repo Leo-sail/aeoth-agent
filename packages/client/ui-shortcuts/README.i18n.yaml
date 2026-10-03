@@ -1,0 +1,42 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 23d63708107998f8
+  zh: 23d63708107998f8
+/deepseek-ai-dsh-client-ui-shortcuts:
+  en: 736bacbd5c6483a5
+  zh: 1c49a7b2c6141a74
+/deepseek-ai-dsh-client-ui-shortcuts/summary:
+  en: 54a87d40f1ceec9e
+  zh: 98062cd54f9fb065
+/deepseek-ai-dsh-client-ui-shortcuts/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-client-ui-shortcuts/use-this-package:
+  en: 2d35beb03b54d4ea
+  zh: 12f3c6ec1a79c673
+/deepseek-ai-dsh-client-ui-shortcuts/understand-the-implementation:
+  en: f56f2610e7258825
+  zh: 249d7cdd55c57166
+/deepseek-ai-dsh-client-ui-shortcuts/further-exploration:
+  en: 9c501cfdc208a15d
+  zh: f4d6b506be78e9f6
+/deepseek-ai-dsh-client-ui-shortcuts/model-experience:
+  en: 3120df665299c634
+  zh: e2dc75ed76d271bc
+/deepseek-ai-dsh-client-ui-shortcuts/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: a0e9f8d52b4b62ee
+/deepseek-ai-dsh-client-ui-shortcuts/known-limitations-and-deferred-work:
+  en: 4c1ee388c3bbb5b0
+  zh: f3e5d73036a449b5
+/deepseek-ai-dsh-client-ui-shortcuts/known-limitations-and-deferred-work/dev-note:
+  en: 47c5f082ab7e39eb
+  zh: 7405a26672e600e3
+/deepseek-ai-dsh-client-ui-shortcuts/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-shortcuts/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

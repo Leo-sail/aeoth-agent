@@ -1,0 +1,48 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: a46e65c1f199cbd4
+  zh: a46e65c1f199cbd4
+/deepseek-ai-dsh-experimental-client-ui-agent-team:
+  en: 447e3c2bbf1ea3c6
+  zh: 25bba08497976d12
+/deepseek-ai-dsh-experimental-client-ui-agent-team/summary:
+  en: 1521a87227476a26
+  zh: b8ba40d75b50ca4a
+/deepseek-ai-dsh-experimental-client-ui-agent-team/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-experimental-client-ui-agent-team/use-this-package:
+  en: 78bda842c7c27d76
+  zh: 1325ab3ced37aea3
+/deepseek-ai-dsh-experimental-client-ui-agent-team/use-this-package/inspect-and-navigate-the-roster:
+  en: 62778e911a4ee9e9
+  zh: dff1dbbc3d5e4af6
+/deepseek-ai-dsh-experimental-client-ui-agent-team/use-this-package/inspect-the-task-board:
+  en: cf09faa436dad9fd
+  zh: e7423f4111eb88f9
+/deepseek-ai-dsh-experimental-client-ui-agent-team/understand-the-implementation:
+  en: 3ea723e7ea467be7
+  zh: dba02b20bef0fd7f
+/deepseek-ai-dsh-experimental-client-ui-agent-team/further-exploration:
+  en: 71ac041029c64d5a
+  zh: fef2e4c5dccb8d1b
+/deepseek-ai-dsh-experimental-client-ui-agent-team/model-experience:
+  en: 47ebeba07d72759d
+  zh: 8fe8133f6dd845a9
+/deepseek-ai-dsh-experimental-client-ui-agent-team/model-experience/kv-cache-effect:
+  en: b51b320f5e4dacfc
+  zh: 6695947c3f9fed28
+/deepseek-ai-dsh-experimental-client-ui-agent-team/known-limitations-and-deferred-work:
+  en: 254e4aa2f81037d2
+  zh: 3cdf19dffafb51df
+/deepseek-ai-dsh-experimental-client-ui-agent-team/known-limitations-and-deferred-work/dev-note:
+  en: 317e07f2fd605e55
+  zh: 66836ceef6216892
+/deepseek-ai-dsh-experimental-client-ui-agent-team/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-experimental-client-ui-agent-team/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

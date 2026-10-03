@@ -1,0 +1,48 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 963c25777fc9752c
+  zh: 963c25777fc9752c
+/deepseek-ai-dsh-win32-process:
+  en: d0f1b3fbea235dfa
+  zh: 8e253d46b74becdb
+/deepseek-ai-dsh-win32-process/summary:
+  en: 664002903e7c8f70
+  zh: ea61f2ab98d39a0e
+/deepseek-ai-dsh-win32-process/table-of-contents:
+  en: a3450c8cdd5f5802
+  zh: 15eec66f42e42ce7
+/deepseek-ai-dsh-win32-process/behavior:
+  en: 77806095cd7f781d
+  zh: 69d09cabc4d49185
+/deepseek-ai-dsh-win32-process/header-verification:
+  en: 2b60a9001b480546
+  zh: 12a621e421c7d789
+/deepseek-ai-dsh-win32-process/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-win32-process/model-experience/process-primitives:
+  en: b002d2485eefd20f
+  zh: fdf07032ec9556bd
+/deepseek-ai-dsh-win32-process/model-experience/process-primitives/what-the-model-sees:
+  en: 973baec28c6a918c
+  zh: 057044d193626dd6
+/deepseek-ai-dsh-win32-process/model-experience/process-primitives/token-effect:
+  en: 0d02f5258e0937b3
+  zh: 3c0d20a82023c891
+/deepseek-ai-dsh-win32-process/model-experience/process-primitives/kv-cache-effect:
+  en: c5961328f1ae01cf
+  zh: 890142bc50091faf
+/deepseek-ai-dsh-win32-process/known-limitations-and-deferred-work:
+  en: e97c61be17a1db4f
+  zh: 11dbf9721db63877
+/deepseek-ai-dsh-win32-process/known-limitations-and-deferred-work/dev-note:
+  en: b395f1375ae2d653
+  zh: 39f0fb47eedc996c
+/deepseek-ai-dsh-win32-process/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-win32-process/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

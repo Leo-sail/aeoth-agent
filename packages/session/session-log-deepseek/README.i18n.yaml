@@ -1,0 +1,48 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 86104b0043eeffee
+  zh: 86104b0043eeffee
+/deepseek-ai-dsh-session-log-deepseek:
+  en: 6d991785cbfd70ae
+  zh: 0918e2462821cde4
+/deepseek-ai-dsh-session-log-deepseek/summary:
+  en: d25d3c9dda0eec47
+  zh: dc9cf44cd3e6ef84
+/deepseek-ai-dsh-session-log-deepseek/table-of-contents:
+  en: e2aa29e41bc101c4
+  zh: 2ef629f2a444bc13
+/deepseek-ai-dsh-session-log-deepseek/configuration:
+  en: 1e8712ec4f0fefcc
+  zh: 5ffe754b2cefdd21
+/deepseek-ai-dsh-session-log-deepseek/request-field:
+  en: 197814e2c48d05b5
+  zh: f4616fb23a3c7a32
+/deepseek-ai-dsh-session-log-deepseek/acceptance-and-retry:
+  en: 3688592c474b3e95
+  zh: 5e83afeb9aa9e9e3
+/deepseek-ai-dsh-session-log-deepseek/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-session-log-deepseek/model-experience/session-log-metadata:
+  en: 468b9eaee350f6e2
+  zh: c192ad6228e7044d
+/deepseek-ai-dsh-session-log-deepseek/model-experience/session-log-metadata/what-the-model-sees:
+  en: 89fef23a54a0f9d6
+  zh: fd17806f1df6083e
+/deepseek-ai-dsh-session-log-deepseek/model-experience/session-log-metadata/token-effect:
+  en: 6a1bb7bbc7db7f06
+  zh: 94ddaa773b7538f7
+/deepseek-ai-dsh-session-log-deepseek/model-experience/session-log-metadata/kv-cache-effect:
+  en: dcf00aa1af688f09
+  zh: df5851d66c3a6b4f
+/deepseek-ai-dsh-session-log-deepseek/known-limitations-and-deferred-work:
+  en: 249ef8dbc237a0c2
+  zh: c169d64ce9ab984c
+/deepseek-ai-dsh-session-log-deepseek/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 1d018d360d563cca
+/deepseek-ai-dsh-session-log-deepseek/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

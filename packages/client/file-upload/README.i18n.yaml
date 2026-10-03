@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: a7260f9bf7b62748
+  zh: a7260f9bf7b62748
+/deepseek-ai-dsh-client-file-upload:
+  en: a6c9f156174554e1
+  zh: cd1a126905ad859b
+/deepseek-ai-dsh-client-file-upload/summary:
+  en: 828f2583d0bc3208
+  zh: 1ca4fc253c7b0b24
+/deepseek-ai-dsh-client-file-upload/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-file-upload/use-this-package:
+  en: 9d5bbf52599b0d00
+  zh: 7907542ce1e34549
+/deepseek-ai-dsh-client-file-upload/understand-the-implementation:
+  en: da896ccc5ecbe207
+  zh: f434a7572085ee1e
+/deepseek-ai-dsh-client-file-upload/further-exploration:
+  en: fa4c18a80cc6653f
+  zh: 330f183abe27e209
+/deepseek-ai-dsh-client-file-upload/model-experience:
+  en: a928c345333d4d93
+  zh: 710172520aacfbe1
+/deepseek-ai-dsh-client-file-upload/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: f57cc48a1b5cbfa9
+/deepseek-ai-dsh-client-file-upload/known-limitations-and-deferred-work:
+  en: 8592a9aab413e5dc
+  zh: ae12d9777eda0b63
+/deepseek-ai-dsh-client-file-upload/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 1d018d360d563cca
+/deepseek-ai-dsh-client-file-upload/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

@@ -1,0 +1,45 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: ed1c9c3210382c5b
+  zh: ed1c9c3210382c5b
+/deepseek-ai-dsh-client-ui-input-trigger:
+  en: b40e9083c7d330ed
+  zh: 127f5e9ec56b9165
+/deepseek-ai-dsh-client-ui-input-trigger/summary:
+  en: a467151bdd69ba96
+  zh: a3e106d69c33a9c0
+/deepseek-ai-dsh-client-ui-input-trigger/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-input-trigger/use-this-package:
+  en: c32eed8d234a108d
+  zh: e0d192dca9c6a1f6
+/deepseek-ai-dsh-client-ui-input-trigger/use-this-package/keyboard-and-mouse:
+  en: b198d6256a961f99
+  zh: 292e0bb94c18c9ca
+/deepseek-ai-dsh-client-ui-input-trigger/understand-the-implementation:
+  en: 3b69752e15d35f56
+  zh: 17cc44ae44cfb3db
+/deepseek-ai-dsh-client-ui-input-trigger/further-exploration:
+  en: e495136867c541d7
+  zh: 7cba86d2e41a6634
+/deepseek-ai-dsh-client-ui-input-trigger/model-experience:
+  en: 5d1596f50088f468
+  zh: 3c72b4f6b1ba27ee
+/deepseek-ai-dsh-client-ui-input-trigger/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: de54f3467ef3b9be
+/deepseek-ai-dsh-client-ui-input-trigger/known-limitations-and-deferred-work:
+  en: 560e5df72c0fb698
+  zh: ed6fa149bc90258a
+/deepseek-ai-dsh-client-ui-input-trigger/known-limitations-and-deferred-work/dev-note:
+  en: 749345762f3fe660
+  zh: 2e58212ba4db347f
+/deepseek-ai-dsh-client-ui-input-trigger/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-input-trigger/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

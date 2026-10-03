@@ -1,0 +1,48 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 8702a2f18b13e5e2
+  zh: 8702a2f18b13e5e2
+/deepseek-ai-dsh-client-ui-permission-presets:
+  en: 8320c8f78c0809ce
+  zh: 74b8ded4da556e81
+/deepseek-ai-dsh-client-ui-permission-presets/summary:
+  en: 47ed9beea820df94
+  zh: 6ddf800be8c1cc7b
+/deepseek-ai-dsh-client-ui-permission-presets/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-permission-presets/use-this-package:
+  en: 91606bff7da02253
+  zh: ef68e813d64c89be
+/deepseek-ai-dsh-client-ui-permission-presets/use-this-package/the-picker:
+  en: d851eab85fe002bd
+  zh: 0fdf6eeb1cbd609b
+/deepseek-ai-dsh-client-ui-permission-presets/use-this-package/the-settings-row:
+  en: 5067f6aa12496225
+  zh: cfa6796684f97535
+/deepseek-ai-dsh-client-ui-permission-presets/understand-the-implementation:
+  en: 4089d5bebf3e8bf0
+  zh: bc5c3652b0612784
+/deepseek-ai-dsh-client-ui-permission-presets/further-exploration:
+  en: 9bdbdea03d0e2a96
+  zh: cc3bf480a0706ef2
+/deepseek-ai-dsh-client-ui-permission-presets/model-experience:
+  en: 114f37b90a58cffa
+  zh: dc99a48a72c975e6
+/deepseek-ai-dsh-client-ui-permission-presets/model-experience/kv-cache-effect:
+  en: f25206808c8d84c5
+  zh: 4fcbc876952d240d
+/deepseek-ai-dsh-client-ui-permission-presets/known-limitations-and-deferred-work:
+  en: 32e56662902c60e5
+  zh: 1b65f5d30e219197
+/deepseek-ai-dsh-client-ui-permission-presets/known-limitations-and-deferred-work/dev-note:
+  en: febc49a55a454923
+  zh: b72c74e467fd6407
+/deepseek-ai-dsh-client-ui-permission-presets/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-permission-presets/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

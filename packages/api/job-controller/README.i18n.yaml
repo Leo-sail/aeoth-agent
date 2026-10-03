@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: ab07be21375d84cc
+  zh: ab07be21375d84cc
+/job-controller:
+  en: a647945219b3ea55
+  zh: 75a87645d584c0b2
+/job-controller/summary:
+  en: ca8414e88013ae8f
+  zh: b39d0ca907bf2276
+/job-controller/table-of-contents:
+  en: 4e53164159b5ce41
+  zh: 89582dc0294d0776
+/job-controller/use-this-package:
+  en: 11192d7e3d26b0d2
+  zh: bdff631b0ae45ba0
+/job-controller/use-this-package/config:
+  en: 8213c8f05541d5b0
+  zh: 348f3ab3ed04e918
+/job-controller/model-experience:
+  en: 45162a45bf535f11
+  zh: 3eeae8c7a02bbef5
+/job-controller/model-experience/kv-cache-effect:
+  en: e71bac9439326121
+  zh: 9f1a50f452658818
+/job-controller/known-limitations-and-deferred-work:
+  en: c0f98753f7ba6b9b
+  zh: 4022148512051bfe
+/job-controller/known-limitations-and-deferred-work/dev-note:
+  en: a1f297405fd3bf23
+  zh: 7323c5216ec30800
+/job-controller/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/job-controller/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

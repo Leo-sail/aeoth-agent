@@ -1,0 +1,66 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 9348af20fbb99ee4
+  zh: 9348af20fbb99ee4
+/deepseek-ai-dsh-command-goal:
+  en: 28189ce760d60a4c
+  zh: 78b24f13e7438ecc
+/deepseek-ai-dsh-command-goal/summary:
+  en: 30ac03ff33731529
+  zh: 76f02f259337da74
+/deepseek-ai-dsh-command-goal/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-command-goal/use-this-package:
+  en: 1f9b0128484fd654
+  zh: 5a2c49fa42271640
+/deepseek-ai-dsh-command-goal/use-this-package/command-reference:
+  en: 98ca4ad981960f99
+  zh: 22d6ecbadbb3a7e1
+/deepseek-ai-dsh-command-goal/use-this-package/input-grammar:
+  en: 38a273cb14017e13
+  zh: d4b7b501bcd9589b
+/deepseek-ai-dsh-command-goal/use-this-package/attachments:
+  en: e61cd7437ed4aa73
+  zh: 552c36c3b8d16007
+/deepseek-ai-dsh-command-goal/use-this-package/compose-it:
+  en: 3de303d0321dc50a
+  zh: 3e3bf87289e01a13
+/deepseek-ai-dsh-command-goal/understand-the-implementation:
+  en: 7fba8a13f8452dc1
+  zh: bbaba056cda78ec9
+/deepseek-ai-dsh-command-goal/understand-the-implementation/design:
+  en: ab637815b21bf065
+  zh: 56eb4ae2ad368994
+/deepseek-ai-dsh-command-goal/understand-the-implementation/source-map:
+  en: 08050fc601600dc9
+  zh: 1a42ebf4f32334b6
+/deepseek-ai-dsh-command-goal/further-exploration:
+  en: 51a317ccd37fbd79
+  zh: 3955af88c84344a6
+/deepseek-ai-dsh-command-goal/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-command-goal/model-experience/human-goal-control:
+  en: b542d90272a9b64e
+  zh: 9f8bfb4ca7784428
+/deepseek-ai-dsh-command-goal/model-experience/human-goal-control/what-the-model-sees:
+  en: a4c7a3d502c58794
+  zh: a47ab70d7aa4f0a4
+/deepseek-ai-dsh-command-goal/model-experience/human-goal-control/token-effect:
+  en: 1c48e9c98cee51b0
+  zh: 63b2f981bdaf6ca4
+/deepseek-ai-dsh-command-goal/model-experience/human-goal-control/kv-cache-effect:
+  en: 15426cc075dc65d7
+  zh: 496e488693a2bacb
+/deepseek-ai-dsh-command-goal/known-limitations-and-deferred-work:
+  en: 62c46f281e212048
+  zh: 57d0d22c57c9d39d
+/deepseek-ai-dsh-command-goal/known-limitations-and-deferred-work/dev-note:
+  en: f0decf130a53b9ff
+  zh: 549550ccbb693986
+/deepseek-ai-dsh-command-goal/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

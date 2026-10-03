@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: ed598fb82cd41fa6
+  zh: ed598fb82cd41fa6
+/settings-controller:
+  en: 7fecb4d8800e8f97
+  zh: 3e2c3fdb29b73cd0
+/settings-controller/summary:
+  en: 0eed797aaaa99dae
+  zh: c97793b01dfc5141
+/settings-controller/table-of-contents:
+  en: 3a654e12f423946b
+  zh: 4e3a19aaee58f8a7
+/settings-controller/use-this-package:
+  en: cf2f4de5bee8be55
+  zh: b2630dcba4be5ae8
+/settings-controller/configuration:
+  en: 6705a0981d3f844f
+  zh: 85881fbab92603fb
+/settings-controller/model-experience:
+  en: 78e9a59c64ef808a
+  zh: 48b8b611da537891
+/settings-controller/model-experience/kv-cache-effect:
+  en: 740c7814748fc2d1
+  zh: 0cff374d4e5272ff
+/settings-controller/known-limitations-and-deferred-work:
+  en: a7475fd8aedf0830
+  zh: add1adce9d320baa
+/settings-controller/known-limitations-and-deferred-work/dev-note:
+  en: b684658b106c5d16
+  zh: 1ba652cf16d8418b
+/settings-controller/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/settings-controller/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

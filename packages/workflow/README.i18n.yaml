@@ -1,0 +1,18 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: c82b174a3d2bacb1
+  zh: e18bc4db90968a30
+/packages-workflow:
+  en: 8c61f1eb2b3756e5
+  zh: ee5ac986d79f877c
+/packages-workflow/overview:
+  en: 803bbdd58f7dbf56
+  zh: 6f7ec2d85c0bbc76
+/packages-workflow/packages:
+  en: 9fe5e9bc0048f632
+  zh: a59b4fb2b891b4c6
+/packages-workflow/development:
+  en: ac1aecd1cb6817d6
+  zh: f2e5dc89d4493631

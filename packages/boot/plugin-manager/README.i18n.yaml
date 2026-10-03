@@ -1,0 +1,57 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 234c82043ddfa9e5
+  zh: 234c82043ddfa9e5
+/deepseek-ai-dsh-plugin-manager:
+  en: e6cbfe169f5fb57b
+  zh: be378036d645a242
+/deepseek-ai-dsh-plugin-manager/summary:
+  en: 6acad16efa56b98b
+  zh: 53cea8867b4a638b
+/deepseek-ai-dsh-plugin-manager/table-of-contents:
+  en: 87679c51aa3693f5
+  zh: 11684a48a5806afb
+/deepseek-ai-dsh-plugin-manager/use-this-package:
+  en: 25b1e9cf3862148c
+  zh: 404891436bec6149
+/deepseek-ai-dsh-plugin-manager/use-this-package/version-compatibility-and-exemptions:
+  en: a6c191983a933c9b
+  zh: 75eee2e9db7c549e
+/deepseek-ai-dsh-plugin-manager/use-this-package/configuration:
+  en: 348f10bcd0188a23
+  zh: 99c722ef51f23b2e
+/deepseek-ai-dsh-plugin-manager/understand-the-implementation:
+  en: aa4ac1230ed44e20
+  zh: c4b359d016f8b253
+/deepseek-ai-dsh-plugin-manager/further-exploration:
+  en: a18619b5b10a7721
+  zh: 04a82d923353c75f
+/deepseek-ai-dsh-plugin-manager/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-plugin-manager/model-experience/management-tool:
+  en: 1815ec6ce56c80d4
+  zh: 2d7ac75d3b25eb6b
+/deepseek-ai-dsh-plugin-manager/model-experience/management-tool/what-the-model-sees:
+  en: 72d6c70869b12f22
+  zh: 45218d6f1e765fb1
+/deepseek-ai-dsh-plugin-manager/model-experience/management-tool/token-effect:
+  en: bc70208bd361dbcd
+  zh: bb651d6066066c6c
+/deepseek-ai-dsh-plugin-manager/model-experience/management-tool/kv-cache-effect:
+  en: c29f60be7f3edc1a
+  zh: d9b9388b96ef95cc
+/deepseek-ai-dsh-plugin-manager/known-limitations-and-deferred-work:
+  en: 2a9b131d54caa93c
+  zh: e4f602642675a2c4
+/deepseek-ai-dsh-plugin-manager/known-limitations-and-deferred-work/failure-behavior:
+  en: 61450cf6e03c2819
+  zh: 4d52f5306825787b
+/deepseek-ai-dsh-plugin-manager/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-plugin-manager/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

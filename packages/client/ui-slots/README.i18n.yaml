@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: d06d6e7a10f9a420
+  zh: d06d6e7a10f9a420
+/deepseek-ai-dsh-client-ui-slots:
+  en: e708fcaf0caa1989
+  zh: 7b9d19291b159f7b
+/deepseek-ai-dsh-client-ui-slots/summary:
+  en: 0e50c90bcd3ad281
+  zh: c4bb1bfc9ac4788b
+/deepseek-ai-dsh-client-ui-slots/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-slots/use-this-package:
+  en: 05691d44a0c6c48f
+  zh: 434033d5761297f3
+/deepseek-ai-dsh-client-ui-slots/use-this-package/reusable-component-factories:
+  en: 301de67bf2779ae6
+  zh: 6e9d405ee1063d53
+/deepseek-ai-dsh-client-ui-slots/use-this-package/the-five-framework-props-shares:
+  en: 45e2933a5e084956
+  zh: 938deedaf489f892
+/deepseek-ai-dsh-client-ui-slots/use-this-package/store-seats:
+  en: 0d1c2948112841ec
+  zh: fc5a998cea485024
+/deepseek-ai-dsh-client-ui-slots/use-this-package/declaration-discipline:
+  en: 8a41014931ffccd5
+  zh: 615f93335a682b01
+/deepseek-ai-dsh-client-ui-slots/understand-the-implementation:
+  en: 983e6c0e71105f65
+  zh: 75af8d36dd8223fd
+/deepseek-ai-dsh-client-ui-slots/understand-the-implementation/registration-and-routing:
+  en: 0638aaadacadb6f1
+  zh: cb6324ef5c9e1ade
+/deepseek-ai-dsh-client-ui-slots/understand-the-implementation/the-renderer-contract:
+  en: 2b6058e98fb1efe7
+  zh: f32e37c8381809b9
+/deepseek-ai-dsh-client-ui-slots/further-exploration:
+  en: 0a43c25c15402bda
+  zh: 219f897dc095f2c2
+/deepseek-ai-dsh-client-ui-slots/model-experience:
+  en: 3120df665299c634
+  zh: 67bb5e1fe59dae19
+/deepseek-ai-dsh-client-ui-slots/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: de54f3467ef3b9be
+/deepseek-ai-dsh-client-ui-slots/known-limitations-and-deferred-work:
+  en: 093b1c5076ddfd6d
+  zh: 3069c423115492fe
+/deepseek-ai-dsh-client-ui-slots/known-limitations-and-deferred-work/dev-note:
+  en: 89e67d6054319245
+  zh: b55de4cfddf136a5
+/deepseek-ai-dsh-client-ui-slots/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-slots/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

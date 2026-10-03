@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: ab6e765059387cb3
+  zh: ab6e765059387cb3
+/deepseek-ai-dsh-session-projection:
+  en: 4de14fc97cd52942
+  zh: 7395050ab82d4f45
+/deepseek-ai-dsh-session-projection/summary:
+  en: a672f8d52ae5e843
+  zh: dabb5c78342eb0b6
+/deepseek-ai-dsh-session-projection/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-session-projection/use-this-package:
+  en: 3a15581f0b043e79
+  zh: 302fc8afe8fb45fa
+/deepseek-ai-dsh-session-projection/use-this-package/when-to-choose-it:
+  en: 90b7c26cb45be52a
+  zh: 386e294ec09607c1
+/deepseek-ai-dsh-session-projection/use-this-package/define-a-projection-unit:
+  en: 09758d1475fad86e
+  zh: 473637cb34aebe72
+/deepseek-ai-dsh-session-projection/use-this-package/register-and-read:
+  en: 5e754e67dff07b02
+  zh: 2ba1bda464abaa45
+/deepseek-ai-dsh-session-projection/use-this-package/persisted-checkpoints:
+  en: 45f1c05fb7e08180
+  zh: f8d62c749899651a
+/deepseek-ai-dsh-session-projection/understand-the-implementation:
+  en: 3397f58d6f49bfda
+  zh: efb85d382e25574d
+/deepseek-ai-dsh-session-projection/understand-the-implementation/design-concept:
+  en: 8afa0fdb49898f6d
+  zh: 6b2da34455963935
+/deepseek-ai-dsh-session-projection/understand-the-implementation/source-map:
+  en: 8b6672b48e7607d6
+  zh: 33611e7ea13219f1
+/deepseek-ai-dsh-session-projection/understand-the-implementation/drive-and-checkpoint-flow:
+  en: 00136880bb586403
+  zh: bd35f645111c068c
+/deepseek-ai-dsh-session-projection/further-exploration:
+  en: 286afc75be9ff434
+  zh: de93c703c0cb820c
+/deepseek-ai-dsh-session-projection/model-experience:
+  en: a24045627fb43695
+  zh: a8465196c3948796
+/deepseek-ai-dsh-session-projection/model-experience/kv-cache-effect:
+  en: 8a592dae9bc946ab
+  zh: eca939995bb5f8e0
+/deepseek-ai-dsh-session-projection/known-limitations-and-deferred-work:
+  en: 8fd41113832feb7c
+  zh: d50021b135278d77
+/deepseek-ai-dsh-session-projection/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-session-projection/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

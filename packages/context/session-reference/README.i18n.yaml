@@ -1,0 +1,69 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 11df651c671fd7e7
+  zh: 11df651c671fd7e7
+/deepseek-ai-dsh-session-reference:
+  en: ac4de1b73582661f
+  zh: 348c1ee18d356ced
+/deepseek-ai-dsh-session-reference/summary:
+  en: 64ecb5f8f522823c
+  zh: 86900744ffbee614
+/deepseek-ai-dsh-session-reference/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-session-reference/use-this-package:
+  en: 5204d64418ff8969
+  zh: d7cabc99294e480e
+/deepseek-ai-dsh-session-reference/use-this-package/mention-syntax:
+  en: a02c1fda44e004b4
+  zh: 4f8084a2beccf5e4
+/deepseek-ai-dsh-session-reference/use-this-package/what-the-agent-gets:
+  en: 0942e28bfd0d07da
+  zh: ca109508b18b4c14
+/deepseek-ai-dsh-session-reference/use-this-package/finding-sessions-to-reference:
+  en: 169f100ba62f2120
+  zh: 3fd4fc0bd73b2370
+/deepseek-ai-dsh-session-reference/use-this-package/configuration:
+  en: e126a8efd26d8ab2
+  zh: e3515e814e00ed8e
+/deepseek-ai-dsh-session-reference/understand-the-implementation:
+  en: db349483e453caf7
+  zh: 70035c291e1efe84
+/deepseek-ai-dsh-session-reference/understand-the-implementation/design-concept:
+  en: 5c7712ca91eaae1c
+  zh: 2d923b605afa7a88
+/deepseek-ai-dsh-session-reference/understand-the-implementation/source-map:
+  en: 3a91f258bdfbe488
+  zh: 80301b5d6b218389
+/deepseek-ai-dsh-session-reference/understand-the-implementation/main-flow:
+  en: 019e5e19f9b3d7fd
+  zh: 52ccf291f53d41fc
+/deepseek-ai-dsh-session-reference/further-exploration:
+  en: e3f39d4f1258d3e5
+  zh: 36eb3f78fa5d13c8
+/deepseek-ai-dsh-session-reference/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-session-reference/model-experience/referenced-session-background:
+  en: 05d3418d162640be
+  zh: 3dd8407f2dc61586
+/deepseek-ai-dsh-session-reference/model-experience/referenced-session-background/what-the-model-sees:
+  en: 375550519407bc3d
+  zh: 037324246f4fb515
+/deepseek-ai-dsh-session-reference/model-experience/referenced-session-background/token-effect:
+  en: f3d69ed47a577be0
+  zh: 196a872914778634
+/deepseek-ai-dsh-session-reference/model-experience/referenced-session-background/kv-cache-effect:
+  en: 530d6417585b5c9e
+  zh: abf1597589e8de17
+/deepseek-ai-dsh-session-reference/known-limitations-and-deferred-work:
+  en: fce2f29b6a71b7f4
+  zh: 31440d93a112d5de
+/deepseek-ai-dsh-session-reference/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-session-reference/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

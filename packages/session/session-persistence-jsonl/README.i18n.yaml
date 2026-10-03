@@ -1,0 +1,72 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 5fb5505e7454443b
+  zh: 5fb5505e7454443b
+/deepseek-ai-dsh-session-persistence-jsonl:
+  en: 719697c849e36229
+  zh: 466ab1b89c10020c
+/deepseek-ai-dsh-session-persistence-jsonl/summary:
+  en: c158ad9b281ded9f
+  zh: ca400a563a7a6942
+/deepseek-ai-dsh-session-persistence-jsonl/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package:
+  en: d6112142a705ec43
+  zh: f0914d9e37216f97
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package/when-to-choose-it:
+  en: 37c10302bbbde268
+  zh: 3d5c027bac868efd
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package/minimal-configuration:
+  en: 774ba9da2c013b37
+  zh: 21d5bcdc30b581a4
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package/on-disk-layout:
+  en: e20cf32540d7c785
+  zh: 67e182529e9211ca
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package/durability-and-crash-semantics:
+  en: 1eaa87736cac029b
+  zh: 26224e8889786d69
+/deepseek-ai-dsh-session-persistence-jsonl/use-this-package/reading-the-logs:
+  en: 2cc12d281b52c7a6
+  zh: ff71be76b858b186
+/deepseek-ai-dsh-session-persistence-jsonl/understand-the-implementation:
+  en: a35407bb25671e7e
+  zh: 6a00f9510c85adcb
+/deepseek-ai-dsh-session-persistence-jsonl/understand-the-implementation/design-concept:
+  en: b69d4565a11b6f02
+  zh: c8309690fc931f8d
+/deepseek-ai-dsh-session-persistence-jsonl/understand-the-implementation/physical-encoding:
+  en: 5aaf80115840318f
+  zh: 0b0fb2b2e085a111
+/deepseek-ai-dsh-session-persistence-jsonl/understand-the-implementation/source-map:
+  en: 3bdb0f1dd4d69fba
+  zh: 8198d655d73d42e3
+/deepseek-ai-dsh-session-persistence-jsonl/further-exploration:
+  en: 52ee405af42619af
+  zh: 552cbce672dc5fc3
+/deepseek-ai-dsh-session-persistence-jsonl/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-session-persistence-jsonl/model-experience/resumed-conversation-history:
+  en: 062875aab7f3f138
+  zh: c7285918227e6f5c
+/deepseek-ai-dsh-session-persistence-jsonl/model-experience/resumed-conversation-history/what-the-model-sees:
+  en: 2a3b5c6e3860eef6
+  zh: 82afe0f0359581b6
+/deepseek-ai-dsh-session-persistence-jsonl/model-experience/resumed-conversation-history/token-effect:
+  en: 8fb2f7cdba1ff320
+  zh: e130ec2a92a53a5c
+/deepseek-ai-dsh-session-persistence-jsonl/model-experience/resumed-conversation-history/kv-cache-effect:
+  en: 53ce4da7ce68d21c
+  zh: 10f40bc354100f77
+/deepseek-ai-dsh-session-persistence-jsonl/known-limitations-and-deferred-work:
+  en: e6343e8ad3f6fb71
+  zh: fe632c9711e7921b
+/deepseek-ai-dsh-session-persistence-jsonl/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-session-persistence-jsonl/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

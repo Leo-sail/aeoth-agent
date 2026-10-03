@@ -1,0 +1,45 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 3ad78d9c0d562ea5
+  zh: 3ad78d9c0d562ea5
+/deepseek-ai-dsh-client-ui-open-in-app:
+  en: 004b805ac638e884
+  zh: 6ac98df58affefcf
+/deepseek-ai-dsh-client-ui-open-in-app/summary:
+  en: 02179ebe596a932c
+  zh: 5f99d080dd648ebf
+/deepseek-ai-dsh-client-ui-open-in-app/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 725b47765ee8f30b
+/deepseek-ai-dsh-client-ui-open-in-app/use-this-package:
+  en: 5d8c659027a80f85
+  zh: be35d2ba53be0442
+/deepseek-ai-dsh-client-ui-open-in-app/use-this-package/what-to-expect:
+  en: c93c175a3583820a
+  zh: fa812b70176d3d60
+/deepseek-ai-dsh-client-ui-open-in-app/understand-the-implementation:
+  en: c8ac8873c45eb568
+  zh: fd623c411f79d90f
+/deepseek-ai-dsh-client-ui-open-in-app/further-exploration:
+  en: fc15feea3afe53f1
+  zh: 43e76cf86a821ee8
+/deepseek-ai-dsh-client-ui-open-in-app/model-experience:
+  en: 5f9e6e0fb0438628
+  zh: fc9a81185ea6cb14
+/deepseek-ai-dsh-client-ui-open-in-app/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: c2241315dc0c89c9
+/deepseek-ai-dsh-client-ui-open-in-app/known-limitations-and-deferred-work:
+  en: e498fe22fb6950cf
+  zh: 32111903b3e1daff
+/deepseek-ai-dsh-client-ui-open-in-app/known-limitations-and-deferred-work/dev-note:
+  en: 289269596aa3171d
+  zh: f2c28d146c961b62
+/deepseek-ai-dsh-client-ui-open-in-app/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-open-in-app/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

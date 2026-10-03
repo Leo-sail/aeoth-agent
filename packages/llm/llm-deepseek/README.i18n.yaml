@@ -1,0 +1,96 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 617d55cf30ef0e1a
+  zh: 617d55cf30ef0e1a
+/deepseek-ai-dsh-llm-deepseek:
+  en: e66a018af9e2de3c
+  zh: d7188003d01964bb
+/deepseek-ai-dsh-llm-deepseek/summary:
+  en: 53ba57f4b647ca73
+  zh: c25c011b385ee519
+/deepseek-ai-dsh-llm-deepseek/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-llm-deepseek/use-this-package:
+  en: c9b4d5f8aa15c7b3
+  zh: 52d833f0909d94f1
+/deepseek-ai-dsh-llm-deepseek/use-this-package/when-to-choose-it:
+  en: cbeb14a9a602c2c9
+  zh: c78c0d26c5791085
+/deepseek-ai-dsh-llm-deepseek/use-this-package/minimal-configuration:
+  en: 397460b501eba006
+  zh: ea7b953a7f0efc27
+/deepseek-ai-dsh-llm-deepseek/use-this-package/endpoint-and-wire-format:
+  en: fce88d2ebad6296c
+  zh: 0c351f26b472d521
+/deepseek-ai-dsh-llm-deepseek/use-this-package/account-credentials:
+  en: 3853ba1a1ffbb46c
+  zh: 97203e80ad933e59
+/deepseek-ai-dsh-llm-deepseek/use-this-package/streaming-with-thinking-and-images:
+  en: 9b82549c6ce25261
+  zh: 22a3978c5022576b
+/deepseek-ai-dsh-llm-deepseek/use-this-package/dynamic-configuration:
+  en: 49290fc5647136b4
+  zh: 96fa9ce0f9e83c13
+/deepseek-ai-dsh-llm-deepseek/use-this-package/provider-specific-request-fields:
+  en: f863390198cc177c
+  zh: 8856c62ba3fb36ca
+/deepseek-ai-dsh-llm-deepseek/use-this-package/failures-and-recovery:
+  en: d31bd24c8c419f88
+  zh: 91205cb3cd754f39
+/deepseek-ai-dsh-llm-deepseek/understand-the-implementation:
+  en: 1598ac8a8bb9b6bf
+  zh: fdd089c5ae7722cd
+/deepseek-ai-dsh-llm-deepseek/understand-the-implementation/design-philosophy:
+  en: 829203c4c282dc46
+  zh: e05dada4a1420a95
+/deepseek-ai-dsh-llm-deepseek/understand-the-implementation/source-map:
+  en: dc2d2409ad8c41cc
+  zh: 51fc4ad65dab6378
+/deepseek-ai-dsh-llm-deepseek/understand-the-implementation/wire-flow:
+  en: a9ac585d0fa942c1
+  zh: 52a2967518509f94
+/deepseek-ai-dsh-llm-deepseek/further-exploration:
+  en: d5ca62004e3adeb0
+  zh: 47c0a9e82331a055
+/deepseek-ai-dsh-llm-deepseek/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-request:
+  en: 1dc50052999253c6
+  zh: 7abf968fc18bffcd
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-request/what-the-model-sees:
+  en: 71806130bb2e8555
+  zh: 995e28d6931ebe4e
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-request/token-effect:
+  en: f6f8c890fb2465e4
+  zh: cb9e4173a0d7415f
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-request/kv-cache-effect:
+  en: 87ac92776176ee15
+  zh: bb49edf3a68dda07
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-response:
+  en: 957d6665495e5ca5
+  zh: 0aa72b2c2dc07167
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-response/what-the-model-sees:
+  en: 36a3d0297d6ca209
+  zh: bfc68b8300f61593
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-response/token-effect:
+  en: 533309d1f93b89de
+  zh: 4cc0b86f05c9be53
+/deepseek-ai-dsh-llm-deepseek/model-experience/deepseek-response/kv-cache-effect:
+  en: ddfbea043596878d
+  zh: 4fbf5864a684c053
+/deepseek-ai-dsh-llm-deepseek/known-limitations-and-deferred-work:
+  en: 7e39b52643ddf945
+  zh: 8735dcb4814997f6
+/deepseek-ai-dsh-llm-deepseek/known-limitations-and-deferred-work/dev-note:
+  en: 5b9e571c20e4ac72
+  zh: dbb07a72ddc8f08b
+/deepseek-ai-dsh-llm-deepseek/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-llm-deepseek/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

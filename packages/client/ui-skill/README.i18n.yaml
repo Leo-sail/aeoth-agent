@@ -1,0 +1,63 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: b356f495de79d68d
+  zh: b356f495de79d68d
+/deepseek-ai-dsh-client-ui-skill:
+  en: 17b91cfc2300ea2b
+  zh: 1fcd42e48e14c5ec
+/deepseek-ai-dsh-client-ui-skill/summary:
+  en: 30ac03ff33731529
+  zh: a166cd4942b3a912
+/deepseek-ai-dsh-client-ui-skill/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 2d021b7a4a4677d8
+/deepseek-ai-dsh-client-ui-skill/use-this-package:
+  en: 2f17d0875048ef3c
+  zh: 6878ee4c75f2b2cf
+/deepseek-ai-dsh-client-ui-skill/use-this-package/what-the-source-offers:
+  en: 9acab1362a1b2649
+  zh: 7d9d610ccd355508
+/deepseek-ai-dsh-client-ui-skill/use-this-package/the-skill-tool-row:
+  en: 52c7aee8faf26795
+  zh: f68e2f17cc7e369a
+/deepseek-ai-dsh-client-ui-skill/understand-the-implementation:
+  en: 1804b3ec4e4103e2
+  zh: 7eb7b7f5849b96f7
+/deepseek-ai-dsh-client-ui-skill/understand-the-implementation/candidate-flow:
+  en: 1a02a85859f851c7
+  zh: 03bd48b83c4a287c
+/deepseek-ai-dsh-client-ui-skill/understand-the-implementation/registration:
+  en: 1965ad3169b7fd97
+  zh: efc23c44ad1d2765
+/deepseek-ai-dsh-client-ui-skill/further-exploration:
+  en: c9acda049d771b16
+  zh: 91ee86722b3b007c
+/deepseek-ai-dsh-client-ui-skill/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-client-ui-skill/model-experience/user-explicit-skill-invocation:
+  en: ae1928252b0ea55c
+  zh: 6c78cb51c6805a2d
+/deepseek-ai-dsh-client-ui-skill/model-experience/user-explicit-skill-invocation/what-the-model-sees:
+  en: 02313760445799a2
+  zh: 46007ed9e9f35b44
+/deepseek-ai-dsh-client-ui-skill/model-experience/user-explicit-skill-invocation/token-effect:
+  en: cb759321f8c62a96
+  zh: 6d479501856d9cd6
+/deepseek-ai-dsh-client-ui-skill/model-experience/user-explicit-skill-invocation/kv-cache-effect:
+  en: da53c649077dad7e
+  zh: 845f77793f8e10a2
+/deepseek-ai-dsh-client-ui-skill/known-limitations-and-deferred-work:
+  en: aed53b17a91d4b02
+  zh: fac571e9228e69c5
+/deepseek-ai-dsh-client-ui-skill/known-limitations-and-deferred-work/dev-note:
+  en: f3cb9f98b665c2f9
+  zh: 2275c60173ce961b
+/deepseek-ai-dsh-client-ui-skill/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-skill/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

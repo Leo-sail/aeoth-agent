@@ -1,0 +1,33 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: b2fe244dfe898c81
+  zh: b2fe244dfe898c81
+/deepseek-ai-dsh-client-store:
+  en: 1b16aed0269bb07f
+  zh: e37d3ba40aa82baf
+/deepseek-ai-dsh-client-store/summary:
+  en: ecb4dde9a694022a
+  zh: 64bce6556a8c9a80
+/deepseek-ai-dsh-client-store/table-of-contents:
+  en: b4683d2a53256fda
+  zh: 4e65ff63dc8c48fe
+/deepseek-ai-dsh-client-store/model-experience:
+  en: 444c8fcde6e159d8
+  zh: dc855e149c636bb4
+/deepseek-ai-dsh-client-store/model-experience/kv-cache-effect:
+  en: ed7581186c5b5a33
+  zh: a0efffb2631c1eec
+/deepseek-ai-dsh-client-store/known-limitations-and-deferred-work:
+  en: 3190cd5b744025fe
+  zh: f559c3316b6a7da4
+/deepseek-ai-dsh-client-store/known-limitations-and-deferred-work/dev-note:
+  en: dd767840e33344a1
+  zh: 0e06a491e39acf38
+/deepseek-ai-dsh-client-store/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-store/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

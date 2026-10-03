@@ -1,0 +1,60 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 234c82043ddfa9e5
+  zh: 234c82043ddfa9e5
+/deepseek-ai-dsh-lsp-stdio:
+  en: 79147f5b588a6d6a
+  zh: 12d7ab50d6fe0850
+/deepseek-ai-dsh-lsp-stdio/summary:
+  en: 84989ba61eb11110
+  zh: c76989801e6e3d01
+/deepseek-ai-dsh-lsp-stdio/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-lsp-stdio/use-this-package:
+  en: d722ba9eb0059ba6
+  zh: 646525beedbdb97c
+/deepseek-ai-dsh-lsp-stdio/use-this-package/minimal-configuration:
+  en: 704c4d09382a5107
+  zh: a8651d01353257aa
+/deepseek-ai-dsh-lsp-stdio/use-this-package/what-a-query-does:
+  en: 41363baf8fdba020
+  zh: d1a6193b1aa813ba
+/deepseek-ai-dsh-lsp-stdio/use-this-package/observable-success-and-failures:
+  en: 57f3a82c014af107
+  zh: 770fc617c1ab0eab
+/deepseek-ai-dsh-lsp-stdio/use-this-package/security-boundary:
+  en: f1f7fef771bcaa6d
+  zh: f11dcf771a6fecfc
+/deepseek-ai-dsh-lsp-stdio/understand-the-implementation:
+  en: 8a5efa64f5b12f88
+  zh: 451548c05c045c22
+/deepseek-ai-dsh-lsp-stdio/understand-the-implementation/design-philosophy:
+  en: 65e273f348dcfb9f
+  zh: a5a01b22551e5d46
+/deepseek-ai-dsh-lsp-stdio/understand-the-implementation/source-map:
+  en: a61285532ca0d549
+  zh: fc170a69260b42a3
+/deepseek-ai-dsh-lsp-stdio/understand-the-implementation/protocol-behavior:
+  en: 0f9bac88ad9448b8
+  zh: f5d3a2e61a596003
+/deepseek-ai-dsh-lsp-stdio/further-exploration:
+  en: 2b280b85054f6b9f
+  zh: 6e609d42db7da87c
+/deepseek-ai-dsh-lsp-stdio/model-experience:
+  en: b366d0dfbfeb2d91
+  zh: 72a7a8d957b13eb4
+/deepseek-ai-dsh-lsp-stdio/model-experience/kv-cache-effect:
+  en: 64354484a5367fbc
+  zh: aec3e5c7933389b6
+/deepseek-ai-dsh-lsp-stdio/known-limitations-and-deferred-work:
+  en: dc4fc5797b3b2d38
+  zh: f04e4159ce280218
+/deepseek-ai-dsh-lsp-stdio/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-lsp-stdio/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

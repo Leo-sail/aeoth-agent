@@ -1,0 +1,63 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 3fde7a02f329ca1e
+  zh: 3fde7a02f329ca1e
+/deepseek-ai-dsh-host-directory-picker-browse:
+  en: 6fbc8d553ca1d797
+  zh: 6503d8fa5542b0f2
+/deepseek-ai-dsh-host-directory-picker-browse/summary:
+  en: 4729cff0710e1853
+  zh: 7553bb80c27b5d8a
+/deepseek-ai-dsh-host-directory-picker-browse/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-host-directory-picker-browse/use-this-package:
+  en: 943e692ce514daf6
+  zh: 917f508c4c612eae
+/deepseek-ai-dsh-host-directory-picker-browse/use-this-package/listing-a-directory:
+  en: b37b3f6bbce50319
+  zh: d609eeb57557e5cb
+/deepseek-ai-dsh-host-directory-picker-browse/use-this-package/creating-a-directory:
+  en: 71acb6e2f9b6176d
+  zh: 64e0bd932507dfe9
+/deepseek-ai-dsh-host-directory-picker-browse/use-this-package/observable-failures:
+  en: 3f136f768deaab29
+  zh: 39eef7ad16271cdb
+/deepseek-ai-dsh-host-directory-picker-browse/use-this-package/configuration:
+  en: 7717ab743920e5a7
+  zh: ec594fe3cb2a0df2
+/deepseek-ai-dsh-host-directory-picker-browse/understand-the-implementation:
+  en: 42b15ac6321706aa
+  zh: 4ed0861911abaf5d
+/deepseek-ai-dsh-host-directory-picker-browse/understand-the-implementation/design-concept:
+  en: cec8eab00b0484b9
+  zh: 213a5cf9f61bd0e0
+/deepseek-ai-dsh-host-directory-picker-browse/understand-the-implementation/the-fully-qualified-fence:
+  en: b547791a9cd9d9f0
+  zh: fd62beb4b2cac303
+/deepseek-ai-dsh-host-directory-picker-browse/understand-the-implementation/abort-and-probing:
+  en: adffb1740e726f22
+  zh: edfe4a1f3141a1b5
+/deepseek-ai-dsh-host-directory-picker-browse/understand-the-implementation/source-map:
+  en: 1a8d1b820a0f97e7
+  zh: 377cc9d4832f93df
+/deepseek-ai-dsh-host-directory-picker-browse/further-exploration:
+  en: 5ab39de763d0f64d
+  zh: ff0dd22a24707341
+/deepseek-ai-dsh-host-directory-picker-browse/model-experience:
+  en: cdbb9c75fbb91bb5
+  zh: 35047dda1956f0ac
+/deepseek-ai-dsh-host-directory-picker-browse/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: de54f3467ef3b9be
+/deepseek-ai-dsh-host-directory-picker-browse/known-limitations-and-deferred-work:
+  en: 45c0c8ff249e6119
+  zh: d7e4ff77f5978fba
+/deepseek-ai-dsh-host-directory-picker-browse/known-limitations-and-deferred-work/dev-note:
+  en: 13b27b4147e8b473
+  zh: 6cfa1d08b4f9b527
+/deepseek-ai-dsh-host-directory-picker-browse/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

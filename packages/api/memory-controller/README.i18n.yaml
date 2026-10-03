@@ -1,0 +1,24 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: c7a22801cefbf7a0
+  zh: c7a22801cefbf7a0
+/deepseek-ai-dsh-api-memory-controller:
+  en: 6076370dee329803
+  zh: c560be38411f4f98
+/deepseek-ai-dsh-api-memory-controller/development:
+  en: a72bbc3f0f4e201d
+  zh: 342ec96f3bdbd383
+/deepseek-ai-dsh-api-memory-controller/source:
+  en: de82da800546efb1
+  zh: 48bef6cbcf1807c0
+/deepseek-ai-dsh-api-memory-controller/documentation:
+  en: 11391cdf215cd4d6
+  zh: cf82651a7e64a1ee
+/deepseek-ai-dsh-api-memory-controller/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-api-memory-controller/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

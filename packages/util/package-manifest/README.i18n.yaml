@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 1371febb12244ce6
+  zh: 1371febb12244ce6
+/deepseek-ai-dsh-package-manifest:
+  en: 90fdf4daddb42135
+  zh: 42350a2d78d2bd81
+/deepseek-ai-dsh-package-manifest/summary:
+  en: 463da8a46e0cf4e9
+  zh: a2c8ffd61a9969ac
+/deepseek-ai-dsh-package-manifest/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 1db86285abf6c499
+/deepseek-ai-dsh-package-manifest/use-this-package:
+  en: 8176ec6688e096ed
+  zh: 274d913a3dd33e1e
+/deepseek-ai-dsh-package-manifest/understand-the-implementation:
+  en: eeb47e55e4012277
+  zh: f8a4683a6bd943dc
+/deepseek-ai-dsh-package-manifest/further-exploration:
+  en: 8d75bdf9b7a2618b
+  zh: 70f25c5c1032049e
+/deepseek-ai-dsh-package-manifest/model-experience:
+  en: e6890ed60febae34
+  zh: 687130b529ec1ee0
+/deepseek-ai-dsh-package-manifest/model-experience/kv-cache-effect:
+  en: bb4e4f9d77a8abcf
+  zh: 367c034469c9c12f
+/deepseek-ai-dsh-package-manifest/known-limitations-and-deferred-work:
+  en: af71828aac32929b
+  zh: 6ea922bd69cef91d
+/deepseek-ai-dsh-package-manifest/known-limitations-and-deferred-work/dev-note:
+  en: b95f08b3b86a65da
+  zh: adcc182699a89251
+/deepseek-ai-dsh-package-manifest/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

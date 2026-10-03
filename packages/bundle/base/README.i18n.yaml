@@ -1,0 +1,66 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 8f7142c8ac4f5f82
+  zh: 8f7142c8ac4f5f82
+/deepseek-ai-dsh-base:
+  en: 501b1b61d4739d2a
+  zh: 5faba14f2480be3b
+/deepseek-ai-dsh-base/summary:
+  en: 30ac03ff33731529
+  zh: a166cd4942b3a912
+/deepseek-ai-dsh-base/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 2d021b7a4a4677d8
+/deepseek-ai-dsh-base/use-this-package:
+  en: bbff250eba0f1b89
+  zh: 0a618f05cc88ee2b
+/deepseek-ai-dsh-base/use-this-package/a-minimal-custom-profile:
+  en: 78e8c092c949c647
+  zh: f31eab2f3aba0d5c
+/deepseek-ai-dsh-base/use-this-package/what-you-get:
+  en: 19714348f57b9a2c
+  zh: b325c752059385f7
+/deepseek-ai-dsh-base/use-this-package/shell-tools-per-platform:
+  en: 2dce12f82d6ee955
+  zh: d4599eb899a3cd88
+/deepseek-ai-dsh-base/use-this-package/changing-the-defaults:
+  en: 96a55abd5f7007dd
+  zh: d94f020708c38a17
+/deepseek-ai-dsh-base/understand-the-implementation:
+  en: 094cfca8e26a0042
+  zh: de435e3e38420c01
+/deepseek-ai-dsh-base/understand-the-implementation/composition-mechanics:
+  en: dcf3d5121694211d
+  zh: cea7a28f7a77d843
+/deepseek-ai-dsh-base/understand-the-implementation/platform-gating:
+  en: 8c2444fa7b237783
+  zh: 82002a8b9ddf5942
+/deepseek-ai-dsh-base/understand-the-implementation/source-map:
+  en: 9492d66302593100
+  zh: 0904436610da2935
+/deepseek-ai-dsh-base/understand-the-implementation/invariant-ownership:
+  en: 533299d7bd555e61
+  zh: 0aed404f790ea447
+/deepseek-ai-dsh-base/further-exploration:
+  en: eced06bd45e37e7f
+  zh: a6ebcc7f310305dd
+/deepseek-ai-dsh-base/model-experience:
+  en: f6c4d2609b5f4bb6
+  zh: 869a9565a133fb01
+/deepseek-ai-dsh-base/model-experience/kv-cache-effect:
+  en: e6e907c99df7cd0a
+  zh: f19f2f84a5f95177
+/deepseek-ai-dsh-base/known-limitations-and-deferred-work:
+  en: 4c5c3ea1910f3c83
+  zh: 565c16d4b86b291b
+/deepseek-ai-dsh-base/known-limitations-and-deferred-work/dev-note:
+  en: ca037cb236aa841a
+  zh: e06f3899be43b572
+/deepseek-ai-dsh-base/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-base/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

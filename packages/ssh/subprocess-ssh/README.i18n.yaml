@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 3f93b47fd81a310e
+  zh: 3f93b47fd81a310e
+/deepseek-ai-dsh-subprocess-ssh:
+  en: f08776b78c004de7
+  zh: b5271644920635d5
+/deepseek-ai-dsh-subprocess-ssh/summary:
+  en: 94cac874abb4f1e2
+  zh: 0ce924fad4163492
+/deepseek-ai-dsh-subprocess-ssh/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 725b47765ee8f30b
+/deepseek-ai-dsh-subprocess-ssh/use-this-package:
+  en: f8e932a09e252f0b
+  zh: acf54b75034707de
+/deepseek-ai-dsh-subprocess-ssh/understand-the-implementation:
+  en: 2403aaafde22b671
+  zh: c04f142f7742c392
+/deepseek-ai-dsh-subprocess-ssh/further-exploration:
+  en: 02c37175cea228e5
+  zh: ef309107adc87bd3
+/deepseek-ai-dsh-subprocess-ssh/model-experience:
+  en: 02267d26e71b847c
+  zh: 749305233e7f63e4
+/deepseek-ai-dsh-subprocess-ssh/model-experience/kv-cache-effect:
+  en: 21f304c66e5ba98b
+  zh: 18185d5b164f8216
+/deepseek-ai-dsh-subprocess-ssh/known-limitations-and-deferred-work:
+  en: 0aa40f28ee1eb6e1
+  zh: da785a9b66cdbed9
+/deepseek-ai-dsh-subprocess-ssh/known-limitations-and-deferred-work/dev-note:
+  en: d648b8fcdc1e36b0
+  zh: d07feeacdec9712d
+/deepseek-ai-dsh-subprocess-ssh/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

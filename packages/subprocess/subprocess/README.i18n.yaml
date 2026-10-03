@@ -1,0 +1,75 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: e773425a1a0d14da
+  zh: e773425a1a0d14da
+/deepseek-ai-dsh-subprocess:
+  en: f692e3fa2c598b70
+  zh: f7d899b31647ead9
+/deepseek-ai-dsh-subprocess/summary:
+  en: f4de66186cbc53ba
+  zh: bf5c4b3f90b767f3
+/deepseek-ai-dsh-subprocess/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-subprocess/use-this-package:
+  en: a43391b5840a4c58
+  zh: a0a9c3fa577d92c0
+/deepseek-ai-dsh-subprocess/use-this-package/mounting-the-service:
+  en: 82be7c63ab95994f
+  zh: 8810e7c489b444df
+/deepseek-ai-dsh-subprocess/use-this-package/starting-a-managed-process:
+  en: 891cb74d5d35095c
+  zh: 296cb1890116fb05
+/deepseek-ai-dsh-subprocess/use-this-package/choosing-how-output-is-delivered:
+  en: 85f4f94dcd9b120d
+  zh: df6a985f7a1c0e40
+/deepseek-ai-dsh-subprocess/use-this-package/using-a-control-pipe:
+  en: 0d1d6d55cd5f7ec4
+  zh: bab0c3f51ed743cb
+/deepseek-ai-dsh-subprocess/use-this-package/managing-process-lifetime:
+  en: 83d662d278184411
+  zh: 2c4e7fbe76823fa8
+/deepseek-ai-dsh-subprocess/use-this-package/running-a-terminal-session:
+  en: e3631497344c2ebd
+  zh: c4ebc7b08f0a316e
+/deepseek-ai-dsh-subprocess/use-this-package/environment-every-child-starts-from:
+  en: cd8ffe6bf177dc67
+  zh: 7be2d265adb661bc
+/deepseek-ai-dsh-subprocess/use-this-package/what-can-go-wrong:
+  en: 51f2f43087a1ed18
+  zh: 6d2ebb099b707df3
+/deepseek-ai-dsh-subprocess/understand-the-implementation:
+  en: 25cd344c959cfd9e
+  zh: 045880776ab82d1e
+/deepseek-ai-dsh-subprocess/understand-the-implementation/design-concept:
+  en: 07201ec2256c25f6
+  zh: 046109cfa92194f3
+/deepseek-ai-dsh-subprocess/understand-the-implementation/source-map:
+  en: 30de3ce459e02570
+  zh: ff32b0cb28da5772
+/deepseek-ai-dsh-subprocess/understand-the-implementation/data-model-and-flow:
+  en: 9998dc0a990fbcf1
+  zh: ba179617f60cb9bc
+/deepseek-ai-dsh-subprocess/understand-the-implementation/lifecycle-and-invariants:
+  en: a132325eea7cadb4
+  zh: 434cbbc61ff9cd0e
+/deepseek-ai-dsh-subprocess/further-exploration:
+  en: 8141fe3ec3928639
+  zh: 4646d581bf178e2b
+/deepseek-ai-dsh-subprocess/model-experience:
+  en: 36d8f1820f81de29
+  zh: da18a4123bdd28b7
+/deepseek-ai-dsh-subprocess/model-experience/kv-cache-effect:
+  en: e290ccc9b3c92c08
+  zh: d75d48f485447a74
+/deepseek-ai-dsh-subprocess/known-limitations-and-deferred-work:
+  en: d59379b4860bb2c3
+  zh: c824e8e863e08c5d
+/deepseek-ai-dsh-subprocess/known-limitations-and-deferred-work/dev-note:
+  en: 742836df265ea1ff
+  zh: 45daf0333596d307
+/deepseek-ai-dsh-subprocess/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

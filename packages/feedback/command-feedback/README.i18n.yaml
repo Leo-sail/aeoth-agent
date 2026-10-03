@@ -1,0 +1,66 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: d218a6c93064615b
+  zh: d218a6c93064615b
+/deepseek-ai-dsh-command-feedback:
+  en: ba9f49666fd040a4
+  zh: 9b2ab90df6a7d96a
+/deepseek-ai-dsh-command-feedback/summary:
+  en: 30ac03ff33731529
+  zh: a166cd4942b3a912
+/deepseek-ai-dsh-command-feedback/table-of-contents:
+  en: 74ac9d4738f5d993
+  zh: 2d021b7a4a4677d8
+/deepseek-ai-dsh-command-feedback/use-this-package:
+  en: 43b47fa17f4eb707
+  zh: 8c25b5a898fb5895
+/deepseek-ai-dsh-command-feedback/use-this-package/the-feedback-command:
+  en: 645ee72ee1af491d
+  zh: 32b86c39307093e3
+/deepseek-ai-dsh-command-feedback/use-this-package/the-web-feedback-dialog:
+  en: 930810280583f334
+  zh: 34d83535891dabee
+/deepseek-ai-dsh-command-feedback/use-this-package/recording-feedback-from-your-own-ui:
+  en: 299e6c32354ff8aa
+  zh: b34b37f6866155a8
+/deepseek-ai-dsh-command-feedback/understand-the-implementation:
+  en: 42b15ac6321706aa
+  zh: 4ed0861911abaf5d
+/deepseek-ai-dsh-command-feedback/understand-the-implementation/design-concept:
+  en: 8363f597c28788d2
+  zh: 9dda2a864a01f4ce
+/deepseek-ai-dsh-command-feedback/understand-the-implementation/how-a-remark-is-recorded:
+  en: 28db75c9d9fbe570
+  zh: 0b2292d80d9e3081
+/deepseek-ai-dsh-command-feedback/understand-the-implementation/source-map:
+  en: 4fd622508f032a28
+  zh: fa336bcbaabca58e
+/deepseek-ai-dsh-command-feedback/further-exploration:
+  en: 3f3b9c53cd589403
+  zh: 13ca15c564be3521
+/deepseek-ai-dsh-command-feedback/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-command-feedback/model-experience/human-feedback-capture:
+  en: 987bab29bbe8ec43
+  zh: 725efc45361172b5
+/deepseek-ai-dsh-command-feedback/model-experience/human-feedback-capture/what-the-model-sees:
+  en: 6ad8e2a4f961d2f4
+  zh: b510d05a74d6df0c
+/deepseek-ai-dsh-command-feedback/model-experience/human-feedback-capture/token-effect:
+  en: 1fcbd4d84eff267f
+  zh: 8da9902c44bf8dc4
+/deepseek-ai-dsh-command-feedback/model-experience/human-feedback-capture/kv-cache-effect:
+  en: c72e7dfee7b0957a
+  zh: b122fce5efccfafa
+/deepseek-ai-dsh-command-feedback/known-limitations-and-deferred-work:
+  en: d898b1b04dd357ee
+  zh: d706a1fddcfb4b48
+/deepseek-ai-dsh-command-feedback/known-limitations-and-deferred-work/dev-note:
+  en: 7a5404af8c3fc90c
+  zh: edbe40591df1bbf5
+/deepseek-ai-dsh-command-feedback/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

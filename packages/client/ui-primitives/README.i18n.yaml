@@ -1,0 +1,66 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 1fb95a4531dd6e47
+  zh: 1fb95a4531dd6e47
+/deepseek-ai-dsh-client-ui-primitives:
+  en: e39769cae26393b8
+  zh: 8743c8cf561fec35
+/deepseek-ai-dsh-client-ui-primitives/summary:
+  en: 1e3e37f2942c8222
+  zh: ccbc48920ccbea2a
+/deepseek-ai-dsh-client-ui-primitives/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-primitives/use-this-package:
+  en: e98fb00e009397ff
+  zh: 9555f132daf8901c
+/deepseek-ai-dsh-client-ui-primitives/use-this-package/component-catalog:
+  en: 27665f53c0ce294f
+  zh: 03b483996041200d
+/deepseek-ai-dsh-client-ui-primitives/use-this-package/controls-and-icons:
+  en: aacf501738b7440a
+  zh: 1f9625244839bbd5
+/deepseek-ai-dsh-client-ui-primitives/use-this-package/rendering-agent-output:
+  en: d79e20306593c4bf
+  zh: 5c0f1100e2cd6fcc
+/deepseek-ai-dsh-client-ui-primitives/use-this-package/localizing-copy:
+  en: 4aef65dea11de083
+  zh: abc22cd7c65cdf38
+/deepseek-ai-dsh-client-ui-primitives/understand-the-implementation:
+  en: 464527753be6a4f6
+  zh: d9df7442503bd58f
+/deepseek-ai-dsh-client-ui-primitives/understand-the-implementation/source-map:
+  en: 44eb32370cbeafe8
+  zh: 728009c66375c6bb
+/deepseek-ai-dsh-client-ui-primitives/understand-the-implementation/input-modality:
+  en: cb61e1a37d6c27e5
+  zh: 1f3fa79dd5ab2e45
+/deepseek-ai-dsh-client-ui-primitives/understand-the-implementation/streaming-markdown:
+  en: 8bbfa14c27f3bfd7
+  zh: 88f7548ac3a114e1
+/deepseek-ai-dsh-client-ui-primitives/understand-the-implementation/geometry-and-overflow:
+  en: 49f6341d81ded00e
+  zh: cab87dc54a42ba69
+/deepseek-ai-dsh-client-ui-primitives/further-exploration:
+  en: b8f203ca27b2a5f9
+  zh: a877f34b148f433f
+/deepseek-ai-dsh-client-ui-primitives/model-experience:
+  en: 3120df665299c634
+  zh: 1d9f365d091d0d2a
+/deepseek-ai-dsh-client-ui-primitives/model-experience/kv-cache-effect:
+  en: ca75c51c89c2c9b0
+  zh: de54f3467ef3b9be
+/deepseek-ai-dsh-client-ui-primitives/known-limitations-and-deferred-work:
+  en: 4e92f46ea4055b4c
+  zh: 68ab9133d0dd8a79
+/deepseek-ai-dsh-client-ui-primitives/known-limitations-and-deferred-work/dev-note:
+  en: ae1d5d1bcc80c932
+  zh: 15709ccdbfcdf26c
+/deepseek-ai-dsh-client-ui-primitives/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-primitives/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: d4c7e810df6f3279
+  zh: d4c7e810df6f3279
+/deepseek-ai-dsh-api-gateway:
+  en: 7c37b852461967b9
+  zh: c6f7a5be7225c73b
+/deepseek-ai-dsh-api-gateway/summary:
+  en: a46c515e4087312a
+  zh: 17c8a2c541eafdea
+/deepseek-ai-dsh-api-gateway/table-of-contents:
+  en: d9859219cdb0f367
+  zh: 2a3cfa8cb786e327
+/deepseek-ai-dsh-api-gateway/host-service-typertgatewayservice-ctx-key-typertgateway:
+  en: 65092c0f187de45c
+  zh: 453bbb826aa7c242
+/deepseek-ai-dsh-api-gateway/client-service-clientremote-ctx-key-remote:
+  en: c106f0ca3e547f84
+  zh: 833e30d7151c41c7
+/deepseek-ai-dsh-api-gateway/model-experience:
+  en: 6cb309d3378f035d
+  zh: 998042a02ee32850
+/deepseek-ai-dsh-api-gateway/model-experience/kv-cache-effect:
+  en: af5abeee32f2d93b
+  zh: b320bb727a223a13
+/deepseek-ai-dsh-api-gateway/known-limitations-and-deferred-work:
+  en: 3ade2903f40a0a98
+  zh: 9af1d557fefdbd89
+/deepseek-ai-dsh-api-gateway/known-limitations-and-deferred-work/dev-note:
+  en: 365f5c32056ff39a
+  zh: 9556fd36702f5ecd
+/deepseek-ai-dsh-api-gateway/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-api-gateway/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

@@ -1,0 +1,24 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 1646e62ed4575f63
+  zh: 1646e62ed4575f63
+/deepseek-ai-dsh-agent-link:
+  en: f58108b595ec460b
+  zh: 7b6f832b4610b500
+/deepseek-ai-dsh-agent-link/development:
+  en: a72bbc3f0f4e201d
+  zh: 342ec96f3bdbd383
+/deepseek-ai-dsh-agent-link/source:
+  en: cf3af9ba544957d7
+  zh: 0a21230bc162a2eb
+/deepseek-ai-dsh-agent-link/documentation:
+  en: 5dac5d21d1fdfcb4
+  zh: 301202ffaba01584
+/deepseek-ai-dsh-agent-link/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-agent-link/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

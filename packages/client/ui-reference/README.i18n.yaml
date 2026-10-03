@@ -1,0 +1,54 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: d431511157cb824f
+  zh: d431511157cb824f
+/deepseek-ai-dsh-client-ui-reference:
+  en: 78a7e99d2d912768
+  zh: 0c2e12bc70916265
+/deepseek-ai-dsh-client-ui-reference/summary:
+  en: 9a48534b932c764e
+  zh: 2cce4b4ec4bbb05a
+/deepseek-ai-dsh-client-ui-reference/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-client-ui-reference/use-this-package:
+  en: 779a9a534eaad38b
+  zh: 3dd159a2c35702d6
+/deepseek-ai-dsh-client-ui-reference/use-this-package/what-a-pick-inserts:
+  en: 86a9f1381a83ed3e
+  zh: db5f615d93dcc08d
+/deepseek-ai-dsh-client-ui-reference/use-this-package/failure-behavior:
+  en: 228ee6f4b81d96a7
+  zh: e1c960c3f5b25317
+/deepseek-ai-dsh-client-ui-reference/understand-the-implementation:
+  en: dbfe93987c800112
+  zh: 200d477cc8cd8a1a
+/deepseek-ai-dsh-client-ui-reference/understand-the-implementation/candidate-flow:
+  en: 6c77da1e946f72e1
+  zh: b7b8e1e1d4f5a102
+/deepseek-ai-dsh-client-ui-reference/understand-the-implementation/serialization:
+  en: 9b084ec665b5a55b
+  zh: 3e2cf7c6e3d70c31
+/deepseek-ai-dsh-client-ui-reference/further-exploration:
+  en: 7d1a04c2a675ad09
+  zh: a2b4b47a2480380a
+/deepseek-ai-dsh-client-ui-reference/model-experience:
+  en: f7fa58a80d82d63a
+  zh: 8235157cbbbd18cf
+/deepseek-ai-dsh-client-ui-reference/model-experience/kv-cache-effect:
+  en: ff23f8026f7c6050
+  zh: 6b0841800076bcd2
+/deepseek-ai-dsh-client-ui-reference/known-limitations-and-deferred-work:
+  en: e79991a25b11e342
+  zh: 15064e8374c8e63d
+/deepseek-ai-dsh-client-ui-reference/known-limitations-and-deferred-work/dev-note:
+  en: 80768071dca1786f
+  zh: a82f1ec9dcb368bd
+/deepseek-ai-dsh-client-ui-reference/desktop-delivery:
+  en: 0fe9f4c50b26c18e
+  zh: 9fd6728dbee79f8b
+/deepseek-ai-dsh-client-ui-reference/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14

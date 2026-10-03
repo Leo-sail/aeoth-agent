@@ -1,0 +1,39 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# Keep both languages synchronized when updating this record.
+/:
+  en: 16c2393f4ebae679
+  zh: 16c2393f4ebae679
+/deepseek-ai-dsh-experimental-client-ui-voice-input:
+  en: e9ad8d109a27c143
+  zh: cb09880ab2ce8942
+/deepseek-ai-dsh-experimental-client-ui-voice-input/summary:
+  en: 703b8b4f923ef765
+  zh: 8a4f3aa4b8192c80
+/deepseek-ai-dsh-experimental-client-ui-voice-input/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 364c80ee00a374ff
+/deepseek-ai-dsh-experimental-client-ui-voice-input/use-this-package:
+  en: 44f25ad14ceda123
+  zh: 43c4680be42af1cf
+/deepseek-ai-dsh-experimental-client-ui-voice-input/understand-the-implementation:
+  en: 18807008bccfdb6e
+  zh: bb5a82c92d4aa056
+/deepseek-ai-dsh-experimental-client-ui-voice-input/further-exploration:
+  en: 5c64426add9d79d6
+  zh: 4e06aa2ead8d2ccd
+/deepseek-ai-dsh-experimental-client-ui-voice-input/model-experience:
+  en: 3c5a85f8b7129ce8
+  zh: d5f491ca88d9a810
+/deepseek-ai-dsh-experimental-client-ui-voice-input/model-experience/kv-cache-effect:
+  en: b5ec79db2e1d0dbc
+  zh: e5aff567ae5ee6fc
+/deepseek-ai-dsh-experimental-client-ui-voice-input/known-limitations-and-deferred-work:
+  en: e6d37618956f3ff8
+  zh: ebb74dd513ece5e3
+/deepseek-ai-dsh-experimental-client-ui-voice-input/known-limitations-and-deferred-work/dev-note:
+  en: 9b9e73fe7bb2077d
+  zh: dfab9ff65dadbef0
+/deepseek-ai-dsh-experimental-client-ui-voice-input/license:
+  en: f324a78de3f69db1
+  zh: a7200ba6a1944d14
