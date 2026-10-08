@@ -8,8 +8,32 @@ export type BotMessageId = string & { readonly __brand: 'BotMessageId' }
 export type BotRunStatus = 'queued' | 'running' | 'completed' | 'interrupted' | 'failed' | 'cancelled'
 export type BotPresence = 'idle' | 'queued' | 'running' | 'waiting-human' | 'failed' | 'offline'
 export type BotRoomPolicy = 'mention-only' | 'round-robin'
-export type BotMessageSenderKind = 'user' | 'bot' | 'a2a' | 'routine'
+export type BotMessageSenderKind = 'user' | 'bot' | 'a2a' | 'routine' | 'leader'
 export type BotConnectionState = 'connected' | 'reconnecting' | 'disconnected'
+
+/** Run origins created by team rooms; every other origin belongs to ordinary rooms. */
+export type BotTeamRunOrigin = 'team-assign' | 'team-message' | 'team-report' | 'team-user'
+/** Presentation role of one team-room message. */
+export type BotTeamMessageKind = 'assign' | 'message' | 'report' | 'summary' | 'notice'
+
+/**
+ * The lead of one team room. A `session` lead is the user's own conversation
+ * (main or direct chat) that assembled the team; a `bot` lead is a member Agent
+ * chosen when the user created a fixed team.
+ */
+export type BotTeamLeader =
+  | { readonly kind: 'session'; readonly sessionId: SessionId }
+  | { readonly kind: 'bot'; readonly botId: BotId }
+
+/** Team configuration carried by a team room; absent on ordinary group chats and direct chats. */
+export interface BotTeam {
+  readonly leader: BotTeamLeader
+  /** Model- and UI-facing lead name; `lead` is the addressable target in team tools. */
+  readonly leaderName: string
+  /** Shared working directory of every member Session; the lead Session cwd for session-led teams. */
+  readonly workspace?: string
+  readonly status: 'active' | 'dismissed'
+}
 
 export interface BotAvatar {
   readonly seed: string
@@ -69,6 +93,10 @@ export interface BotRoom {
   readonly revision?: number
   readonly createdAt: string
   readonly updatedAt: string
+  /** Present on team rooms only. */
+  readonly team?: BotTeam
+  /** Read-only view filled by snapshots: each member's hidden room Session, keyed by Bot id. */
+  readonly memberSessions?: Readonly<Record<string, SessionId>>
 }
 
 export interface DeleteRoomRequest {
@@ -115,6 +143,10 @@ export interface BotMessage {
   /** Wall-clock duration from run admission to the persisted Agent reply. */
   readonly durationMs?: number
   readonly sequence?: number
+  /** Team-room presentation role; absent in ordinary rooms. */
+  readonly kind?: BotTeamMessageKind
+  /** Team-room addressees by name (`lead`, member names, or `all`). */
+  readonly targetNames?: readonly string[]
 }
 
 export interface BotRun {
@@ -122,8 +154,12 @@ export interface BotRun {
   readonly botId: BotId
   readonly roomId: BotRoomId
   readonly sessionId: SessionId
-  readonly origin: 'user' | 'routine' | 'a2a' | 'bot-message'
+  readonly origin: 'user' | 'routine' | 'a2a' | 'bot-message' | BotTeamRunOrigin
   readonly prompt: string
+  /** Team assignment metadata: the subject the lead gave and who dispatched it. */
+  readonly assignment?: { readonly subject: string; readonly fromName: string }
+  /** The member Session is blocked on a human approval; derived presence is `waiting-human`. */
+  readonly awaitingApproval?: boolean
   readonly status: BotRunStatus
   readonly controlRevision: number
   readonly createdAt: string
@@ -191,6 +227,75 @@ export interface BotCredentialInfo {
   readonly writable: boolean
 }
 
+/** Team configuration accepted by `createRoom`; exactly one of the lead fields is set. */
+export interface CreateTeamRequest {
+  readonly leaderBotId?: string
+  readonly leaderSessionId?: string
+  readonly leaderName: string
+  readonly workspace?: string
+}
+
+/** One durable team-room message plus the member runs it dispatches. */
+export interface PostTeamMessageRequest {
+  readonly roomId: string
+  readonly sender: { readonly kind: 'leader' | 'bot' | 'user'; readonly botId?: string; readonly name: string }
+  readonly text: string
+  readonly kind: BotTeamMessageKind
+  /** Members that receive a run for this message; empty when only the lead Session is addressed. */
+  readonly targetBotIds: readonly string[]
+  readonly targetNames: readonly string[]
+  readonly origin: BotTeamRunOrigin
+  readonly assignment?: { readonly subject: string; readonly fromName: string }
+}
+
+/** The committed team-room message and the member runs it queued. */
+export interface TeamMessageResult {
+  readonly message: BotMessage
+  readonly runs: readonly BotRun[]
+}
+
+export interface DismissTeamRequest {
+  readonly roomId: string
+  readonly summary: string
+}
+
+/** One member approval waiting for a person, raised by a hidden team member Session. */
+export interface TeamApproval {
+  readonly id: string
+  readonly roomId: BotRoomId
+  readonly memberName: string
+  readonly sessionId: SessionId
+  readonly toolName: string
+  readonly reason?: string
+  readonly createdAt: string
+}
+
+/** A person's decision on one {@link TeamApproval}. */
+export interface TeamApprovalAnswer {
+  readonly id: string
+  readonly outcome: 'allowed-once' | 'rejected'
+}
+
+/** What the conversation that leads a team needs to show about it. */
+export interface TeamOverview {
+  readonly room: BotRoom
+  readonly members: readonly {
+    readonly botId: BotId
+    readonly name: string
+    readonly presence: BotPresence
+    readonly sessionId?: SessionId
+  }[]
+  readonly approvals: readonly TeamApproval[]
+}
+
+/** Resolved team role of one live Session. */
+export interface BotTeamMembership {
+  readonly room: BotRoom
+  readonly role: 'lead' | 'member'
+  readonly name: string
+  readonly botId?: BotId
+}
+
 export interface CreateRoomRequest {
   readonly directBotId?: string
   readonly name: string
@@ -198,6 +303,8 @@ export interface CreateRoomRequest {
   readonly imagePath?: string
   readonly mentionOnly?: boolean
   readonly paused?: boolean
+  /** Create a team room led by one member Agent or by one existing Session. */
+  readonly team?: CreateTeamRequest
 }
 
 export interface SendRoomMessageRequest {
@@ -227,5 +334,11 @@ export interface SettleBotRunRequest {
   readonly error?: string
   readonly retry?: boolean
   readonly leaseOwner?: string
-  readonly reply?: { readonly text: string; readonly sessionSeq: SessionSeq; readonly reasoning?: string; readonly toolActivity?: readonly { readonly name: string; readonly status: string; readonly detail?: string }[]; readonly usage?: BotMessageUsage }
+  readonly reply?: {
+    readonly text: string
+    readonly sessionSeq: SessionSeq
+    readonly reasoning?: string
+    readonly toolActivity?: readonly { readonly name: string; readonly status: string; readonly detail?: string }[]
+    readonly usage?: BotMessageUsage
+  }
 }

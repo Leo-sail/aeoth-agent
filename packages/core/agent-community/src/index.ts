@@ -11,7 +11,7 @@ import z from '@deepseek-ai/schemastery'
 import type {
   BotCommunitySnapshot, BotId, BotIdentity, BotMessage, BotMessageId, BotRoom, BotRoomId, BotRun, BotRunId, BotMailboxItem,
   ControlBotRunRequest, CreateBotRequest, CreateRoomRequest, DeleteRoomRequest, RetryBotRunRequest, SendRoomMessageRequest, SettleBotRunRequest, UpdateBotRequest, UpdateRoomRequest,
-  BotProfileBinding, DeleteBotRequest,
+  BotProfileBinding, DeleteBotRequest, BotPresence, BotTeam, BotTeamMembership, DismissTeamRequest, PostTeamMessageRequest, TeamMessageResult, CreateTeamRequest, BotTeamMessageKind, BotTeamRunOrigin,
 } from './types.ts'
 
 export type * from './types.ts'
@@ -109,8 +109,45 @@ export class AgentCommunityService {
     const state = await this.read()
     const bots = state.bots.filter(bot => bot.builtIn !== true && bot.id !== 'bot-default' && bot.name !== 'default')
     const ids = new Set(bots.map(bot => bot.id))
-    const rooms = state.rooms.filter(room => room.id !== 'room-lobby' && room.name !== 'Lobby' && (room.directBotId === undefined ? room.memberIds.filter(id => ids.has(id)).length >= 2 : ids.has(room.directBotId)))
+    const rooms = state.rooms
+      .filter(room => room.id !== 'room-lobby' && room.name !== 'Lobby' && (room.directBotId === undefined
+        ? room.memberIds.filter(id => ids.has(id)).length >= (room.team === undefined ? 2 : 1)
+        : ids.has(room.directBotId)))
+      .map(room => room.team === undefined ? room : { ...room, memberSessions: memberSessionsOf(state, room.id) })
     return { ...state, bots, rooms }
+  }
+
+  /**
+   * Resolve the team role of one Session: the lead Session of a session-led
+   * team, or a member's hidden room Session (including the lead Agent of a
+   * fixed team). Dismissed teams keep resolving so late reports still land.
+   * @param sessionId - the live Session to classify.
+   * @returns the room, role, and model-facing name, or undefined outside teams.
+   */
+  async teamMembership(sessionId: SessionId): Promise<BotTeamMembership | undefined> {
+    const state = await this.read()
+    return teamMembershipIn(state, sessionId)
+  }
+
+  /**
+   * Find the room whose hidden Session this is, with the owning Bot.
+   * @param sessionId - candidate hidden room Session.
+   * @returns the room link, or undefined for ordinary conversations.
+   */
+  async roomLinkOf(sessionId: SessionId): Promise<{ readonly room: BotRoom; readonly bot: BotIdentity } | undefined> {
+    const state = await this.read()
+    const link = state.roomAgentSessions.find(item => item.sessionId === sessionId)
+    const room = state.rooms.find(item => item.id === link?.roomId)
+    const bot = state.bots.find(item => item.id === link?.botId)
+    return room === undefined || bot === undefined ? undefined : { room, bot }
+  }
+
+  /** List team rooms led by one Session, newest first. */
+  async teamsLedBy(sessionId: SessionId): Promise<readonly BotRoom[]> {
+    const state = await this.read()
+    return state.rooms
+      .filter(room => room.team?.leader.kind === 'session' && room.team.leader.sessionId === sessionId)
+      .toSorted((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt))
   }
   async listBots(): Promise<readonly BotIdentity[]> { return (await this.read()).bots.filter(bot => bot.builtIn !== true && bot.id !== 'bot-default' && bot.name !== 'default') }
   async listRooms(): Promise<readonly BotRoom[]> { return (await this.read()).rooms.filter(room => room.id !== 'room-lobby' && room.name !== 'Lobby') }
@@ -186,11 +223,13 @@ export class AgentCommunityService {
       if (state.rooms.length >= this.config.maxRooms) throw new Error('agent community room limit reached')
       const memberIds = [...new Set(input.memberIds ?? [])] as BotId[]
       if (memberIds.length === 0) throw new Error('select at least one Bot')
-      if (input.directBotId === undefined && memberIds.length < 2) throw new Error('group chat must contain at least 2 Agents')
+      if (input.team !== undefined && input.directBotId !== undefined) throw new Error('a direct chat cannot be a team')
+      if (input.directBotId === undefined && input.team === undefined && memberIds.length < 2) throw new Error('group chat must contain at least 2 Agents')
       if (input.directBotId !== undefined && (memberIds.length !== 1 || memberIds[0] !== input.directBotId)) {
         throw new Error('direct chat must contain exactly its Bot')
       }
       if (memberIds.some(memberId => !state.bots.some(bot => bot.id === memberId))) throw new Error('room contains an unknown bot')
+      const team = input.team === undefined ? undefined : resolveTeam(state, input.team, memberIds)
       const createdAt = now()
       const room: BotRoom = {
         id: id<BotRoomId>('room'), name: assertText(input.name, 'room name', 120),
@@ -200,6 +239,7 @@ export class AgentCommunityService {
         policy: input.directBotId === undefined ? (input.mentionOnly === false ? 'round-robin' : 'mention-only') : 'mention-only',
         sequence: 0, connection: 'connected',
         createdAt, updatedAt: createdAt,
+        ...(team === undefined ? {} : { team }),
       }
       await this.write({ ...state, rooms: [...state.rooms, room] })
       return room
@@ -213,7 +253,9 @@ export class AgentCommunityService {
       if (current === undefined) throw new Error('room not found')
       const memberIds = input.memberIds === undefined ? current.memberIds : [...new Set(input.memberIds)] as BotId[]
       if (memberIds.some(memberId => !state.bots.some(bot => bot.id === memberId))) throw new Error('room contains an unknown bot')
-      if (current.directBotId === undefined && memberIds.length < 2) throw new Error('group chat must contain at least 2 Agents')
+      if (current.directBotId === undefined && current.team === undefined && memberIds.length < 2) throw new Error('group chat must contain at least 2 Agents')
+      if (current.team !== undefined && memberIds.length < 1) throw new Error('team must keep at least 1 member')
+      if (current.team?.leader.kind === 'bot' && !memberIds.includes(current.team.leader.botId)) throw new Error('the team lead cannot be removed from its team')
       if (current.directBotId !== undefined && (memberIds.length !== 1 || memberIds[0] !== current.directBotId)) throw new Error('direct chat must contain exactly its Bot')
       const removed = new Set(current.memberIds.filter(botId => !memberIds.includes(botId)))
       const { imagePath: oldImagePath, ...base } = current
@@ -284,7 +326,10 @@ export class AgentCommunityService {
       const bot = state.bots.find(item => item.id === input.id)
       if (bot === undefined) return
       const orphansGroup = (room: BotRoom): boolean =>
-        room.directBotId === undefined && room.memberIds.includes(bot.id) && room.memberIds.length - 1 < 2
+        room.directBotId === undefined && room.memberIds.includes(bot.id)
+        && (room.team === undefined
+          ? room.memberIds.length - 1 < 2
+          : room.memberIds.length - 1 < 1 || isTeamLeadBot(room, bot.id))
       const removedRoomIds = new Set(state.rooms.filter(room => room.directBotId === bot.id || orphansGroup(room)).map(room => room.id))
       const touches = (roomId: BotRoomId, botId: BotId): boolean => removedRoomIds.has(roomId) || botId === bot.id
       await this.removeSessions(new Set<SessionId>([
@@ -335,6 +380,7 @@ export class AgentCommunityService {
       if (room === undefined) throw new Error('room not found')
       const text = assertText(input.text, 'room message')
       const mentions = this.mentions(state, room, text)
+      if (room.team !== undefined) return this.writeTeamUserMessage(state, room, text, mentions, input.senderName)
       // Explicit mentions remain authoritative. Without an @, route by the
       // request's content: one best-fit Agent for ordinary work, all matching
       // Agents for explicit multi-party/collaboration needs, and a stable
@@ -376,6 +422,148 @@ export class AgentCommunityService {
       })
       return message
     })
+  }
+
+  /**
+   * Append one team-room message and queue a run for every addressed member.
+   * Messages addressed only to a session lead queue nothing; the controller
+   * delivers them to that Session.
+   * @param input - room, sender, text, presentation kind, and addressed members.
+   * @returns the committed message and its queued runs.
+   */
+  async postTeamMessage(input: PostTeamMessageRequest): Promise<TeamMessageResult> {
+    return this.serial(async () => {
+      const state = await this.read()
+      const room = state.rooms.find(item => item.id === input.roomId)
+      if (room?.team === undefined) throw new Error('team room not found')
+      if (room.team.status !== 'active') throw new Error('this team has been dismissed; assemble a new team')
+      const targets = [...new Set(input.targetBotIds)] as BotId[]
+      if (targets.some(botId => !room.memberIds.includes(botId))) throw new Error('every target must be a member of this team')
+      const composed = this.composeTeamMessage(state, room, {
+        sender: { kind: input.sender.kind, ...(input.sender.botId === undefined ? {} : { botId: input.sender.botId as BotId }), name: input.sender.name },
+        text: assertText(input.text, 'team message', 200_000), kind: input.kind, targets, targetNames: input.targetNames,
+        origin: input.origin, ...(input.assignment === undefined ? {} : { assignment: input.assignment }),
+      })
+      await this.write(composed.state)
+      return { message: composed.message, runs: composed.runs }
+    })
+  }
+
+  /**
+   * Close one team: cancel its queued and running member runs, publish the
+   * lead's summary, and mark the team dismissed. Member Sessions are kept.
+   * @param input - team room and summary text.
+   * @returns the dismissed room.
+   */
+  async dismissTeam(input: DismissTeamRequest): Promise<BotRoom> {
+    return this.serial(async () => {
+      const state = await this.read()
+      const room = state.rooms.find(item => item.id === input.roomId)
+      if (room?.team === undefined) throw new Error('team room not found')
+      const timestamp = now()
+      const active = state.runs.filter(run => run.roomId === room.id && (run.status === 'queued' || run.status === 'running'))
+      for (const run of active) {
+        if (run.status === 'running') this.ctx.get('agents')?.get(run.sessionId)?.cancel({ kind: 'user' }, { keepInbox: false })
+      }
+      const activeIds = new Set(active.map(run => run.id))
+      const sequence = room.sequence + 1
+      const leadBotId = room.team.leader.kind === 'bot' ? room.team.leader.botId : undefined
+      const summary: BotMessage = {
+        id: id<BotMessageId>('message'), roomId: room.id,
+        sender: { kind: 'leader', ...(leadBotId === undefined ? {} : { botId: leadBotId }), name: room.team.leaderName },
+        text: assertText(input.summary, 'team summary', 200_000), mentions: [], kind: 'summary', createdAt: timestamp, sequence,
+      }
+      const team: BotTeam = { ...room.team, status: 'dismissed' }
+      const runs = state.runs.map(run => activeIds.has(run.id)
+        ? (() => { const { leaseOwner: _owner, leaseExpiresAt: _expiry, ...base } = run; return { ...base, status: 'cancelled' as const, controlRevision: run.controlRevision + 1, error: 'Team dismissed', finishedAt: timestamp, updatedAt: timestamp } })()
+        : run)
+      const updatedRoom: BotRoom = { ...room, team, sequence, updatedAt: timestamp }
+      await this.write({
+        ...state, runs,
+        rooms: state.rooms.map(item => item.id === room.id ? updatedRoom : item),
+        messages: [...state.messages, summary],
+        mailbox: state.mailbox.map(item => item.roomId === room.id && item.status !== 'settled' ? { ...item, status: 'settled', settledAt: timestamp } : item),
+        bots: state.bots.map(bot => ({ ...bot, presence: derivePresence(runs, bot.id, bot.presence === 'failed' ? 'failed' : 'idle') })),
+      })
+      return updatedRoom
+    })
+  }
+
+  /**
+   * Record whether the running run of one hidden member Session waits for a
+   * human approval, so the room can show who needs attention.
+   * @param sessionId - member Session that asked or received a decision.
+   * @param awaiting - whether an approval is pending.
+   * @returns the updated run, or undefined when no team run owns the Session.
+   */
+  async setRunAwaitingApproval(sessionId: SessionId, awaiting: boolean): Promise<BotRun | undefined> {
+    return this.serial(async () => {
+      const state = await this.read()
+      const current = state.runs.find(run => run.sessionId === sessionId && run.status === 'running')
+      if (current === undefined || (current.awaitingApproval === true) === awaiting) return undefined
+      const { awaitingApproval: _previous, ...base } = current
+      const updated: BotRun = awaiting ? { ...base, awaitingApproval: true, updatedAt: now() } : { ...base, updatedAt: now() }
+      const runs = state.runs.map(run => run.id === current.id ? updated : run)
+      await this.write({ ...state, runs, bots: state.bots.map(bot => bot.id === current.botId ? { ...bot, presence: derivePresence(runs, bot.id, 'idle') } : bot) })
+      return updated
+    })
+  }
+
+  /** Route one human team-room message: explicit mentions go to those members, otherwise to the lead. */
+  private async writeTeamUserMessage(state: PersistedState, room: BotRoom, text: string, mentions: readonly BotId[], senderName?: string): Promise<BotMessage> {
+    const team = room.team as BotTeam
+    const explicit = [...new Set(mentions)].filter(botId => room.memberIds.includes(botId))
+    const targets = explicit.length > 0 ? explicit : team.leader.kind === 'bot' ? [team.leader.botId] : []
+    const names = explicit.length > 0
+      ? explicit.map(botId => state.bots.find(bot => bot.id === botId)?.name ?? botId)
+      : ['lead']
+    // A human message reopens a dismissed team so the lead can pick the work up again.
+    const reopened: PersistedState = team.status === 'active'
+      ? state
+      : { ...state, rooms: state.rooms.map(item => item.id === room.id ? { ...item, team: { ...team, status: 'active' as const } } : item) }
+    const composed = this.composeTeamMessage(reopened, { ...room, team: { ...team, status: 'active' } }, {
+      sender: { kind: 'user', name: senderName?.trim() || 'user' }, text, kind: 'message', targets, targetNames: names, origin: 'team-user',
+    })
+    await this.write(composed.state)
+    return composed.message
+  }
+
+  /** Pure state transition shared by every team-room message producer. */
+  private composeTeamMessage(state: PersistedState, room: BotRoom, spec: {
+    readonly sender: BotMessage['sender']
+    readonly text: string
+    readonly kind: BotTeamMessageKind
+    readonly targets: readonly BotId[]
+    readonly targetNames: readonly string[]
+    readonly origin: BotTeamRunOrigin
+    readonly assignment?: { readonly subject: string; readonly fromName: string }
+  }): { state: PersistedState; message: BotMessage; runs: BotRun[] } {
+    if (state.messages.length + 1 > this.config.maxMessages) throw new Error('agent community message limit reached')
+    if (state.runs.length + spec.targets.length > this.config.maxRuns) throw new Error('agent community run limit reached')
+    const timestamp = now()
+    const sequence = room.sequence + 1
+    const messageId = id<BotMessageId>('message')
+    const roomAgentSessions = [...state.roomAgentSessions]
+    const runs: BotRun[] = spec.targets.map(botId => ({
+      id: id<BotRunId>('run'), botId, roomId: room.id, sessionId: linkSession(roomAgentSessions, room.id, botId), origin: spec.origin, prompt: spec.text,
+      status: 'queued', controlRevision: 0, attempt: 0, maxAttempts: 3, createdAt: timestamp, updatedAt: timestamp,
+      roomSequence: sequence, rootMessageId: messageId, round: 1, ...(spec.assignment === undefined ? {} : { assignment: spec.assignment }),
+    }))
+    const message: BotMessage = {
+      id: messageId, roomId: room.id, sender: spec.sender, text: spec.text, mentions: [...spec.targets], kind: spec.kind,
+      targetNames: [...spec.targetNames], createdAt: timestamp, sequence, ...(runs.length === 0 ? {} : { runIds: runs.map(run => run.id) }),
+    }
+    const allRuns = [...state.runs, ...runs]
+    return {
+      message, runs,
+      state: {
+        ...state, roomAgentSessions,
+        rooms: state.rooms.map(item => item.id === room.id ? { ...item, sequence, updatedAt: timestamp } : item),
+        messages: [...state.messages, message], runs: allRuns,
+        mailbox: [...state.mailbox, ...runs.map(run => ({ id: id<string>('mailbox'), roomId: room.id, botId: run.botId, messageId, sequence, status: 'pending' as const, createdAt: timestamp }))],
+        bots: state.bots.map(bot => spec.targets.includes(bot.id) ? { ...bot, presence: derivePresence(allRuns, bot.id, 'idle') } : bot),
+      },
+    }
   }
 
   /** Adopt a scheduler-delivered prompt into the owning Community room without duplicating the Session input. */
@@ -427,8 +615,13 @@ export class AgentCommunityService {
       const leaseExpiry = Date.parse(current.leaseExpiresAt ?? '')
       const leaseExpired = current.status === 'running' && (!Number.isFinite(leaseExpiry) || leaseExpiry <= clock)
       if (current.status === 'running' && !leaseExpired) return undefined
+      // Team rooms run every member in parallel: only the same hidden Session serializes.
+      // Ordinary rooms keep one run per room and per Bot.
+      const teamRoomIds = new Set(state.rooms.filter(item => item.team !== undefined).map(item => item.id))
       const competing = state.runs.filter(run => run.id !== current.id && ['queued', 'running'].includes(run.status)
-        && (run.botId === current.botId || run.roomId === current.roomId))
+        && (run.sessionId === current.sessionId
+          || (!teamRoomIds.has(current.roomId) && !teamRoomIds.has(run.roomId)
+            && (run.botId === current.botId || run.roomId === current.roomId))))
       if (competing.some(run => run.status === 'running' && Date.parse(run.leaseExpiresAt ?? '') > clock)) return undefined
       if (competing.some(run => state.runs.indexOf(run) < state.runs.indexOf(current)
         && !state.rooms.find(item => item.id === run.roomId)?.paused)) return undefined
@@ -530,7 +723,7 @@ export class AgentCommunityService {
         if (!bot) throw new Error('run bot not found')
         const text = assertText(input.reply.text, 'bot reply', 200_000)
         const mentions = this.mentions(state, room, text).filter(botId => botId !== current.botId)
-        paused ||= USER_MENTION.test(text)
+        paused ||= room.team === undefined && USER_MENTION.test(text)
         const messageId = id<BotMessageId>('message')
         const rootMessageId = current.rootMessageId ?? state.messages.find(item => item.runIds?.includes(current.id))?.id ?? messageId
         sequence++
@@ -538,7 +731,7 @@ export class AgentCommunityService {
         const rootMessage = state.messages.find(item => item.id === rootMessageId)
         const relayRecipients = this.resolveRelayRecipients(state, room, rootMessage?.text ?? current.prompt, text, mentions, family)
         const remaining = Math.max(0, 10 - family.length)
-        if (!paused && room.directBotId === undefined && (current.round ?? 1) < 3) {
+        if (!paused && room.directBotId === undefined && room.team === undefined && (current.round ?? 1) < 3) {
           for (const botId of relayRecipients.slice(0, remaining)) {
             if (family.some(run => run.botId === botId && ['queued', 'running'].includes(run.status))) continue
             if (state.runs.length + followups.length >= this.config.maxRuns) break
@@ -549,18 +742,39 @@ export class AgentCommunityService {
               roomSequence: sequence, rootMessageId, round: (current.round ?? 1) + 1 })
           }
         }
+        const lead = room.team !== undefined && isTeamLeadBot(room, current.botId)
+        if (room.team !== undefined && !lead) {
+          const report = teamReportRun(state, room, current, bot.name, `Report from ${bot.name}${current.assignment === undefined ? '' : ` on "${current.assignment.subject}"`}:\n\n${text}`, roomAgentSessions, sequence, timestamp)
+          if (report !== undefined) followups.push(report)
+        }
         const startedAt = Date.parse(current.startedAt ?? current.createdAt)
         const durationMs = Number.isFinite(startedAt) ? Math.max(0, Date.parse(timestamp) - startedAt) : undefined
-        messages.push({ id: messageId, roomId: room.id, sender: { kind: 'bot', botId: bot.id, name: bot.name }, text, mentions, sequence,
+        messages.push({ id: messageId, roomId: room.id, sender: { kind: lead ? 'leader' : 'bot', botId: bot.id, name: bot.name }, text, mentions, sequence,
+          ...(room.team === undefined ? {} : lead ? { kind: 'message' as const } : { kind: 'report' as const, targetNames: ['lead'] }),
           createdAt: timestamp, runId: current.id, runIds: followups.map(run => run.id), sessionId: current.sessionId, sessionSeq: input.reply.sessionSeq,
           ...(durationMs === undefined ? {} : { durationMs }),
           ...(input.reply.reasoning === undefined ? {} : { reasoning: input.reply.reasoning }),
           ...(input.reply.toolActivity === undefined ? {} : { toolActivity: input.reply.toolActivity }),
           ...(input.reply.usage === undefined ? {} : { usage: input.reply.usage }) })
       }
-      if (input.status === 'failed' && input.retry === true && current.attempt < current.maxAttempts) {
+      const retrying = input.status === 'failed' && input.retry === true && current.attempt < current.maxAttempts
+      if (retrying) {
         const { finishedAt: _finished, requestId: _request, submission: _submission, error: failure, ...retry } = updated
         updated = { ...retry, status: 'queued', ...(failure === undefined ? {} : { lastError: failure }), nextRetryAt: new Date(Date.now() + Math.min(30_000, 500 * 2 ** current.attempt)).toISOString() }
+      }
+      // A team member that stops without a reply still owes its lead an account, so the lead can reassign.
+      if (room.team !== undefined && !retrying && input.status !== 'completed') {
+        const bot = state.bots.find(item => item.id === current.botId)
+        const name = bot?.name ?? current.botId
+        const reason = input.status === 'interrupted' ? 'was interrupted' : `failed: ${input.error ?? 'unknown error'}`
+        const text = `${name} stopped without finishing${current.assignment === undefined ? '' : ` "${current.assignment.subject}"`}: ${reason}`.slice(0, 2000)
+        sequence++
+        if (!isTeamLeadBot(room, current.botId)) {
+          const report = teamReportRun(state, room, current, name, text, roomAgentSessions, sequence, timestamp)
+          if (report !== undefined) followups.push(report)
+        }
+        messages.push({ id: id<BotMessageId>('message'), roomId: room.id, sender: { kind: 'bot', botId: current.botId, name }, text, mentions: [],
+          kind: 'notice', targetNames: ['lead'], sequence, createdAt: timestamp, runId: current.id, runIds: followups.map(run => run.id), sessionId: current.sessionId })
       }
       const runs = [...state.runs.map(run => run.id === current.id ? updated
         : paused && run.roomId === room.id && run.status === 'queued' && run.origin === 'bot-message'
@@ -573,8 +787,7 @@ export class AgentCommunityService {
         rooms: state.rooms.map(item => item.id === room.id ? { ...item, sequence, paused, updatedAt: timestamp } : item),
         roomAgentSessions: roomAgentSessions.map(link => link.roomId === room.id && link.botId === current.botId && input.status === 'completed'
           ? { ...link, lastSeenSequence: Math.max(link.lastSeenSequence ?? 0, current.roomSequence ?? 0) } : link),
-        bots: state.bots.map(bot => ({ ...bot, presence: runs.some(run => run.botId === bot.id && run.status === 'running') ? 'running'
-          : runs.some(run => run.botId === bot.id && run.status === 'queued') ? 'queued' : bot.id === current.botId && input.status === 'failed' ? 'failed' : 'idle' })) })
+        bots: state.bots.map(bot => ({ ...bot, presence: derivePresence(runs, bot.id, bot.id === current.botId && input.status === 'failed' ? 'failed' : 'idle') })) })
       return true
     })
   }
@@ -747,6 +960,83 @@ export class AgentCommunityService {
     this.tail = next.catch(() => {})
     return next
   }
+}
+
+/** Find or create the hidden Session link of one member in one room. */
+function linkSession(links: RoomAgentSession[], roomId: BotRoomId, botId: BotId): SessionId {
+  let link = links.find(item => item.roomId === roomId && item.botId === botId)
+  if (link === undefined) {
+    link = { roomId, botId, sessionId: SessionId(id('session-bot')) }
+    links.push(link)
+  }
+  return link.sessionId
+}
+
+function isTeamLeadBot(room: BotRoom, botId: BotId): boolean {
+  return room.team?.leader.kind === 'bot' && room.team.leader.botId === botId
+}
+
+/** Presence of one Bot derived from its runs; `fallback` applies when nothing is queued or running. */
+function derivePresence(runs: readonly BotRun[], botId: BotId, fallback: BotPresence): BotPresence {
+  const running = runs.filter(run => run.botId === botId && run.status === 'running')
+  if (running.some(run => run.awaitingApproval === true)) return 'waiting-human'
+  if (running.length > 0) return 'running'
+  if (runs.some(run => run.botId === botId && run.status === 'queued')) return 'queued'
+  return fallback
+}
+
+/** Queue a member's account for the lead Agent of a fixed team; session leads are reached by the controller. */
+function teamReportRun(
+  state: PersistedState, room: BotRoom, source: BotRun, fromName: string, text: string,
+  links: RoomAgentSession[], sequence: number, timestamp: string,
+): BotRun | undefined {
+  const leader = room.team?.leader
+  if (leader?.kind !== 'bot' || !state.bots.some(bot => bot.id === leader.botId)) return undefined
+  return {
+    id: id<BotRunId>('run'), botId: leader.botId, roomId: room.id, sessionId: linkSession(links, room.id, leader.botId),
+    origin: 'team-report', prompt: text, status: 'queued', attempt: 0, maxAttempts: 3, controlRevision: 0,
+    createdAt: timestamp, updatedAt: timestamp, roomSequence: sequence, round: 1,
+    ...(source.rootMessageId === undefined ? {} : { rootMessageId: source.rootMessageId }),
+    assignment: { subject: source.assignment?.subject ?? `report from ${fromName}`, fromName },
+  }
+}
+
+/** Validate a team request against the room members and resolve its lead. */
+function resolveTeam(state: PersistedState, input: CreateTeamRequest, memberIds: readonly BotId[]): BotTeam {
+  if ((input.leaderBotId === undefined) === (input.leaderSessionId === undefined)) throw new Error('a team needs exactly one lead')
+  if (input.workspace !== undefined && input.workspace !== '' && !isAbsolute(input.workspace)) throw new Error('team workspace must be an absolute path')
+  if (input.leaderBotId !== undefined) {
+    const lead = state.bots.find(bot => bot.id === input.leaderBotId)
+    if (lead === undefined || !memberIds.includes(lead.id)) throw new Error('the team lead must be one of the selected Agents')
+    const workspace = input.workspace || lead.workspace
+    return { leader: { kind: 'bot', botId: lead.id }, leaderName: lead.name, ...(workspace ? { workspace } : {}), status: 'active' }
+  }
+  return {
+    leader: { kind: 'session', sessionId: SessionId(input.leaderSessionId as string) },
+    leaderName: assertText(input.leaderName, 'team lead name', 64),
+    ...(input.workspace ? { workspace: input.workspace } : {}), status: 'active',
+  }
+}
+
+function memberSessionsOf(state: PersistedState, roomId: BotRoomId): Record<string, SessionId> {
+  return Object.fromEntries(state.roomAgentSessions.filter(link => link.roomId === roomId).map(link => [link.botId, link.sessionId]))
+}
+
+/** Classify one Session against every team room; an active team wins over dismissed history. */
+function teamMembershipIn(state: PersistedState, sessionId: SessionId): BotTeamMembership | undefined {
+  const rooms = state.rooms.filter(room => room.team !== undefined)
+    .toSorted((left, right) => Number(right.team?.status === 'active') - Number(left.team?.status === 'active')
+      || Date.parse(right.createdAt) - Date.parse(left.createdAt))
+  for (const room of rooms) {
+    const team = room.team as BotTeam
+    if (team.leader.kind === 'session' && team.leader.sessionId === sessionId) return { room, role: 'lead', name: team.leaderName }
+    const link = state.roomAgentSessions.find(item => item.roomId === room.id && item.sessionId === sessionId)
+    if (link === undefined || !room.memberIds.includes(link.botId)) continue
+    const bot = state.bots.find(item => item.id === link.botId)
+    if (bot === undefined) continue
+    return { room, role: isTeamLeadBot(room, bot.id) ? 'lead' : 'member', name: bot.name, botId: bot.id }
+  }
+  return undefined
 }
 
 export function apply(ctx: Context, config: Config): void { ctx.provide('agentCommunity', new AgentCommunityService(ctx, config)) }
