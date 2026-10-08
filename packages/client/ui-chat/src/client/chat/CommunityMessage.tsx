@@ -37,7 +37,9 @@ export interface CommunityMessageProps {
 }
 
 /** Render one Agent conversation message with the exact Chat bubble, markdown, reasoning, and action chrome. */
-export function CommunityMessage({ role, author, avatar, text, time, reasoning, toolActivity, usage, durationLabel, extraActions, t }: CommunityMessageProps) {
+export function CommunityMessage({
+  role, author, avatar, text, time, reasoning, toolActivity, usage, durationLabel, extraActions, t,
+}: CommunityMessageProps) {
   const labels = useMemo(() => markdownLabels(t), [t])
   if (role === 'user') {
     return <div className={messageCss.userRow} data-chat-flow-kind="user">
@@ -53,9 +55,14 @@ export function CommunityMessage({ role, author, avatar, text, time, reasoning, 
       {reasoning && <CommunityReasoning text={reasoning} t={t} />}
       <div className={assistantCss.body}>
         <MarkdownText text={text} labels={labels} />
-        {toolActivity?.map((tool, index) => <div key={`${tool.name}:${index}`} className={css.toolActivity}>
-          <span>{tool.name}</span><span>{tool.status}</span>
-        </div>)}
+        {toolActivity !== undefined && toolActivity.length > 0 && (
+          <details className={css.toolActivityDetails}>
+            <summary className={css.toolActivitySummary}>{toolActivity.length} tool call{toolActivity.length > 1 ? 's' : ''}</summary>
+            {toolActivity.map((tool, index) => <div key={`${tool.name}:${index}`} className={css.toolActivity}>
+              <span>{tool.name}</span><span>{tool.status}</span>
+            </div>)}
+          </details>
+        )}
       </div>
       <MessageIconActions text={text} time={time} clock="end" className={css.assistantActions}
         extraActions={extraActions}

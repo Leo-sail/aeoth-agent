@@ -247,7 +247,7 @@ export class AgentCommunityController extends TypertRemoteService {
     if (run.status === 'running' && Date.parse(run.leaseExpiresAt ?? '') > Date.now()) return
     this.scheduled.add(run.id)
     const previous = this.sessionQueues.get(run.sessionId) ?? Promise.resolve()
-    const next = previous.catch(() => {}).then(() => this.run(run.id)).catch(async error => {
+    const next = previous.catch(() => {}).then(() => this.run(run.id)).catch(async (error: unknown) => {
       if (this.lifetime.signal.aborted) return
       const owned = this.activeRuns.get(run.id)
       if (owned) {
@@ -257,7 +257,7 @@ export class AgentCommunityController extends TypertRemoteService {
           status: 'failed', error: safeError(error), retry })
         if (settled && !retry) await this.reportToSessionLead(owned, { kind: 'failed', text: safeError(error) })
       }
-    }).catch(error => {
+    }).catch((error: unknown) => {
       this.ctx.logger.warn(`agent community run failed: ${safeError(error)}`)
     }).finally(() => {
       this.team.notify(run.roomId)
@@ -279,7 +279,7 @@ export class AgentCommunityController extends TypertRemoteService {
     const heartbeat = setInterval(() => {
       if (renewing) return
       renewing = true
-      void this.service().heartbeat(run.id, run.controlRevision, this.ownerId).then(valid => {
+      void this.service().heartbeat(run.id, run.controlRevision, this.ownerId).then((valid) => {
         if (!valid) { lostLease = true; this.ctx.get('agents')?.get(run.sessionId)?.cancel({ kind: 'user' }, { keepInbox: true }) }
       }).catch(() => { lostLease = true; this.ctx.get('agents')?.get(run.sessionId)?.cancel({ kind: 'user' }, { keepInbox: true }) })
         .finally(() => { renewing = false })
@@ -320,7 +320,7 @@ export class AgentCommunityController extends TypertRemoteService {
       if (!agent) throw new Error('Bot Session did not activate an Agent')
       const requestId = run.requestId ?? run.id
       const existing = findRunResult(agent.session.snapshotEvents(), requestId)
-      const pending = [...agent.inbox.nextTurn, ...agent.inbox.nextStep].some(message => {
+      const pending = [...agent.inbox.nextTurn, ...agent.inbox.nextStep].some((message) => {
         const source = message.source as { readonly kind?: string; readonly rpcId?: string }
         return (source.kind === 'user' || source.kind === 'schedule') && source.rpcId === requestId
       })
@@ -354,7 +354,9 @@ export class AgentCommunityController extends TypertRemoteService {
           return
         }
         if (run.submission !== 'pending') throw new Error('Submission outcome is unknown; inspect the Session before explicitly retrying.')
-        if (bot.provider && bot.model) await session.selectModel({ sessionId: run.sessionId, provider: bot.provider, model: bot.model, persistDefault: false })
+        if (bot.provider && bot.model) {
+          await session.selectModel({ sessionId: run.sessionId, provider: bot.provider, model: bot.model, persistDefault: false })
+        }
         if (room.team !== undefined) this.team.inheritLeadPolicy(room, agent)
         const admitted = await this.service().dispatchRun(run.id, async () => {
           this.lifetime.signal.throwIfAborted()
@@ -488,7 +490,7 @@ function findRunResult(events: readonly SessionEvent[], runId: string):
   if (assistant?.type === 'assistant/message') {
     const text = assistant.data.message.content.flatMap(block => block.type === 'text' ? [block.text] : []).join('').trim()
     const reasoning = assistant.data.message.content.flatMap(block => block.type === 'reasoning' ? [block.text] : []).join('').trim()
-    const toolActivity = events.slice(start + 1).filter(event => event.type === 'tool/call' || event.type === 'tool/result').flatMap(event => {
+    const toolActivity = events.slice(start + 1).filter(event => event.type === 'tool/call' || event.type === 'tool/result').flatMap((event) => {
       if (event.type === 'tool/call') return [{ name: event.data.name, status: 'called', detail: event.data.arguments }]
       return [{ name: 'tool', status: event.data.message.isError ? 'error' : 'completed' }]
     })

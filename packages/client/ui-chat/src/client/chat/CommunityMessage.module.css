@@ -52,5 +52,11 @@
 .assistantRow { width: 100%; }
 .assistantRow > :global(.dsh-assistant-markdown) { min-width: 0; }
 
-.avatar { display: none; }
 .author { margin-bottom: 6px; color: var(--dsw-alias-label-tertiary); }
+
+.toolActivityDetails { margin-top: 6px; }
+.toolActivitySummary { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border: .5px solid var(--dsw-alias-border-l3); border-radius: var(--dsw-radius-sm); background: transparent; color: var(--dsw-alias-label-tertiary); font-size: 11px; cursor: pointer; list-style: none; user-select: none; }
+.toolActivitySummary::-webkit-details-marker { display: none; }
+.toolActivitySummary::before { content: '▶'; display: inline-block; font-size: 9px; transition: transform 120ms ease; }
+details[open] .toolActivitySummary::before { transform: rotate(90deg); }
+.toolActivitySummary:hover { color: var(--dsw-alias-label-primary); border-color: var(--dsw-alias-border-l2); }

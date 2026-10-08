@@ -373,20 +373,21 @@ export function BotCommunityPage(props: BotCommunityProps) {
             </div>
             <div className={css.actions}>
               {isAgentMode && <Button size="sm" variant="outline" disabled={busy || messages.length === 0} onClick={() => { requestDeleteRoom(room) }}>{props.t('clearConversation')}</Button>}
+              {!isAgentMode && <Button size="sm" variant="outline" disabled={busy || messages.length === 0} onClick={() => { requestDeleteRoom(room) }}>{props.t('clearConversation')}</Button>}
               {isAgentMode && selectedAgent && <Button size="sm" variant="outline" disabled={busy} onClick={() => { openAgentEdit(selectedAgent) }}>{props.t('edit')}</Button>}
               {!isAgentMode && <Button size="sm" variant="outline" disabled={busy} onClick={() => { openRoomEdit(room) }}>{props.t('edit')}</Button>}
             </div>
           </header>
           {team !== undefined && <div className={css.teamStrip}>
             {team.leader.kind === 'session' && <button type="button" className={css.teamChip} data-lead="true" onClick={() => { props.openSession(team.leader.kind === 'session' ? team.leader.sessionId : '' as SessionId) }} title={props.t('openLeadSession')}>
-              <span className={css.teamChipName}>★ {team.leaderName}</span><span className={css.teamChipMeta}>{props.t('openLeadSession')}</span>
+              <span className={css.teamChipName}>{avatarEmoji(undefined, team.leaderName)} {team.leaderName}</span><span className={css.teamChipMeta}>{props.t('openLeadSession')}</span>
             </button>}
             {roomMembers.map((agent) => {
               const memberSession = room.memberSessions?.[agent.id]
-              const lead = team.leader.kind === 'bot' && team.leader.botId === agent.id
-              return <button key={agent.id} type="button" className={css.teamChip} data-lead={lead ? 'true' : undefined} data-presence={agent.presence ?? 'idle'} disabled={memberSession === undefined}
+              const isLead = team.leader.kind === 'bot' && team.leader.botId === agent.id
+              return <button key={agent.id} type="button" className={css.teamChip} data-lead={isLead ? 'true' : undefined} data-presence={agent.presence ?? 'idle'} disabled={memberSession === undefined}
                 title={props.t('openSession')} onClick={() => { if (memberSession !== undefined) props.openSession(memberSession) }}>
-                <span className={css.teamChipName}>{lead ? '★ ' : ''}{avatarEmoji(agent)} {agent.name}</span>
+                <span className={css.teamChipName}>{avatarEmoji(agent)} {agent.name}</span>
                 <span className={css.teamChipMeta}>{props.t(`presence.${agent.presence ?? 'idle'}`)}</span>
               </button>
             })}
