@@ -305,6 +305,21 @@ export class SessionProjectionCache extends Service {
     return restored.snapshot
   }
 
+  /**
+   * Drop the stored record of a session whose log was deleted, so no fold
+   * shortcut (title input text included) outlives it. Dispose the live
+   * session first: its detach checkpoint is enqueued on the same domain write
+   * chain ahead of this delete and therefore cannot re-create the record.
+   * @param id - the deleted session.
+   */
+  async remove(id: SessionId): Promise<void> {
+    for (const session of this.dirty.keys()) {
+      if (session.id !== id) continue
+      this.markClean(session)
+      this.dirty.delete(session)
+    }
+    await this.requireTable().delete(id)
+  }
 
   // --- write-behind (throttle + mandatory points) ---
 

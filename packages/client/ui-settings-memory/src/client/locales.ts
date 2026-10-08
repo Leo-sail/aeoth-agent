@@ -1,6 +1,6 @@
 export const en = {
   title: 'Memory & Skills', description: 'Review durable facts, correct your profile, and manage learned skills.',
-  memory: 'MEMORY', user: 'USER', skills: 'Skills', review: 'Review', migration: 'Migrate legacy memory', provider: 'Storage provider', loading: 'Loading…', refresh: 'Refresh',
+  memory: 'MEMORY', user: 'USER', skills: 'Skills', review: 'Review', migration: 'Migrate legacy memory', provider: 'Storage provider', loading: 'Loading…',
   memoryHint: 'Environment, project conventions, and verified lessons. Do not store credentials.',
   userHint: 'Stable preferences and communication expectations. Do not store sensitive guesses.',
   skillsHint: 'Profile-owned skills are editable. Bundled and third-party skills are read-only. /learn queues a learning request; it does not guarantee a verified skill.',
@@ -15,7 +15,7 @@ export const en = {
 export type MemorySettingsLocaleKey = keyof typeof en
 export const zh: Record<MemorySettingsLocaleKey, string> = {
   title: '记忆与技能', description: '查看长期知识、纠正用户档案，管理已学习的技能。',
-  memory: 'MEMORY', user: 'USER', skills: '技能', review: '审阅', migration: '迁移旧记忆', provider: '存储 Provider', loading: '加载中…', refresh: '刷新',
+  memory: 'MEMORY', user: 'USER', skills: '技能', review: '审阅', migration: '迁移旧记忆', provider: '存储 Provider', loading: '加载中…',
   memoryHint: '保存环境约定、项目事实和已验证经验。不要存储凭据。', userHint: '保存稳定偏好和沟通习惯。不要记录敏感推断。',
   skillsHint: '可编辑当前 profile 的技能；内置及第三方技能只读。/learn 仅提交学习请求，不代表技能已生成或验证。',
   empty: '暂无条目。', add: '添加条目', entry: '记忆内容', edit: '编辑', save: '保存', cancel: '取消', remove: '删除', confirmDelete: '确认删除',

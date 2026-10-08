@@ -11,6 +11,8 @@ kind: "package-reference"
 
 通过 Agent Community Remote 向桌面渲染器提供 Bot、房间、消息和运行控制。控制器把持久房间状态接入既有 Session 与 Agent 生命周期。
 
+`deleteBot` 先取消该 Agent 在本 Host 上正在执行的运行，再交给服务永久删除 Agent 及其会话数据；`deleteRoom` 删除单个直聊或群聊。
+
 ## 开发
 
 本包随太易桌面端开发。环境准备见[源码运行](../../../README.zh.md#run-from-source)，打包方式见[Desktop 开发说明](../../../apps/desktop/README.zh.md)。

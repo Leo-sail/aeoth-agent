@@ -9,6 +9,7 @@ import type { AgentCommunityService } from '@deepseek-ai/dsh-agent-community'
 import type {
   BotCommunitySnapshot, BotCredentialInfo, BotId, BotIdentity, BotMessage, BotMailboxItem, BotRoom, BotRoomId, BotRun, BotRunId, BotMessageUsage, ControlBotRunRequest,
   CreateBotRequest, CreateRoomRequest, DeleteRoomRequest, RetryBotRunRequest, SendRoomMessageRequest, UpdateBotRequest, UpdateRoomRequest,
+  DeleteBotRequest,
 } from '@deepseek-ai/dsh-agent-community/types'
 import { Remote, RemoteError, remoteErrorOf, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
 import type { SessionController, SessionRequestId } from '@deepseek-ai/dsh-api-session-controller'
@@ -115,6 +116,16 @@ export class AgentCommunityController extends TypertRemoteService {
       const target = await this.credentialTarget(botId, ref)
       await this.credentials().unset(target.scopedRef)
     } catch (error) { throw new RemoteError('gateway/bad-request', safeError(error), {}) }
+  }
+  @Remote('deleteBot')
+  async deleteBot(input: DeleteBotRequest): Promise<void> {
+    try {
+      // Stop in-flight runner work for this Agent before its Sessions are removed.
+      for (const run of this.activeRuns.values()) {
+        if (run.botId === input.id) this.ctx.get('agents')?.get(run.sessionId)?.cancel({ kind: 'user' }, { keepInbox: false })
+      }
+      await this.service().deleteBot(input)
+    } catch (error) { throwRemoteRequestError(error) }
   }
   @Remote async listRooms(): Promise<readonly BotRoom[]> { return this.service().listRooms() }
   @Remote async createRoom(input: CreateRoomRequest): Promise<BotRoom> {

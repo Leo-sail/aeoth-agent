@@ -32,7 +32,6 @@ function MemoryPanel({ t, state, ...props }: MemoryCardProps & { state: MemorySe
   const runSearch = () => { void props.search(query, target) }
   const tabs = ['memory', 'user', 'skills', 'review', 'migration'] as const
   return <section className={css.card} aria-busy={state.pending || state.loading}>
-    <header className={css.header}><div><h2>{t('title')}</h2><p>{t('description')}</p></div><Button size="sm" variant="outline" onClick={() => { void props.load() }}>{t('refresh')}</Button></header>
     {state.error && <p role="alert" className={css.error}>{state.error}</p>}
     <div className={css.tabs} role="tablist">{tabs.map(value => <button key={value} className={css.tab} data-active={tab === value ? 'true' : undefined} type="button" role="tab" aria-selected={tab === value} onClick={() => { setTab(value); setQuery('') }}>{t(value)}</button>)}</div>
     {tab === 'skills' ? <Skills t={t} state={state} {...props} />

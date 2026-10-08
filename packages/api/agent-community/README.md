@@ -12,6 +12,8 @@ This package is part of the Aeoth Desktop runtime. Electron and the application-
 
 Expose Bot identities, rooms, messages and run controls to the Desktop renderer through the Agent Community Remote service. The controller connects persistent room state to the existing Session and Agent lifecycle.
 
+`deleteBot` cancels the Agent's runs executing on this Host, then has the service permanently delete the Agent and its session data; `deleteRoom` deletes a single direct or group chat.
+
 ## Development
 
 This package is developed with Aeoth Desktop. Follow the [source setup](../../../README.md#run-from-source) and [Desktop build instructions](../../../apps/desktop/README.md).

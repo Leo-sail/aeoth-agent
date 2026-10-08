@@ -12,6 +12,8 @@ This package is part of the Aeoth Desktop runtime. Electron and the application-
 
 Own persistent Bot identities, room membership, message ordering, mailboxes and run state. Room state is distinct from the temporary Agent handles that execute a run.
 
+Deleting an Agent (`deleteBot`) removes its direct chat, its runs, mailbox items and hidden Sessions in every room (Session logs and projection cache included), and removes it from group chats; a group chat left with fewer than 2 members is deleted with it. New Agents carry no credential namespace, so model calls use the deployment credentials configured in Settings → Models. A namespace that earlier versions wrote implicitly (equal to the Agent name or id) is dropped on read; an explicitly chosen namespace stays isolated and never falls back to global credentials. An Agent reply that mentions @user pauses group relays, and the user's next message resumes that room; a manual pause stays in force. A run that exhausted its attempts settles as failed instead of blocking later runs of the same room or Agent.
+
 ## Development
 
 This package is developed with Aeoth Desktop. Follow the [source setup](../../../README.md#run-from-source) and [Desktop build instructions](../../../apps/desktop/README.md).

@@ -75,6 +75,10 @@ export interface DeleteRoomRequest {
   readonly id: string
 }
 
+export interface DeleteBotRequest {
+  readonly id: string
+}
+
 export interface UpdateRoomRequest {
   readonly id: string
   readonly name?: string

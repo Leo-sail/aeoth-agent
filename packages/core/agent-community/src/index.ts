@@ -11,6 +11,7 @@ import z from '@deepseek-ai/schemastery'
 import type {
   BotCommunitySnapshot, BotId, BotIdentity, BotMessage, BotMessageId, BotRoom, BotRoomId, BotRun, BotRunId, BotMailboxItem,
   ControlBotRunRequest, CreateBotRequest, CreateRoomRequest, DeleteRoomRequest, RetryBotRunRequest, SendRoomMessageRequest, SettleBotRunRequest, UpdateBotRequest, UpdateRoomRequest,
+  BotProfileBinding, DeleteBotRequest,
 } from './types.ts'
 
 export type * from './types.ts'
@@ -61,6 +62,21 @@ function assertText(value: string, label: string, max = 4000): string {
   if (/^[\u0000-\u001f\u007f]/u.test(text)) throw new Error(`${label} contains control characters`)
   return text
 }
+/**
+ * Agents created before deployment credentials were shared got their own name (or id) as an
+ * implicit credential namespace that nothing ever filled, so every model call failed. Only an
+ * explicitly chosen namespace is kept.
+ */
+function withoutAutoCredentialNamespace(
+  profile: BotProfileBinding,
+  bot: { readonly id: unknown; readonly name: unknown },
+): BotProfileBinding {
+  if (profile.credentialNamespace !== bot.name && profile.credentialNamespace !== bot.id) return profile
+  const { credentialNamespace: _auto, ...rest } = profile
+  return rest
+}
+/** An Agent reply that addresses the human pauses the room until the human answers. */
+const USER_MENTION = /(?<![\w@.])@user(?![\w-])/iu
 function escapeRegExp(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&') }
 function normalizeBotName(value: string): string {
   return assertText(value, 'bot name', 64).toLocaleLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '-').replace(/^-+|-+$/gu, '')
@@ -120,7 +136,9 @@ export class AgentCommunityService {
         systemPrompt: assertText(input.systemPrompt?.trim() || DEFAULT_AEOTH_AGENT_PROMPT, 'agent instructions', 8000),
         ...(input.mentionOnly === undefined ? {} : { mentionOnly: input.mentionOnly }),
         presence: 'idle',
-        profile: { profileId: id('profile'), memoryNamespace: `bot:${name}:memory`, skillScope: name, credentialNamespace: name, ...input.profile },
+        // No default credential namespace: an Agent uses the deployment credentials
+        // configured on the Models page unless a caller explicitly scopes it.
+        profile: { profileId: id('profile'), memoryNamespace: `bot:${name}:memory`, skillScope: name, ...input.profile },
       }
       await this.write({ ...state, bots: [...state.bots, bot] })
       return bot
@@ -240,24 +258,10 @@ export class AgentCommunityService {
       const state = await this.read()
       const room = state.rooms.find(item => item.id === input.id)
       if (room === undefined) return
-      const sessionIds = new Set<SessionId>([
+      await this.removeSessions(new Set<SessionId>([
         ...state.roomAgentSessions.filter(link => link.roomId === room.id).map(link => link.sessionId),
         ...state.runs.filter(run => run.roomId === room.id).map(run => run.sessionId),
-      ])
-      const agents = this.ctx.get('agents')
-      if (agents?.dispose !== undefined) {
-        await Promise.all([...sessionIds].map(sessionId => agents.dispose(sessionId)))
-      }
-      // Older/non-loop providers may not expose a tracked handle. Quiesce any
-      // remaining live Agent before removing its durable artifact.
-      const liveAgents = [...sessionIds]
-        .map(sessionId => agents?.get(sessionId))
-        .filter((agent): agent is NonNullable<typeof agent> => agent !== undefined)
-      for (const agent of liveAgents) agent.cancel({ kind: 'disposed' }, { keepInbox: false })
-      await Promise.all(liveAgents.map(agent => agent.whenIdle()))
-      await Promise.all(liveAgents.map(agent => this.ctx.sessions.flush(agent.session).catch(() => undefined)))
-      const persistence = this.ctx.get('sessionPersistence') as { remove(id: SessionId): Promise<void> } | undefined
-      if (persistence !== undefined) await Promise.all([...sessionIds].map(sessionId => persistence.remove(sessionId)))
+      ]))
       await this.write({
         ...state,
         rooms: state.rooms.filter(item => item.id !== room.id),
@@ -267,6 +271,61 @@ export class AgentCommunityService {
         roomAgentSessions: state.roomAgentSessions.filter(link => link.roomId !== room.id),
       })
     })
+  }
+
+  /**
+   * Permanently remove an Agent: its direct chat, its runs and Sessions in every room, and its
+   * group memberships. Group chats left with fewer than two members are removed with it, since
+   * a group cannot be created or kept below that size.
+   */
+  async deleteBot(input: DeleteBotRequest): Promise<void> {
+    return this.serial(async () => {
+      const state = await this.read()
+      const bot = state.bots.find(item => item.id === input.id)
+      if (bot === undefined) return
+      const orphansGroup = (room: BotRoom): boolean =>
+        room.directBotId === undefined && room.memberIds.includes(bot.id) && room.memberIds.length - 1 < 2
+      const removedRoomIds = new Set(state.rooms.filter(room => room.directBotId === bot.id || orphansGroup(room)).map(room => room.id))
+      const touches = (roomId: BotRoomId, botId: BotId): boolean => removedRoomIds.has(roomId) || botId === bot.id
+      await this.removeSessions(new Set<SessionId>([
+        ...state.roomAgentSessions.filter(link => touches(link.roomId, link.botId)).map(link => link.sessionId),
+        ...state.runs.filter(run => touches(run.roomId, run.botId)).map(run => run.sessionId),
+      ]))
+      await this.write({
+        ...state,
+        bots: state.bots.filter(item => item.id !== bot.id),
+        rooms: state.rooms.filter(room => !removedRoomIds.has(room.id))
+          .map(room => room.memberIds.includes(bot.id)
+            ? { ...room, memberIds: room.memberIds.filter(member => member !== bot.id), updatedAt: now() }
+            : room),
+        messages: state.messages.filter(item => !removedRoomIds.has(item.roomId)),
+        runs: state.runs.filter(run => !touches(run.roomId, run.botId)),
+        mailbox: state.mailbox.filter(item => !touches(item.roomId, item.botId)),
+        roomAgentSessions: state.roomAgentSessions.filter(link => !touches(link.roomId, link.botId)),
+      })
+    })
+  }
+
+  /** Quiesce and delete hidden Agent Sessions before their Community records are dropped. */
+  private async removeSessions(sessionIds: ReadonlySet<SessionId>): Promise<void> {
+    const agents = this.ctx.get('agents')
+    if (agents?.dispose !== undefined) {
+      await Promise.all([...sessionIds].map(sessionId => agents.dispose(sessionId)))
+    }
+    // Older/non-loop providers may not expose a tracked handle. Quiesce any
+    // remaining live Agent before removing its durable artifact.
+    const liveAgents = [...sessionIds]
+      .map(sessionId => agents?.get(sessionId))
+      .filter((agent): agent is NonNullable<typeof agent> => agent !== undefined)
+    for (const agent of liveAgents) agent.cancel({ kind: 'disposed' }, { keepInbox: false })
+    await Promise.all(liveAgents.map(agent => agent.whenIdle()))
+    await Promise.all(liveAgents.map(agent => this.ctx.sessions.flush(agent.session).catch(() => undefined)))
+    const persistence = this.ctx.get('sessionPersistence') as { remove(id: SessionId): Promise<void> } | undefined
+    if (persistence !== undefined) await Promise.all([...sessionIds].map(sessionId => persistence.remove(sessionId)))
+    // The projection cache keeps a per-Session fold shortcut that includes prompt text; drop it with the log.
+    const projections = this.ctx.get('sessionProjectionCache') as { remove?: (id: SessionId) => Promise<void> } | undefined
+    const removeProjection = projections?.remove?.bind(projections)
+    if (removeProjection !== undefined) await Promise.all([...sessionIds].map(sessionId => removeProjection(sessionId)))
   }
 
   async sendRoomMessage(input: SendRoomMessageRequest): Promise<BotMessage> {
@@ -281,6 +340,11 @@ export class AgentCommunityService {
       // Agents for explicit multi-party/collaboration needs, and a stable
       // round-robin fallback when no profile vocabulary matches.
       const recipients = this.resolveRecipients(state, room, text, mentions)
+      // A room an Agent paused by addressing @user is waiting for exactly this message; resume it so
+      // the reply is not queued behind the pause. A pause with no such question stays in force.
+      const roomMessages = state.messages.filter(item => item.roomId === room.id)
+      const sinceUser = roomMessages.slice(roomMessages.findLastIndex(item => item.sender.kind === 'user') + 1)
+      const resume = room.paused === true && sinceUser.some(item => item.sender.kind === 'bot' && USER_MENTION.test(item.text))
       const pending = state.runs.filter(run => run.status === 'queued' || run.status === 'running').length
       if (state.messages.length + 1 + recipients.length + pending > this.config.maxMessages) throw new Error('agent community message limit reached')
       if (state.runs.length + recipients.length > this.config.maxRuns) throw new Error('agent community run limit reached')
@@ -304,8 +368,11 @@ export class AgentCommunityService {
         createdAt: now(), sequence, ...(createdRuns.length ? { runIds: createdRuns.map(run => run.id) } : {}),
       }
       const mailbox: BotMailboxItem[] = createdRuns.map(run => ({ id: id('mailbox'), roomId: room.id, botId: run.botId, messageId: message.id, sequence, status: 'pending', createdAt: message.createdAt }))
+      const rooms = state.rooms.map(item => item.id === room.id
+        ? { ...item, sequence, updatedAt: now(), ...(resume ? { paused: false } : {}) }
+        : item)
       await this.write({
-        ...state, rooms: state.rooms.map(item => item.id === room.id ? { ...item, sequence, updatedAt: now() } : item), messages: [...state.messages, message], runs: [...state.runs, ...createdRuns.map(run => ({ ...run, roomSequence: sequence, rootMessageId: message.id, round: 1 }))], mailbox: [...state.mailbox, ...mailbox], roomAgentSessions,
+        ...state, rooms, messages: [...state.messages, message], runs: [...state.runs, ...createdRuns.map(run => ({ ...run, roomSequence: sequence, rootMessageId: message.id, round: 1 }))], mailbox: [...state.mailbox, ...mailbox], roomAgentSessions,
       })
       return message
     })
@@ -367,7 +434,16 @@ export class AgentCommunityService {
         && !state.rooms.find(item => item.id === run.roomId)?.paused)) return undefined
       const timestamp = now()
       const attempt = current.status === 'running' ? current.attempt + 1 : current.attempt + 1
-      if (attempt > current.maxAttempts) return undefined
+      if (attempt > current.maxAttempts) {
+        // An exhausted run must settle, otherwise it blocks every later run of the same room and Bot.
+        const { leaseOwner: _owner, leaseExpiresAt: _lease, nextRetryAt: _next, ...base } = current
+        const exhausted: BotRun = { ...base, status: 'failed', controlRevision: current.controlRevision + 1, updatedAt: timestamp, finishedAt: timestamp,
+          error: current.error ?? current.lastError ?? 'Agent run exhausted its retry attempts' }
+        await this.write({ ...state, runs: state.runs.map(run => run.id === runId ? exhausted : run),
+          mailbox: state.mailbox.map(item => item.roomId === current.roomId && item.botId === current.botId && item.sequence === current.roomSequence ? { ...item, status: 'settled', settledAt: timestamp } : item),
+          bots: state.bots.map(bot => bot.id === current.botId ? { ...bot, presence: 'failed' } : bot) })
+        return undefined
+      }
       const claimed: BotRun = { ...current, status: 'running', attempt, controlRevision: current.controlRevision + 1,
         startedAt: current.startedAt ?? timestamp, lastHeartbeatAt: timestamp, updatedAt: timestamp,
         leaseOwner: owner, leaseExpiresAt: new Date(clock + 30_000).toISOString(),
@@ -454,7 +530,7 @@ export class AgentCommunityService {
         if (!bot) throw new Error('run bot not found')
         const text = assertText(input.reply.text, 'bot reply', 200_000)
         const mentions = this.mentions(state, room, text).filter(botId => botId !== current.botId)
-        paused ||= /(?<![\w@.])@user(?![\w-])/iu.test(text)
+        paused ||= USER_MENTION.test(text)
         const messageId = id<BotMessageId>('message')
         const rootMessageId = current.rootMessageId ?? state.messages.find(item => item.runIds?.includes(current.id))?.id ?? messageId
         sequence++
@@ -647,7 +723,7 @@ export class AgentCommunityService {
           error: 'Legacy prototype run has no Session receipt; send a new message to execute it.',
         }
         : run) as readonly BotRun[]
-      const bots = raw.bots.map(bot => ({ ...bot, profile: bot.profile ?? { profileId: String(bot.id), memoryNamespace: `bot:${String(bot.id)}:memory`, skillScope: String(bot.id), credentialNamespace: String(bot.id) } })) as readonly BotIdentity[]
+      const bots = raw.bots.map(bot => ({ ...bot, profile: withoutAutoCredentialNamespace(bot.profile ?? { profileId: String(bot.id), memoryNamespace: `bot:${String(bot.id)}:memory`, skillScope: String(bot.id) }, bot) })) as readonly BotIdentity[]
       const filteredBots = bots.filter(bot => bot.builtIn !== true && bot.id !== 'bot-default' && bot.name !== 'default')
       const filteredBotIds = new Set(filteredBots.map(bot => bot.id))
       const filteredRooms = rooms.filter(room => room.id !== 'room-lobby' && room.name !== 'Lobby')

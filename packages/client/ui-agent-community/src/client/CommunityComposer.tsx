@@ -10,7 +10,7 @@ import {
   IconStopFillMedium,
   MenuSurface,
 } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { BotIdentity, BotRoom } from '@deepseek-ai/dsh-agent-community/types'
+import type { BotIdentity } from '@deepseek-ai/dsh-agent-community/types'
 import { ComposerSurface } from '@deepseek-ai/dsh-client-ui-conversation/client'
 import css from './page.module.css'
 
@@ -27,18 +27,23 @@ type ComposerMenuItem = {
 }
 
 const STATIC_SKILLS: readonly ComposerMenuItem[] = [
-  { key: 'banner-design', label: 'banner-design', detail: 'Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction …', insert: '/banner-design ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'brand', label: 'brand', detail: 'Brand voice, visual identity, messaging frameworks, asset management, brand consistency.', insert: '/brand ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'design', label: 'design', detail: 'Comprehensive design skill: brand identity, design tokens, UI styling, logo generation, and more.', insert: '/design ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'design-system', label: 'design-system', detail: 'Token architecture, component specifications, and slide generation.', insert: '/design-system ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'impeccable', label: 'impeccable', detail: 'Design, redesign, shape, critique, audit, polish, and improve a frontend interface.', insert: '/impeccable ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'office-docx', label: 'office-docx', detail: 'Create, read, edit, and check Word documents (.docx), including reports and letters.', insert: '/office-docx ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'office-pptx', label: 'office-pptx', detail: 'Create, read, edit, and check PowerPoint presentations (.pptx), including slide text and tables.', insert: '/office-pptx ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'office-xlsx', label: 'office-xlsx', detail: 'Read, create, and modify Excel workbooks (.xlsx), including data and formulas.', insert: '/office-xlsx ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'slides', label: 'slides', detail: 'Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, and copywriting.', insert: '/slides ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'ui-styling', label: 'ui-styling', detail: 'Create beautiful, accessible user interfaces with shadcn/ui, Tailwind CSS, and canvas-based designs.', insert: '/ui-styling ', icon: <IconSkillOutlineRegular size={16} /> },
-  { key: 'ui-ux-pro-max', label: 'ui-ux-pro-max', detail: 'UI/UX design intelligence with searchable databases.', insert: '/ui-ux-pro-max ', icon: <IconSkillOutlineRegular size={16} /> },
+  { key: 'banner-design', label: 'banner-design', detail: 'Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction …', insert: '/banner-design ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'brand', label: 'brand', detail: 'Brand voice, visual identity, messaging frameworks, asset management, brand consistency.', insert: '/brand ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'design', label: 'design', detail: 'Comprehensive design skill: brand identity, design tokens, UI styling, logo generation, and more.', insert: '/design ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'design-system', label: 'design-system', detail: 'Token architecture, component specifications, and slide generation.', insert: '/design-system ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'impeccable', label: 'impeccable', detail: 'Design, redesign, shape, critique, audit, polish, and improve a frontend interface.', insert: '/impeccable ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'office-docx', label: 'office-docx', detail: 'Create, read, edit, and check Word documents (.docx), including reports and letters.', insert: '/office-docx ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'office-pptx', label: 'office-pptx', detail: 'Create, read, edit, and check PowerPoint presentations (.pptx), including slide text and tables.', insert: '/office-pptx ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'office-xlsx', label: 'office-xlsx', detail: 'Read, create, and modify Excel workbooks (.xlsx), including data and formulas.', insert: '/office-xlsx ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'slides', label: 'slides', detail: 'Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, and copywriting.', insert: '/slides ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'ui-styling', label: 'ui-styling', detail: 'Create beautiful, accessible user interfaces with shadcn/ui, Tailwind CSS, and canvas-based designs.', insert: '/ui-styling ', icon: <IconSkillOutlineRegular size={14} /> },
+  { key: 'ui-ux-pro-max', label: 'ui-ux-pro-max', detail: 'UI/UX design intelligence with searchable databases.', insert: '/ui-ux-pro-max ', icon: <IconSkillOutlineRegular size={14} /> },
 ]
+
+export interface CommunityComposerCommand {
+  readonly name: string
+  readonly description: string
+}
 
 export interface CommunityComposerReference {
   readonly key: string
@@ -58,6 +63,7 @@ export interface CommunityComposerCopy {
   readonly commands: string
   readonly mentions: string
   readonly noSuggestions: string
+  readonly mentionAll: string
   readonly send: string
   readonly addItems: readonly ComposerMenuItem[]
   readonly directiveItems: readonly ComposerMenuItem[]
@@ -69,11 +75,13 @@ export interface CommunityComposerProps {
   readonly running?: boolean
   readonly onStop?: (() => void) | undefined
   readonly copy: CommunityComposerCopy
+  /** 当前对话可 @ 的 Agent（直聊为空：无需提及）。 */
   readonly agents: readonly BotIdentity[]
-  readonly rooms: readonly BotRoom[]
+  /** 是否提供 `@all` 广播项（仅群聊）。 */
+  readonly mentionAll: boolean
   readonly sessionId?: string | undefined
   readonly lookupReferences?: ((query: string, signal: AbortSignal) => Promise<readonly CommunityComposerReference[]>) | undefined
-  readonly lookupCommands?: ((signal: AbortSignal) => Promise<readonly { readonly name: string; readonly description: string }[]>) | undefined
+  readonly lookupCommands?: ((signal: AbortSignal) => Promise<readonly CommunityComposerCommand[]>) | undefined
   readonly onOpenModelSettings?: (() => void) | undefined
   readonly onChange: (value: string) => void
   readonly onSubmit: () => void
@@ -91,7 +99,10 @@ function normalizeMention(value: string): string {
 }
 
 /** Community-owned adapter of Aeoth's native composer surface. */
-export function CommunityComposer({ value, disabled, running = false, onStop, copy, agents, rooms, sessionId, lookupReferences, lookupCommands, onOpenModelSettings, onChange, onSubmit }: CommunityComposerProps) {
+export function CommunityComposer({
+  value, disabled, running = false, onStop, copy, agents, mentionAll, sessionId,
+  lookupReferences, lookupCommands, onOpenModelSettings, onChange, onSubmit,
+}: CommunityComposerProps) {
   const editorRef = useRef<HTMLTextAreaElement | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
   const [menu, setMenu] = useState<MenuMode>()
@@ -134,7 +145,7 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
     return () => { controller.abort() }
   }, [lookupCommands, menu, sessionId])
 
-  const update = (next: string): void => {
+  const update = (next: string): (void) => {
     onChange(next)
     requestAnimationFrame(() => {
       const node = editorRef.current
@@ -145,7 +156,7 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
     })
   }
 
-  const insert = (text: string, replaceTrigger = true): void => {
+  const insert = (text: string, replaceTrigger = true): (void) => {
     const node = editorRef.current
     const end = node?.selectionStart ?? cursor
     const before = value.slice(0, end)
@@ -162,7 +173,7 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
     })
   }
 
-  const onFilePick = (event: ChangeEvent<HTMLInputElement>): void => {
+  const onFilePick = (event: ChangeEvent<HTMLInputElement>): (void) => {
     const files = [...(event.target.files ?? [])]
     event.target.value = ''
     const labels = files.map(file => file.name.includes(' ') ? `@"${file.name}"` : `@${file.name}`)
@@ -173,36 +184,33 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
     const query = trigger?.query.toLocaleLowerCase() ?? ''
     const agentItems = agents
       .filter(agent => agent.name.toLocaleLowerCase().includes(query))
-      .map(agent => {
+      .map((agent) => {
         const label = normalizeMention(agent.name)
         return { key: `agent:${agent.id}`, label, detail: agent.description, insert: label }
       })
-    const roomItems = rooms
-      .filter(room => room.name.toLocaleLowerCase().includes(query))
-      .map(room => {
-        const label = normalizeMention(room.name.includes(' ') ? `"${room.name}"` : room.name)
-        return { key: `room:${room.id}`, label, detail: copy.conversation, insert: label }
-      })
-    const references = remoteReferences.map(item => ({ ...item, label: normalizeMention(item.label), insert: normalizeMention(item.insert) }))
+    const references = remoteReferences.map(item => ({
+      ...item, label: normalizeMention(item.label), insert: normalizeMention(item.insert),
+    }))
+    const all = mentionAll && 'all'.includes(query) ? [{ key: 'all', label: '@all', detail: copy.mentionAll, insert: '@all' }] : []
     const seen = new Set<string>()
-    return [{ key: 'all', label: '@all', detail: copy.mentions, insert: '@all' }, ...agentItems, ...roomItems, ...references].filter(item => {
+    return [...all, ...agentItems, ...references].filter((item) => {
       const key = item.insert.toLocaleLowerCase()
       if (seen.has(key)) return false
       seen.add(key)
       return true
     })
-  }, [agents, copy.conversation, copy.mentions, remoteReferences, rooms, trigger?.query])
+  }, [agents, copy.mentionAll, mentionAll, remoteReferences, trigger?.query])
 
   const slashSections = useMemo(() => {
     const query = trigger?.query.toLocaleLowerCase() ?? ''
-    const dynamic = remoteCommands.map(command => {
+    const dynamic = remoteCommands.map((command) => {
       const name = command.name.replace(/^\/+/u, '')
       return {
         key: `command:${name}`,
         label: `/${name}`,
         detail: command.description,
         insert: `/${name} `,
-        icon: <IconListPenOutlineRegular size={16} />,
+        icon: <IconListPenOutlineRegular size={14} />,
       }
     })
     const directives = [...copy.directiveItems, ...dynamic]
@@ -218,13 +226,13 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
     ].filter(section => section.items.length > 0)
   }, [copy.directiveItems, copy.directiveTitle, copy.skillTitle, remoteCommands, trigger?.query])
 
-  const submit = (): void => {
+  const submit = (): (void) => {
     if (!value.trim()) return
     setMenu(undefined)
     onSubmit()
   }
 
-  const pickAddItem = (item: ComposerMenuItem): void => {
+  const pickAddItem = (item: ComposerMenuItem): (void) => {
     if (item.action === 'file') {
       fileRef.current?.click()
       setMenu(undefined)
@@ -244,13 +252,19 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
 
   const overlay = <>
     {menu === 'plus' && <MenuSurface className={css.composerMenu} role="menu" aria-label={copy.addTitle}>
-      <div className={css.composerMenuLabel}>{copy.addTitle}</div>
-      {copy.addItems.map(item => <ComposerMenuButton key={item.key} item={item} onPick={pickAddItem} />)}
-      <div className={css.composerMenuLabel}>{copy.directiveTitle}</div>
-      {copy.directiveItems.map(item => <ComposerMenuButton key={item.key} item={item} onPick={pickAddItem} />)}
+      <div className={css.composerViewport}>
+        <section className={css.composerSection}>
+          <div className={css.composerMenuLabel}>{copy.addTitle}</div>
+          {copy.addItems.map(item => <ComposerMenuButton key={item.key} item={item} onPick={pickAddItem} />)}
+        </section>
+        <section className={css.composerSection}>
+          <div className={css.composerMenuLabel}>{copy.directiveTitle}</div>
+          {copy.directiveItems.map(item => <ComposerMenuButton key={item.key} item={item} onPick={pickAddItem} />)}
+        </section>
+      </div>
     </MenuSurface>}
-    {menu === 'slash' && <ComposerSuggestions sections={slashSections} empty={copy.noSuggestions} onPick={item => { insert(item.insert ?? `${item.label} `) }} />}
-    {menu === 'mention' && <ComposerSuggestions sections={[{ title: copy.mentions, items: mentionItems }]} empty={copy.noSuggestions} onPick={item => { insert(`${item.insert ?? item.label} `) }} />}
+    {menu === 'slash' && <ComposerSuggestions sections={slashSections} empty={copy.noSuggestions} onPick={(item) => { insert(item.insert ?? `${item.label} `) }} />}
+    {menu === 'mention' && <ComposerSuggestions sections={[{ title: copy.mentions, items: mentionItems }]} empty={copy.noSuggestions} onPick={(item) => { insert(`${item.insert ?? item.label} `) }} />}
   </>
 
   return <ComposerSurface
@@ -275,10 +289,10 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
       value={value}
       disabled={disabled}
       rows={1}
-      onChange={event => { setCursor(event.target.selectionStart); update(event.target.value) }}
-      onKeyUp={event => { setCursor(event.currentTarget.selectionStart) }}
-      onClick={event => { setCursor(event.currentTarget.selectionStart) }}
-      onKeyDown={event => {
+      onChange={(event) => { setCursor(event.target.selectionStart); update(event.target.value) }}
+      onKeyUp={(event) => { setCursor(event.currentTarget.selectionStart) }}
+      onClick={(event) => { setCursor(event.currentTarget.selectionStart) }}
+      onKeyDown={(event) => {
         if (event.key === 'Escape') { setMenu(undefined); return }
         if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); submit() }
       }}
@@ -287,25 +301,35 @@ export function CommunityComposer({ value, disabled, running = false, onStop, co
 }
 
 function ComposerMenuButton({ item, onPick }: { readonly item: ComposerMenuItem; readonly onPick: (item: ComposerMenuItem) => void }) {
-  return <button className={css.composerMenuItem} type="button" onClick={() => { onPick(item) }}>
-    <span className={css.composerItemIcon} aria-hidden>{item.icon ?? <IconPaperPlaneOutlineRegular size={16} />}</span>
-    <strong>{item.label}</strong>
+  return <button className={css.composerMenuItem} type="button" role="menuitem" onClick={() => { onPick(item) }}>
+    <span className={css.composerItemIcon} aria-hidden>{item.icon ?? <IconPaperPlaneOutlineRegular size={14} />}</span>
+    <span className={css.composerItemName}>{item.label}</span>
     {item.alias && <span className={css.composerItemAlias}>{item.alias}</span>}
     <span className={css.composerItemDetail}>{item.detail}</span>
   </button>
 }
 
-function ComposerSuggestions({ sections, empty, onPick }: { readonly sections: readonly { readonly title: string; readonly items: readonly ComposerMenuItem[] }[]; readonly empty: string; readonly onPick: (item: ComposerMenuItem) => void }) {
+interface ComposerSuggestionsProps {
+  readonly sections: readonly { readonly title: string; readonly items: readonly ComposerMenuItem[] }[]
+  readonly empty: string
+  readonly onPick: (item: ComposerMenuItem) => void
+}
+
+function ComposerSuggestions({ sections, empty, onPick }: ComposerSuggestionsProps) {
   return <MenuSurface className={css.composerMenu} role="listbox">
-    {sections.length === 0 ? <div className={css.composerEmpty}>{empty}</div> : sections.map(section => <section key={section.title} className={css.composerSection}>
-      <div className={css.composerMenuLabel}>{section.title}</div>
-      {section.items.map(item => <button className={css.composerMenuItem} type="button" role="option" key={item.key} onClick={() => { onPick(item) }}>
-        <span className={css.composerItemIcon} aria-hidden>{item.icon ?? <IconSkillOutlineRegular size={16} />}</span>
-        <strong>{item.label}</strong>
-        {item.alias && <span className={css.composerItemAlias}>{item.alias}</span>}
-        <span className={css.composerItemDetail}>{item.detail}</span>
-      </button>)}
-    </section>)}
+    <div className={css.composerViewport}>
+      {sections.length === 0
+        ? <div className={css.composerEmpty}>{empty}</div>
+        : sections.map(section => <section key={section.title} className={css.composerSection}>
+          <div className={css.composerMenuLabel}>{section.title}</div>
+          {section.items.map(item => <button className={css.composerMenuItem} type="button" role="option" key={item.key} onClick={() => { onPick(item) }}>
+            <span className={css.composerItemIcon} aria-hidden>{item.icon ?? <IconSkillOutlineRegular size={14} />}</span>
+            <span className={css.composerItemName}>{item.label}</span>
+            {item.alias && <span className={css.composerItemAlias}>{item.alias}</span>}
+            <span className={css.composerItemDetail}>{item.detail}</span>
+          </button>)}
+        </section>)}
+    </div>
   </MenuSurface>
 }
 

@@ -34,9 +34,9 @@ export const en: Record<AgentPresetSettingsKey, string> = {
   builtInGroup: 'Built-in', customGroup: 'Custom',
   sectionIntro: 'Choose the agent’s tools and how it works. Use Standard mode for everyday tasks, or Creator mode to add capabilities to Aeoth.',
 
-  seatHint: 'Choose the agent preset for your new task',
-  headerHint: 'The agent preset chosen when this task started',
-  nav: 'Agent presets',
+  seatHint: 'Choose the response style for your new task',
+  headerHint: 'The response style chosen when this task started',
+  nav: 'Response Style',
 
   setDefault: 'Set as new task default',
   view: 'View configuration',
@@ -73,9 +73,9 @@ export const zh: Record<AgentPresetSettingsKey, string> = {
   builtInGroup: '内置', customGroup: '自定义',
   sectionIntro: '选择 Agent 的工具和工作方式。日常任务用「标准模式」，扩展 Aeoth 的能力用「创造模式」。',
 
-  seatHint: '选择新任务使用的 Agent 预设',
-  headerHint: '本任务的 Agent 预设，在任务开始时确定',
-  nav: 'Agent 预设',
+  seatHint: '选择新任务使用的回复风格',
+  headerHint: '本任务的回复风格，在任务开始时确定',
+  nav: '回复风格',
 
   setDefault: '设为新任务默认',
   view: '查看配置',
