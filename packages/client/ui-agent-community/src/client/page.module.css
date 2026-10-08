@@ -126,3 +126,19 @@
 .composerItemDetail { flex: 1; min-width: 0; overflow: hidden; color: var(--dsw-alias-label-tertiary); font-size: 12px; line-height: 18px; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
 .composerEmpty { padding: 10px 8px; color: var(--dsw-alias-label-tertiary); font-size: 12px; text-align: center; }
 @media (max-width: 760px) { .composerItemDetail { display: none; } }
+
+/* 团队房间：成员条（领导 ★、在线状态，点击打开成员会话）与消息上方的协作类型标签。 */
+.teamStrip { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 28px; border-bottom: 1px solid var(--dsw-alias-border-l2); background: var(--dsw-alias-bg-base); }
+.teamChip { display: inline-grid; gap: 1px; min-width: 0; max-width: 220px; padding: 5px 10px; border: .5px solid var(--dsw-alias-border-l3); border-radius: var(--dsw-radius-md); background: var(--dsw-alias-bg-layer-1); color: var(--dsw-alias-label-primary); text-align: left; cursor: pointer; }
+.teamChip:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
+.teamChip:disabled { cursor: default; }
+.teamChip[data-lead='true'] { border-color: var(--dsw-alias-state-business-primary); }
+.teamChip[data-presence='running'] .teamChipMeta { color: var(--dsw-alias-state-business-primary); }
+.teamChip[data-presence='waiting-human'] { border-color: var(--dsw-alias-state-warning, #d97706); }
+.teamChip[data-presence='failed'] .teamChipMeta { color: var(--dsw-alias-state-error); }
+.teamChipName { overflow: hidden; font-size: 13px; font-weight: 500; line-height: 18px; text-overflow: ellipsis; white-space: nowrap; }
+.teamChipMeta { color: var(--dsw-alias-label-tertiary); font-size: 11px; line-height: 15px; }
+.teamKind { margin: 0 0 4px; color: var(--dsw-alias-label-tertiary); font-size: 11px; line-height: 16px; }
+.teamKind[data-align='end'] { text-align: right; }
+.message[data-team-kind='summary'] { padding: 12px 14px; border: .5px solid var(--dsw-alias-state-business-primary); border-radius: var(--dsw-radius-md); }
+@media (max-width: 760px) { .teamStrip { padding-inline: 18px; } }

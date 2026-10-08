@@ -6,7 +6,8 @@ import {
   IconTrashOutlineRegular, Input, Modal,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { ModelCatalog } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { BotCommunitySnapshot, BotId, BotIdentity, BotMessage, BotMessageUsage, BotRoom, BotRun } from '@deepseek-ai/dsh-agent-community/types'
+import type { BotCommunitySnapshot, BotId, BotIdentity, BotMessage, BotMessageUsage, BotRoom, BotRun, TeamApproval } from '@deepseek-ai/dsh-agent-community/types'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import { CommunityMessage, type ChatViewSlotProps, type TurnTokenUsage } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { CommunityComposer } from './CommunityComposer.tsx'
 import type { BotCommunityProps } from './index.ts'
@@ -55,6 +56,10 @@ export function BotCommunityPage(props: BotCommunityProps) {
   const [members, setMembers] = useState<BotId[]>([])
   const [roomPaused, setRoomPaused] = useState(false)
   const [agentPreset, setAgentPreset] = useState('standard')
+  const [teamMode, setTeamMode] = useState(false)
+  const [teamLeader, setTeamLeader] = useState<BotId | ''>('')
+  const [teamWorkspace, setTeamWorkspace] = useState('')
+  const [approvals, setApprovals] = useState<readonly TeamApproval[]>([])
   const [deleteTarget, setDeleteTarget] = useState<{ kind: 'room'; room: BotRoom } | { kind: 'agent'; agent: BotIdentity }>()
 
   const visibleRoomsOf = (rooms: readonly BotRoom[]): BotRoom[] =>
@@ -62,9 +67,14 @@ export function BotCommunityPage(props: BotCommunityProps) {
 
   const load = async (preferredRoomId?: string): Promise<void> => {
     try {
-      const result = await props.remote.snapshot()
+      // 审批列表是附加信息：它失败不能让整份 snapshot 一起丢失，否则群聊列表会空。
+      const [result, pending] = await Promise.all([
+        props.remote.snapshot(),
+        isAgentMode ? Promise.resolve(undefined) : props.remote.listTeamApprovals().catch(() => undefined),
+      ])
       if (!result.ok) { setError(result.error.message); return }
       setSnapshot(result.value)
+      if (pending?.ok === true) setApprovals(pending.value)
       const visible = visibleRoomsOf(result.value.rooms)
       setRoomId((current) => {
         const wanted = preferredRoomId ?? current
@@ -74,7 +84,14 @@ export function BotCommunityPage(props: BotCommunityProps) {
     } catch (e) { setError(e instanceof Error ? e.message : String(e)) }
   }
 
-  useEffect(() => { void load() }, [])
+  useEffect(() => { void load(isAgentMode ? undefined : props.takePreferredRoom()) }, [])
+  useEffect(() => {
+    if (isAgentMode) return undefined
+    return props.onPreferredRoom(() => {
+      const wanted = props.takePreferredRoom()
+      if (wanted !== undefined) { setRoomId(wanted); void load(wanted) }
+    })
+  }, [])
   useEffect(() => {
     const timer = window.setInterval(() => { void load(roomId) }, 1500)
     return () => { window.clearInterval(timer) }
@@ -96,6 +113,9 @@ export function BotCommunityPage(props: BotCommunityProps) {
   const runById = useMemo(() => new Map(runs.map(run => [run.id, run])), [runs])
   // 只在 Run 仍持有存活 Session 时查询 Session 侧的命令/引用服务；已结束的历史可能指向已释放的 Session。
   const referenceSessionId = runs.find(run => run.status === 'queued' || run.status === 'running')?.sessionId
+  const team = room?.team
+  const roomApprovals = approvals.filter(item => item.roomId === roomId)
+  const nameOf = (botId: BotId): string => agents.find(agent => agent.id === botId)?.name ?? botId
   const nativeT = props.t as unknown as NativeTranslate
 
   // 模型列表直接来自 Host 目录（即「设置 → 模型」中已配置并可用的模型），按厂商分组。
@@ -142,6 +162,7 @@ export function BotCommunityPage(props: BotCommunityProps) {
     setFormOpen(false); setEditing(false); setAgentId(undefined)
     setAgentName(''); setAgentDescription(''); setAvatarSeed('🤖'); setInstructions(''); setModelRoute('')
     setRoomName(''); setRoomImagePath(''); setMembers([]); setRoomPaused(false); setMentionOnly(false); setAgentPreset('standard')
+    setTeamMode(false); setTeamLeader(''); setTeamWorkspace('')
   }
 
   const openCreate = (): void => {
@@ -186,8 +207,15 @@ export function BotCommunityPage(props: BotCommunityProps) {
   })
 
   const createGroup = (): Promise<void> => execute(async () => {
+    const leader = teamMode ? agents.find(agent => agent.id === teamLeader) : undefined
     const result = await props.remote.createRoom({
       name: roomName, memberIds: members, ...(roomImagePath.trim() ? { imagePath: roomImagePath.trim() } : {}), mentionOnly,
+      ...(leader === undefined ? {} : {
+        team: {
+          leaderBotId: leader.id, leaderName: leader.name,
+          ...(teamWorkspace.trim() ? { workspace: teamWorkspace.trim() } : {}),
+        },
+      }),
     })
     if (result.ok) { setRoomId(result.value.id); clearForm() }
     return result
@@ -267,6 +295,13 @@ export function BotCommunityPage(props: BotCommunityProps) {
     })
   }
 
+  const answerApproval = (approval: TeamApproval, outcome: 'allowed-once' | 'rejected'): void => {
+    void execute(async () => {
+      const result = await props.remote.answerTeamApproval({ id: approval.id, outcome })
+      return result.ok ? { ok: true } : result
+    })
+  }
+
   const send = (): Promise<void> => {
     if (room === undefined || !message.trim()) return Promise.resolve()
     return execute(async () => {
@@ -296,12 +331,16 @@ export function BotCommunityPage(props: BotCommunityProps) {
   const headerTitle = isAgentMode ? selectedAgent?.name ?? room?.name : room?.name
   const headerHint = isAgentMode
     ? (selectedAgent?.description.trim() || props.t('directHint'))
-    : (roomMembers.length === 0 ? props.t('groupNoMembers') : props.t('groupMembers', { members: roomMembers.map(agent => agent.name).join('、') }))
+    : team !== undefined
+      ? props.t('teamHeaderHint', { lead: team.leaderName, members: roomMembers.filter(agent => !(team.leader.kind === 'bot' && team.leader.botId === agent.id)).map(agent => agent.name).join('、') || '—' })
+      : (roomMembers.length === 0 ? props.t('groupNoMembers') : props.t('groupMembers', { members: roomMembers.map(agent => agent.name).join('、') }))
   const emptyTitle = isAgentMode ? (agents.length === 0 ? props.t('empty') : props.t('selectAgent')) : (groupRooms.length === 0 ? props.t('noRooms') : props.t('selectRoom'))
   const emptyHint = isAgentMode ? (agents.length === 0 ? props.t('emptyAgentsHint') : undefined) : (groupRooms.length === 0 ? props.t('noRoomsHint') : undefined)
   const formTitle = isAgentMode ? props.t(editing ? 'editTitle' : 'createTitle') : props.t(editing ? 'groupEditTitle' : 'groupTitle')
   const formDescription = isAgentMode ? props.t(editing ? 'editDescription' : 'createDescription') : props.t(editing ? 'groupEditDescription' : 'groupDescription')
-  const formInvalid = isAgentMode ? !agentName.trim() : (!roomName.trim() || members.length < 2)
+  const formInvalid = isAgentMode
+    ? !agentName.trim()
+    : (!roomName.trim() || (teamMode && !editing ? members.length < 1 || teamLeader === '' || !members.includes(teamLeader) : members.length < 2))
   const submitForm = (): void => {
     void (isAgentMode ? (editing ? updateAgent() : createAgent()) : (editing ? updateGroup() : createGroup()))
   }
@@ -315,7 +354,7 @@ export function BotCommunityPage(props: BotCommunityProps) {
         </div>
         {isAgentMode
           ? <div className={css.agentList}>{agents.length === 0 ? <p className={css.listEmpty}>{props.t('empty')}</p> : agents.map(agent => <AgentRow key={agent.id} agent={agent} active={room?.directBotId === agent.id} disabled={busy} presenceLabel={props.t(`presence.${agent.presence ?? 'offline'}`)} onOpen={() => { openAgent(agent) }} onDelete={requestDeleteAgent} deleteLabel={props.t('deleteAgent')} />)}</div>
-          : <div className={css.roomList}>{groupRooms.length === 0 ? <p className={css.listEmpty}>{props.t('noRooms')}</p> : groupRooms.map(item => <RoomRow key={item.id} room={item} active={item.id === roomId} meta={`${props.t('memberCount', { count: String(item.memberIds.length) })}${item.paused ? ` · ${props.t('paused')}` : ''}`} onSelect={() => { setRoomId(item.id) }} onDelete={requestDeleteRoom} deleteLabel={props.t('deleteRoom')} disabled={busy} />)}</div>}
+          : <div className={css.roomList}>{groupRooms.length === 0 ? <p className={css.listEmpty}>{props.t('noRooms')}</p> : groupRooms.map(item => <RoomRow key={item.id} room={item} active={item.id === roomId} meta={`${item.team === undefined ? '' : `${props.t('teamBadge')} · ${props.t('teamLead', { name: item.team.leaderName })} · `}${props.t('memberCount', { count: String(item.memberIds.length) })}${item.team?.status === 'dismissed' ? ` · ${props.t('teamDismissed')}` : ''}${item.paused ? ` · ${props.t('paused')}` : ''}`} onSelect={() => { setRoomId(item.id) }} onDelete={requestDeleteRoom} deleteLabel={props.t('deleteRoom')} disabled={busy} />)}</div>}
       </div>
     </aside>
     <main className={css.content}>
@@ -323,11 +362,12 @@ export function BotCommunityPage(props: BotCommunityProps) {
         ? <div className={css.emptyState}>
           <p className={css.emptyTitle}>{emptyTitle}</p>
           {emptyHint && <p className={css.emptyHint}>{emptyHint}</p>}
+          {error && <p role="alert" className={css.error}>{error}</p>}
         </div>
         : <>
           <header className={css.header}>
             <div className={css.heading}>
-              <div className={css.eyebrow}>{props.t(isAgentMode ? 'directLabel' : 'groupLabel')}{connectionLabel ? ` · ${connectionLabel}` : ''}</div>
+              <div className={css.eyebrow}>{props.t(isAgentMode ? 'directLabel' : team === undefined ? 'groupLabel' : 'teamBadge')}{team?.status === 'dismissed' ? ` · ${props.t('teamDismissed')}` : ''}{connectionLabel ? ` · ${connectionLabel}` : ''}</div>
               <h2>{headerTitle}</h2>
               <p>{headerHint}</p>
             </div>
@@ -337,14 +377,35 @@ export function BotCommunityPage(props: BotCommunityProps) {
               {!isAgentMode && <Button size="sm" variant="outline" disabled={busy} onClick={() => { openRoomEdit(room) }}>{props.t('edit')}</Button>}
             </div>
           </header>
+          {team !== undefined && <div className={css.teamStrip}>
+            {team.leader.kind === 'session' && <button type="button" className={css.teamChip} data-lead="true" onClick={() => { props.openSession(team.leader.kind === 'session' ? team.leader.sessionId : '' as SessionId) }} title={props.t('openLeadSession')}>
+              <span className={css.teamChipName}>★ {team.leaderName}</span><span className={css.teamChipMeta}>{props.t('openLeadSession')}</span>
+            </button>}
+            {roomMembers.map((agent) => {
+              const memberSession = room.memberSessions?.[agent.id]
+              const lead = team.leader.kind === 'bot' && team.leader.botId === agent.id
+              return <button key={agent.id} type="button" className={css.teamChip} data-lead={lead ? 'true' : undefined} data-presence={agent.presence ?? 'idle'} disabled={memberSession === undefined}
+                title={props.t('openSession')} onClick={() => { if (memberSession !== undefined) props.openSession(memberSession) }}>
+                <span className={css.teamChipName}>{lead ? '★ ' : ''}{avatarEmoji(agent)} {agent.name}</span>
+                <span className={css.teamChipMeta}>{props.t(`presence.${agent.presence ?? 'idle'}`)}</span>
+              </button>
+            })}
+          </div>}
           {error && <p role="alert" className={css.error}>{error}</p>}
           <section className={css.conversation}>
             <div className={css.messageList}>
-              {messages.length === 0 ? <p className={css.empty}>{props.t('noMessages')}</p> : messages.map(item => <CommunityMessageView key={item.id} item={item} agents={agents} communityT={props.t} nativeT={nativeT} runs={runsForMessage(item)} unrouted={!isAgentMode && item.sender.kind === 'user' && (item.runIds?.length ?? 0) === 0} controlRun={controlRun} retryRun={retryRun} />)}
+              {messages.length === 0 ? <p className={css.empty}>{props.t('noMessages')}</p> : messages.map(item => <CommunityMessageView key={item.id} item={item} agents={agents} communityT={props.t} nativeT={nativeT} runs={runsForMessage(item)} unrouted={!isAgentMode && team === undefined && item.sender.kind === 'user' && (item.runIds?.length ?? 0) === 0} controlRun={controlRun} retryRun={retryRun} nameOf={nameOf} />)}
             </div>
           </section>
         </>}
       <div className={css.composerDock}>
+        {roomApprovals.map(item => <div key={item.id} role="status" className={css.pausedNotice}>
+          <span title={item.reason}>{props.t('approvalRequest', { member: item.memberName, tool: item.toolName })}{item.reason ? `：${item.reason.slice(0, 160)}` : ''}</span>
+          <span className={css.actions}>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => { answerApproval(item, 'rejected') }}>{props.t('approvalReject')}</Button>
+            <Button size="sm" disabled={busy} onClick={() => { answerApproval(item, 'allowed-once') }}>{props.t('approvalAllow')}</Button>
+          </span>
+        </div>)}
         {!isAgentMode && room?.paused === true && <div role="status" className={css.pausedNotice}>
           <span>{props.t(awaitingUser ? 'pausedAwaitingUser' : 'pausedNotice')}</span>
           <Button size="sm" variant="outline" disabled={busy} onClick={resumeRoom}>{props.t('resume')}</Button>
@@ -362,7 +423,7 @@ export function BotCommunityPage(props: BotCommunityProps) {
           running={runs.some(run => run.status === 'queued' || run.status === 'running')}
           onStop={stopRuns}
           copy={{
-            placeholder: props.t('composerPlaceholder'), plus: props.t('composerPlus'), file: props.t('composerFile'),
+            placeholder: props.t(team === undefined ? 'composerPlaceholder' : 'teamComposerPlaceholder'), plus: props.t('composerPlus'), file: props.t('composerFile'),
             conversation: props.t('composerConversation'), commands: props.t('composerCommands'), mentions: props.t('composerMentions'),
             noSuggestions: props.t('composerNoSuggestions'), mentionAll: props.t('mentionAll'), send: props.t('send'), addTitle: props.t('composerAddTitle'),
             directiveTitle: props.t('composerDirectiveTitle'), skillTitle: props.t('composerSkillTitle'),
@@ -411,7 +472,21 @@ export function BotCommunityPage(props: BotCommunityProps) {
           <label>{props.t('roomName')}<Input value={roomName} onChange={(e) => { setRoomName(e.target.value) }} /></label>
           <label>{props.t('roomImage')}<Input value={roomImagePath} onChange={(e) => { setRoomImagePath(e.target.value) }} /></label>
           <fieldset className={css.members}><legend>{props.t('members')} ({members.length})</legend>{agents.length === 0 ? <p className={css.formHint}>{props.t('emptyMembers')}</p> : agents.map(agent => <label className={css.check} key={agent.id}><input type="checkbox" checked={members.includes(agent.id)} onChange={() => { setMembers(current => current.includes(agent.id) ? current.filter(id => id !== agent.id) : [...current, agent.id]) }} />{agent.name}<small>{agent.description}</small></label>)}</fieldset>
-          <label className={css.check}><input type="checkbox" checked={mentionOnly} onChange={(e) => { setMentionOnly(e.target.checked) }} />{props.t('mentionOnly')}</label>
+          {!editing && <div className={css.pauseSetting}>
+            <label className={css.check}><input type="checkbox" checked={teamMode} onChange={(e) => { setTeamMode(e.target.checked) }} />{props.t('teamMode')}</label>
+            <p className={css.formHint}>{props.t('teamModeHint')}</p>
+          </div>}
+          {!editing && teamMode && <>
+            <label>{props.t('teamLeader')}
+              <select value={teamLeader} onChange={(e) => { setTeamLeader(e.target.value as BotId) }}>
+                <option value="">{props.t('teamLeaderPick')}</option>
+                {members.map(id => <option key={id} value={id}>{nameOf(id)}</option>)}
+              </select>
+            </label>
+            <label>{props.t('teamWorkspace')}<Input value={teamWorkspace} placeholder="/Users/…/project" onChange={(e) => { setTeamWorkspace(e.target.value) }} /></label>
+            <p className={css.formHint}>{props.t('teamWorkspaceHint')}</p>
+          </>}
+          {!(teamMode && !editing) && room?.team === undefined && <label className={css.check}><input type="checkbox" checked={mentionOnly} onChange={(e) => { setMentionOnly(e.target.checked) }} />{props.t('mentionOnly')}</label>}
           {editing && <div className={css.pauseSetting}><label className={css.check}><input type="checkbox" checked={roomPaused} onChange={(e) => { setRoomPaused(e.target.checked) }} />{props.t('pause')}</label><p className={css.formHint}>{props.t('pauseHint')}</p></div>}
         </div>}
     </Modal>
@@ -430,8 +505,16 @@ export function BotCommunityPage(props: BotCommunityProps) {
   </section>
 }
 
-function CommunityMessageView({ item, agents, communityT, nativeT, runs, unrouted, controlRun, retryRun }: { item: BotMessage; agents: readonly BotIdentity[]; communityT: BotCommunityProps['t']; nativeT: NativeTranslate; runs: readonly BotRun[]; unrouted: boolean; controlRun: (run: BotRun, action: 'interrupt' | 'cancel') => void; retryRun: (run: BotRun) => void }) {
-  const bot = item.sender.kind === 'bot'
+function CommunityMessageView({ item, agents, communityT, nativeT, runs, unrouted, controlRun, retryRun, nameOf }: { item: BotMessage; agents: readonly BotIdentity[]; communityT: BotCommunityProps['t']; nativeT: NativeTranslate; runs: readonly BotRun[]; unrouted: boolean; controlRun: (run: BotRun, action: 'interrupt' | 'cancel') => void; retryRun: (run: BotRun) => void; nameOf: (botId: BotId) => string }) {
+  const bot = item.sender.kind === 'bot' || item.sender.kind === 'leader'
+  const targets = (item.targetNames ?? []).map(name => name === 'lead' ? communityT('teamLeader') : name === 'all' ? '@all' : name).join('、')
+    || item.mentions.map(nameOf).join('、')
+  const kindLabel = item.kind === undefined ? undefined
+    : item.kind === 'assign' ? communityT('kindAssign', { targets })
+      : item.kind === 'report' ? communityT('kindReport')
+        : item.kind === 'summary' ? communityT('kindSummary')
+          : item.kind === 'notice' ? communityT('kindNotice')
+            : targets ? communityT('kindMessage', { targets }) : undefined
   const sender = item.sender.botId === undefined ? undefined : agents.find(agent => agent.id === item.sender.botId)
   const time = Date.parse(item.createdAt)
   const usage = item.usage === undefined ? undefined : toTurnUsage(item.usage)
@@ -454,7 +537,8 @@ function CommunityMessageView({ item, agents, communityT, nativeT, runs, unroute
   })
   const failure = runs.find(run => run.status === 'failed')
   const failedAgent = failure === undefined ? undefined : agents.find(agent => agent.id === failure.botId)
-  return <article className={css.message}>
+  return <article className={css.message} data-team-kind={item.kind}>
+    {kindLabel !== undefined && <p className={css.teamKind} data-align={bot ? 'start' : 'end'}>{kindLabel}</p>}
     <CommunityMessage role={bot ? 'assistant' : 'user'} author={bot ? item.sender.name : undefined}
       avatar={bot ? avatarEmoji(sender, item.sender.name) : undefined} text={item.text}
       time={Number.isNaN(time) ? undefined : time} reasoning={item.reasoning} toolActivity={item.toolActivity} usage={usage}
@@ -520,5 +604,5 @@ interface RoomRowProps {
   disabled: boolean
 }
 function RoomRow({ room, active, meta, onSelect, onDelete, deleteLabel, disabled }: RoomRowProps) {
-  return <div className={css.rowWithAction}><button className={css.roomRow} data-active={active ? 'true' : undefined} type="button" aria-pressed={active} onClick={onSelect}><span className={css.avatar} aria-hidden="true">群</span><span className={css.rowText}><span className={css.rowName}>{room.name}</span><span className={css.rowMeta}>{meta}</span></span></button><button className={css.rowDeleteButton} type="button" disabled={disabled} aria-label={deleteLabel} title={deleteLabel} onClick={(event) => { event.stopPropagation(); onDelete(room) }}><IconTrashOutlineRegular size={14} /></button></div>
+  return <div className={css.rowWithAction}><button className={css.roomRow} data-active={active ? 'true' : undefined} type="button" aria-pressed={active} onClick={onSelect}><span className={css.avatar} aria-hidden="true">{room.team === undefined ? '群' : '团'}</span><span className={css.rowText}><span className={css.rowName}>{room.name}</span><span className={css.rowMeta}>{meta}</span></span></button><button className={css.rowDeleteButton} type="button" disabled={disabled} aria-label={deleteLabel} title={deleteLabel} onClick={(event) => { event.stopPropagation(); onDelete(room) }}><IconTrashOutlineRegular size={14} /></button></div>
 }
