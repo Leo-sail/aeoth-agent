@@ -48,6 +48,8 @@ worktrees/
 native/system/test/bin/
 
 # Private Aeoth source distribution: never publish local state or credentials.
+# Development logs and planning documents stay local.
+AEOTH_AGENT.md
 .aeoth/
 .aeoth-*/
 research/
