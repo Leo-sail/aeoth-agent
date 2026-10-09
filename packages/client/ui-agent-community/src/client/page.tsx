@@ -263,6 +263,23 @@ export function BotCommunityPage(props: BotCommunityProps) {
         })
         if (recreated.ok) { await load(recreated.value.id); return }
       }
+      // 清空协作团队：删除旧房间后重建同配置的空房间，保持选中。
+      const team = target.room.team
+      if (team !== undefined && team.status !== 'dismissed') {
+        const leader = team.leader
+        const recreated = await props.remote.createRoom({
+          name: target.room.name,
+          imagePath: target.room.imagePath,
+          memberIds: target.room.memberIds,
+          mentionOnly: target.room.mentionOnly,
+          team: {
+            leaderName: team.leaderName,
+            workspace: team.workspace,
+            ...(leader.kind === 'bot' ? { leaderBotId: leader.botId } : { leaderSessionId: leader.sessionId }),
+          },
+        })
+        if (recreated.ok) { await load(recreated.value.id); return }
+      }
       setRoomId(undefined); setSnapshot(undefined)
       await load()
     })().catch((error: unknown) => { setError(error instanceof Error ? error.message : String(error)) }).finally(() => { setBusy(false) })
