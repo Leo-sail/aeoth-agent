@@ -264,22 +264,33 @@ export function BotCommunityPage(props: BotCommunityProps) {
         if (recreated.ok) { await load(recreated.value.id); return }
       }
       // 清空协作团队：删除旧房间后重建同配置的空房间，保持选中。
+      // dismissed 状态的团队不再传 team 配置，但仍重建群聊保留房间。
       const team = target.room.team
-      if (team !== undefined && team.status !== 'dismissed') {
+      if (team !== undefined) {
         const leader = team.leader
         const recreated = await props.remote.createRoom({
           name: target.room.name,
-          imagePath: target.room.imagePath,
+          ...(target.room.imagePath !== undefined ? { imagePath: target.room.imagePath } : {}),
           memberIds: target.room.memberIds,
           mentionOnly: target.room.mentionOnly,
-          team: {
-            leaderName: team.leaderName,
-            workspace: team.workspace,
-            ...(leader.kind === 'bot' ? { leaderBotId: leader.botId } : { leaderSessionId: leader.sessionId }),
-          },
+          ...(team.status !== 'dismissed' ? {
+            team: {
+              leaderName: team.leaderName,
+              ...(team.workspace !== undefined ? { workspace: team.workspace } : {}),
+              ...(leader.kind === 'bot' ? { leaderBotId: leader.botId } : { leaderSessionId: leader.sessionId }),
+            },
+          } : {}),
         })
         if (recreated.ok) { await load(recreated.value.id); return }
       }
+      // 清空普通群聊：删除旧房间后重建同配置的空房间，保持选中。
+      const recreatedGroup = await props.remote.createRoom({
+        name: target.room.name,
+        ...(target.room.imagePath !== undefined ? { imagePath: target.room.imagePath } : {}),
+        memberIds: target.room.memberIds,
+        mentionOnly: target.room.mentionOnly,
+      })
+      if (recreatedGroup.ok) { await load(recreatedGroup.value.id); return }
       setRoomId(undefined); setSnapshot(undefined)
       await load()
     })().catch((error: unknown) => { setError(error instanceof Error ? error.message : String(error)) }).finally(() => { setBusy(false) })

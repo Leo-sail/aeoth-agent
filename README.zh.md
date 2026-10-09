@@ -2,22 +2,59 @@
 
 [English](README.md) | 中文
 
-太易（Aeoth Agent）是面向本地文件、代码与工具的桌面 AI Agent 应用。Electron 桌面端是唯一产品入口；运行时、渲染器、插件组合和本地工作区都随桌面应用交付。
+太易是一款基于 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) 的开源桌面 AI Agent 应用。它把 dsh 运行时封装进一个 Electron 桌面应用，加入了 Agent 直聊和多 Agent 协作团队功能，打包成可以直接安装的 macOS 应用。
 
-## 开发者预览
+项目完全开源，欢迎通过 GitHub Issues 和 Discussions 提交反馈和 Bug。
 
-太易目前处于开发者预览阶段，兼容性与产品界面仍会继续调整。
+**创作者：** leochang — leochang210@gmail.com
 
-- 产品版本：**0.1.0-preview.3**
-- 固定来源：`dsh-v0.2.0-rc.2`，commit `639ed015397290b3745d163aafe02ffee4aa3f84`
-- 仓库保留桌面端源码及其运行时依赖。
-- 本源码分发不包含自动化测试套件、测试夹具、基准数据或用户凭据。
+---
 
-<a id="run-from-source"></a>
+## 它能做什么
 
-## 从源码运行
+打开太易，你得到的是一个完整的 dsh 运行时跑在本地。它在 dsh 基础上额外提供：
 
-需要 Node.js `^22.19.0` 或 `>=24.0.0`、pnpm `11.7.0`，以及当前系统所需的原生编译环境。
+- **Agent 面板** — 创建有名字的 Bot，配置自定义系统提示词，选择任意已配置的模型，与 Bot 保持持续对话。每个 Bot 的聊天记录跨会话保留。
+- **团队面板** — 把多个 Bot 放进一个群聊房间，指定一个 Leader，发送任务后 Leader 会自动把子任务分配给其他成员，结果汇聚到同一个对话线程。可以暂停、中断或重试任意一步。
+- **桌面壳** — 原生窗口管理、自动更新、本地 Profile 隔离、托盘图标。除了模型调用，数据不出本机。
+
+其他功能——Agent 执行引擎、LLM 路由、工具调用、会话管理、Skills、MCP 服务支持——全部直接继承自 dsh 核心，太易没有替换或重写这些层。
+
+---
+
+## 快速开始：安装应用
+
+从 [Releases](https://github.com/Leo-sail/aeoth-agent/releases) 页面下载最新的 macOS Apple Silicon 未签名 DMG。
+
+因为是 ad-hoc 签名而非公证版本，macOS 第一次打开时会拒绝。绕过方法：
+
+1. 打开 DMG，把太易拖到「应用程序」文件夹。
+2. 第一次尝试启动时，macOS 会弹出「无法打开，因为无法验证开发者」的提示，点击**取消**——不要点「移到废纸篓」。
+3. 打开**系统设置 → 隐私与安全性**，滚动到底部，会看到关于太易被阻止的提示，点击**仍要打开**。
+4. 再弹出一个确认对话框，点击**打开**。
+
+之后每次正常启动，不再需要这个步骤。
+
+---
+
+## 首次配置
+
+太易第一次启动时会在 `~/.aeoth/` 创建本地 Profile，默认没有配置任何模型。
+
+1. 点击左下角的齿轮图标（设置）。
+2. 进入**模型**，添加你使用的 API Key（DeepSeek、OpenAI、Anthropic 等主流服务商都支持）。
+3. 选择一个默认模型。
+4. 关闭设置，可以开始用了。
+
+打开 Agent 面板：点击左侧边栏的机器人图标，点 **+** 创建第一个 Bot，填写名称、可选的系统提示词，选择模型，聊天房间会自动打开。
+
+使用协作团队：切换到同一面板的「团队」标签，创建群聊房间，添加成员 Bot，指定 Leader，发送任务即可。
+
+---
+
+## 从源码构建
+
+依赖：Node.js `^22.19.0` 或 `>=24.0.0`，pnpm `11.7.0`，macOS 上需要 Xcode Command Line Tools。
 
 ```sh
 pnpm install --frozen-lockfile
@@ -25,30 +62,61 @@ pnpm run build:official
 pnpm run start:desktop
 ```
 
-进入桌面开发循环：
+进入增量开发模式（修改后自动重建）：
 
 ```sh
 pnpm run dev:desktop
 ```
 
-首次启动会创建独立的本地 home 与 profile。请在「设置 → 模型」中配置模型接口和 API Key。不要提交凭据、会话、本机配置、`node_modules` 或构建缓存。
+打包 macOS ARM64 未签名 DMG：
 
-## 桌面分发
+```sh
+cp apps/desktop/.env.macos.example apps/desktop/.env.macos
+pnpm run package:desktop:mac:arm64:unsigned
+```
 
-仓库面向 private 桌面分发准备。macOS Apple Silicon 本地交付目录为 `release/0.1.0-preview.3/mac-arm64/`，校验后保留 DMG、ZIP 与 SHA-256 校验清单。当前预览通道为 ad-hoc 签名，尚未构成正式公证发行版。
+产物输出到 `release/` 目录下对应版本号的子目录。
 
-桌面打包命令见 [Desktop 开发说明](apps/desktop/README.zh.md)，其中包含运行时准备、Electron 打包、macOS 签名、Windows 打包和更新发布说明。上传是独立的、必须经用户授权的步骤。
+---
 
 ## 目录结构
 
-- `apps/desktop/`：Electron 壳、原生窗口、更新流程和打包资源。
-- `apps/desktop-host/`：由 Electron 桌面端拥有的私有 Node Host。
-- `packages/desktop/`：桌面运行时与渲染器入口包。
-- `packages/bundle/desktop-app/`：桌面 profile 组合。
-- `packages/client/desktop/`：渲染器启动内核。
-- `packages/host/desktop-server/` 与 `packages/host/desktop-static/`：本地渲染器传输和静态资源服务。
-- `migrations/` 与运行时包：持久化应用状态和 Agent 能力。
+```
+apps/desktop/          Electron 壳、原生窗口、更新流程、打包资源
+apps/desktop-host/     Electron 应用持有的私有 Node Host 进程
+packages/desktop/      桌面运行时与渲染器入口包
+packages/bundle/       桌面 Profile 组合
+packages/client/       浏览器侧 UI 插件（Agent 面板、团队面板、设置等）
+packages/core/         核心服务（agent community、会话、存储等）
+packages/api/          Host 侧 Remote API 控制器
+packages/host/         本地传输和静态资源服务
+migrations/            持久化状态迁移
+docs/                  架构和子系统文档
+```
 
-## 隐私与来源
+---
 
-仓库不得包含 API Key、用户会话、profile、升级备份、依赖目录或本机构建缓存。为保持兼容，第三方包名、许可证和来源记录在需要时保留。详见 [LICENSE](LICENSE) 与 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+## 基线与来源
+
+太易基于 dsh 的一个固定快照构建：
+
+- **基线：** `dsh-v0.2.0-rc.2`，commit `639ed015397290b3745d163aafe02ffee4aa3f84`
+- **产品版本：** `0.1.0-preview.3`
+
+按上游许可，本仓库不包含自动化测试套件、测试夹具、基准数据和用户凭据。
+
+第三方包的名称、许可证和署名信息完整保留在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+---
+
+## 参与贡献
+
+Bug 反馈和功能建议请提 [GitHub Issues](https://github.com/Leo-sail/aeoth-agent/issues)。
+
+代码贡献请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。简版：一个 PR 一个逻辑变更，Conventional Commits 格式，不在 commit 里放密钥或本机路径。
+
+---
+
+## 许可证
+
+MIT — 详见 [LICENSE](LICENSE)。

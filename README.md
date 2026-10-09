@@ -2,22 +2,59 @@
 
 English | [中文](README.zh.md)
 
-Aeoth Agent is a desktop AI agent for local files, code and tools. The Electron application includes its Host, renderer, plugin composition and local workspace integration.
+Aeoth is a desktop AI agent built on top of [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness). It wraps the harness runtime into a standalone Electron application, adds an Agent community panel for direct Bot chat and multi-agent team collaboration, and ships everything as a single installable app for macOS.
 
-## Developer preview
+The project is open source. Contributions, feedback, and bug reports are welcome via GitHub Issues and Discussions.
 
-Aeoth is a developer preview. Interfaces and compatibility may change.
+**Creator:** leochang — leochang210@gmail.com
 
-- Product version: **0.1.0-preview.3**
-- Source baseline: `dsh-v0.2.0-rc.2` at `639ed015397290b3745d163aafe02ffee4aa3f84`
-- The repository contains the desktop application source and its runtime dependencies.
-- This source distribution does not contain automated test suites, test fixtures, benchmark data, or user credentials.
+---
 
-<a id="run-from-source"></a>
+## What it does
 
-## Run from source
+When you open Aeoth, you get a full dsh runtime running locally. The main things it adds on top of plain dsh:
 
-Requirements: Node.js `^22.19.0` or `>=24.0.0`, pnpm `11.7.0`, and the native build prerequisites for your operating system.
+- **Agent panel** — create named Bots with custom system prompts, pick any model you have configured, and chat with them in persistent rooms. Each Bot keeps its own conversation history across sessions.
+- **Team panel** — put multiple Bots in a group room. Assign one as Leader and send a task; the Leader routes subtasks to the other members and the results come back in a single thread. You can pause, interrupt, or retry any run step.
+- **Desktop shell** — native window management, auto-update, local profile isolation, and a tray icon. Nothing leaves your machine unless the model call does.
+
+Everything else — the Agent execution engine, LLM routing, tool calling, session management, skills, MCP server support — is inherited directly from the dsh core. Aeoth does not replace or reinvent those layers.
+
+---
+
+## Quick start: install the app
+
+Download the latest unsigned DMG for macOS Apple Silicon from the [Releases](https://github.com/Leo-sail/aeoth-agent/releases) page.
+
+Because the build is ad-hoc signed and not notarized, macOS will refuse to open it the first time. To get past that:
+
+1. Open the DMG and drag Aeoth to Applications as usual.
+2. The first time you try to launch it, macOS shows "cannot be opened because the developer cannot be verified." Click **Cancel** — do not click Move to Trash.
+3. Open **System Settings → Privacy & Security**, scroll to the bottom, and you'll see a message about Aeoth being blocked. Click **Open Anyway**.
+4. A final dialog appears asking if you're sure. Click **Open**.
+
+After that first launch, the app opens normally every time.
+
+---
+
+## First-time setup
+
+On first launch, Aeoth creates a local profile under `~/.aeoth/`. Nothing is configured yet — you need to add a model before anything works.
+
+1. Click the gear icon (Settings) in the bottom left.
+2. Go to **Models** and add your API key for DeepSeek, OpenAI, Anthropic, or any provider you use.
+3. Select a default model.
+4. Close Settings. You're ready.
+
+To open the Agent panel, click the robot icon in the left sidebar. Click **+** to create your first Bot — give it a name, optionally a system prompt, and pick a model. A chat room opens automatically.
+
+To set up a Team, switch to the Team tab in the same panel. Create a group room, add the Bots you want, designate a Leader, and send a task.
+
+---
+
+## Build from source
+
+Requirements: Node.js `^22.19.0` or `>=24.0.0`, pnpm `11.7.0`, and Xcode Command Line Tools on macOS.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -25,30 +62,61 @@ pnpm run build:official
 pnpm run start:desktop
 ```
 
-For an iterative desktop development session:
+For iterative development with live reload:
 
 ```sh
 pnpm run dev:desktop
 ```
 
-The application creates its own local home and profile on first launch. Configure the model endpoint and API key in **Settings → Models**. Do not commit credentials, session data, machine-specific configuration, `node_modules`, or build caches.
+To produce the macOS ARM64 unsigned DMG:
 
-## Desktop distribution
+```sh
+cp apps/desktop/.env.macos.example apps/desktop/.env.macos
+pnpm run package:desktop:mac:arm64:unsigned
+```
 
-The repository is prepared for a private desktop distribution. The local macOS Apple Silicon delivery directory is `release/0.1.0-preview.3/mac-arm64/`. DMG, ZIP and SHA-256 checksums are staged there after validation. The current preview lane is ad-hoc signed and is not a notarized public release.
+The output lands in `release/` under the current version directory.
 
-The desktop package commands are maintained in [apps/desktop/README.md](apps/desktop/README.md). They cover runtime preparation, Electron packaging, macOS signing, Windows packaging, and update publication. Uploading is deliberately a separate, user-authorized step.
+---
 
 ## Project layout
 
-- `apps/desktop/` — Electron shell, native windows, update flow, and packaged resources.
-- `apps/desktop-host/` — private Node host owned by the Electron application.
-- `packages/desktop/` — Desktop runtime and renderer entry packages.
-- `packages/bundle/desktop-app/` — Desktop profile composition.
-- `packages/client/desktop/` — renderer boot kernel.
-- `packages/host/desktop-server/` and `packages/host/desktop-static/` — local renderer transport and static asset serving.
-- `migrations/` and runtime packages — durable application state and Agent capabilities.
+```
+apps/desktop/          Electron shell, native windows, update flow, packaged resources
+apps/desktop-host/     Private Node host process owned by the Electron app
+packages/desktop/      Desktop runtime and renderer entry packages
+packages/bundle/       Desktop profile composition
+packages/client/       Browser-side UI plugins (Agent panel, Team panel, settings, etc.)
+packages/core/         Core services (agent community, session, storage, etc.)
+packages/api/          Host-side Remote API controllers
+packages/host/         Local transport and static asset serving
+migrations/            Durable state migrations
+docs/                  Architecture and subsystem documentation
+```
 
-## Privacy and provenance
+---
 
-No API key, user session, profile, upgrade backup, dependency directory, or local build cache belongs in the repository. Third-party package names, licenses, and provenance remain unchanged where compatibility requires them. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+## Baseline and provenance
+
+Aeoth is built on a fixed snapshot of dsh:
+
+- **Baseline:** `dsh-v0.2.0-rc.2` at commit `639ed015397290b3745d163aafe02ffee4aa3f84`
+- **Product version:** `0.1.0-preview.3`
+
+This repository does not contain automated test suites, test fixtures, benchmark data, or user credentials from the upstream — those were removed as permitted by the upstream license before distribution.
+
+Third-party package names, licenses, and attribution are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+---
+
+## Contributing
+
+Bug reports and feature requests go in [GitHub Issues](https://github.com/Leo-sail/aeoth-agent/issues).
+
+For code contributions, please read [CONTRIBUTING.md](CONTRIBUTING.md) first. The short version: one logical change per PR, Conventional Commits format, no secrets or machine-specific paths in commits.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
