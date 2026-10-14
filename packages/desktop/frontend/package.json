@@ -36,7 +36,6 @@
     "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
     "@deepseek-ai/dsh-client-desktop": "workspace:*",
     "@deepseek-ai/dsh-pwsh-local": "workspace:*",
-    "@deepseek-ai/dsh-experimental-agent-team": "workspace:*",
     "@types/node": "^22.0.0",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
@@ -54,5 +53,6 @@
     "@deepseek-ai/dsh-experimental-auto-review": "workspace:*",
     "@deepseek-ai/dsh-experimental-speech-to-text": "workspace:*",
     "@deepseek-ai/dsh-experimental-voice-input-bundle": "workspace:*"
-  }
+  },
+  "dependencies": {}
 }

@@ -188,7 +188,6 @@ const INSTALLATION_OWNED_PROFILE_TUPLES: Record<string, readonly string[]> = {}
 export const DEFAULT_PROFILE_BUNDLES: readonly string[] = ['@deepseek-ai/dsh-base']
 
 export const OPTIONAL_BUNDLES: readonly string[] = [
-  "@deepseek-ai/dsh-experimental-agent-team-profile",
   "@deepseek-ai/dsh-experimental-voice-input-bundle",
   "@deepseek-ai/dsh-experimental-auto-review",
   "@deepseek-ai/dsh-experimental-schedule-bundle"

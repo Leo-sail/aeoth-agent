@@ -53,13 +53,6 @@ export function adaptAeothManifest<T extends object>(
   let own = object(raw.aeoth)
   const profile = object(own.profile)
   const bundles = profile.bundles
-  // The UI-only bundle was folded into the team bundle in 0.1.7.
-  // Only normalize Aeoth profiles that already enable the replacement.
-  const retired = '@deepseek-ai/dsh-experimental-agent-team-web-profile'
-  if (Array.isArray(bundles) && bundles.includes(retired)
-    && bundles.includes('@deepseek-ai/dsh-experimental-agent-team-profile')) {
-    own = { ...own, profile: { ...profile, bundles: bundles.filter(name => name !== retired) } }
-  }
   const hasUpstream = Object.keys(upstream).length > 0
   const hasOwn = Object.keys(own).length > 0
   if (!hasOwn) return { ...manifest, ...(hasUpstream ? { dsh: raw.dsh as DshManifest } : {}) }

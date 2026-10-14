@@ -78,10 +78,6 @@
     - id: agent-community
       name: '@deepseek-ai/dsh-agent-community'
 
-    # Native bidirectional A2A task service; HTTP transport is mounted by web-app.
-    - id: agent-link
-      name: '@deepseek-ai/dsh-agent-link'
-
     - id: plugin-package-inventory-deepseek
       name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'
 

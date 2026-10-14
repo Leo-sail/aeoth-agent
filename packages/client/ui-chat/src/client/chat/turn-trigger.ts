@@ -37,7 +37,6 @@ export function turnTriggerDetails(node: ContextMessageNode): {
       icon = 'agent'
       break
     case 'team-message':
-    case 'agent-team':
       title = 'message.trigger.team'
       icon = 'team'
       break
