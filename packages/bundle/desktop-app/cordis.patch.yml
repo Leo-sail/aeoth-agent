@@ -136,10 +136,6 @@
     - id: memory-controller
       name: '@deepseek-ai/dsh-api-memory-controller'
 
-    - id: agent-community-controller
-      name: '@deepseek-ai/dsh-api-agent-community'
-
-
     # Workspace commands and reconnect-safe projection over Typert Remote.
     - id: workspace-controller
       name: '@deepseek-ai/dsh-api-workspace-controller'
@@ -396,12 +392,6 @@
 
     - id: ui-settings-memory
       name: '@deepseek-ai/dsh-client-ui-settings-memory'
-
-    - id: tool-agent-community
-      name: '@deepseek-ai/dsh-tool-agent-community'
-
-    - id: ui-agent-community
-      name: '@deepseek-ai/dsh-client-ui-agent-community'
 
     # Plan control: the composer plan seat over the plan projection + /plan channel.
     - id: ui-plan

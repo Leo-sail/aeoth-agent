@@ -36,7 +36,7 @@
   "dependencies": {
     "@deepseek-ai/cordis-plugin-timer": "workspace:~",
     "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-community": "workspace:*",
+
     "@deepseek-ai/dsh-agent-default-model": "workspace:*",
     "@deepseek-ai/dsh-agent-instructions": "workspace:*",
     "@deepseek-ai/dsh-agent-loop": "workspace:*",

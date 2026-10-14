@@ -78,9 +78,6 @@
       "path": "./packages/api/memory-controller/tsconfig.client.json"
     },
     {
-      "path": "./packages/api/agent-community/tsconfig.client.json"
-    },
-    {
       "path": "./packages/api/workspace-controller/tsconfig.client.json"
     },
     {
@@ -202,9 +199,6 @@
     },
     {
       "path": "./packages/client/ui-settings-memory"
-    },
-    {
-      "path": "./packages/client/ui-agent-community"
     },
     {
       "path": "./packages/client/ui-settings-subagent"

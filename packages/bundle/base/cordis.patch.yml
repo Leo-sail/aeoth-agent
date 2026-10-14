@@ -74,10 +74,6 @@
     - id: agent
       name: '@deepseek-ai/dsh-agent'
 
-    # Native Bot Mode / Agent Community. User-facing feature, not an optional plugin.
-    - id: agent-community
-      name: '@deepseek-ai/dsh-agent-community'
-
     - id: plugin-package-inventory-deepseek
       name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'
 
