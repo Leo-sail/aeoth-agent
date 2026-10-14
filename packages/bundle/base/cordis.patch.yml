@@ -52,6 +52,11 @@
     - id: typert-gateway
       name: '@deepseek-ai/dsh-api-gateway'
 
+    # Method-level access control for non-owner Peers; the Gateway requires it,
+    # and its Client half publishes the standard access Hooks.
+    - id: remote-access
+      name: '@deepseek-ai/dsh-api-remote-access'
+
     - id: session-title
       name: '@deepseek-ai/dsh-session-title'
       config:
@@ -65,7 +70,7 @@
         targetWords: 5
         targetCjkCharacters: 10
         maxInputBytes: 4096
-        maxOutputTokens: 64
+        maxOutputTokens: 4096
         timeoutMs: 60000
 
     - id: user-questions
@@ -120,6 +125,14 @@
 
     - id: credentials
       name: '@deepseek-ai/dsh-credentials-local'
+
+    # The native DeepSeek adapter: API Key authentication.
+    - id: llm-deepseek
+      name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+
+    # The native DeepSeek adapter: DeepSeek account authentication.
+    - id: llm-deepseek-account
+      name: '@deepseek-ai/dsh-llm-deepseek-account'
 
     # The pi-ai multi-provider twin, mounted dormant: zero routes (and no extra
     # models in the picker) until a `llm-pi-ai:` settings section supplies provider
@@ -357,6 +370,7 @@
 
     - id: command-feedback
       name: '@deepseek-ai/dsh-command-feedback'
+      disabled: true
 
     - id: goal
       name: '@deepseek-ai/dsh-goal'

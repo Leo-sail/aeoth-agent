@@ -297,7 +297,7 @@ export class GroupTaskDriver {
   }
 
   /** The leader's integrate prompt, with what came back since it last ran. */
-  private integratePrompt(roomId: string, state: GroupTaskState): string {
+  private integratePrompt(_roomId: string, state: GroupTaskState): string {
     const reports = state.pendingReports
       .map((r) => `· ${this.accessor.botName(r.botId)}${r.ok ? '' : '（失败）'}：${r.text}`)
       .join('\n')

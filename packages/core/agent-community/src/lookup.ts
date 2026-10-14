@@ -13,7 +13,7 @@
  *
  * @module
  */
-import type { BotIdentity, BotRoom, BotRun } from './types.ts'
+import type { BotIdentity, BotRoom } from './types.ts'
 
 /**
  * A lookup by id (or name) found nothing.

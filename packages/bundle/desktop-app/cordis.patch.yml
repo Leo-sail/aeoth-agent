@@ -46,6 +46,7 @@
 
     - id: message-feedback
       name: '@deepseek-ai/dsh-message-feedback'
+      disabled: true
       config:
         maxNoteBytes: 8192
 
@@ -358,6 +359,7 @@
     # acknowledgement toast, over the messageFeedback and sessionFeedback Remotes.
     - id: ui-message-feedback
       name: '@deepseek-ai/dsh-client-ui-message-feedback'
+      disabled: true
 
     # Model selection: the /model popupSelect + composer seat over session.models.
     - id: ui-model-selection

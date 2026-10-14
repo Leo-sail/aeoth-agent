@@ -335,6 +335,10 @@
       "@deepseek-ai/dsh-agent-community": ["./packages/core/agent-community/src"],
       "@deepseek-ai/dsh-agent-community/types": ["./packages/core/agent-community/src/types.ts"],
       "@deepseek-ai/dsh-api-agent-community": ["./packages/api/agent-community/src/index.ts"],
+      "@deepseek-ai/dsh-api-remote-access": ["./packages/api/remote-access/src/index.ts"],
+      "@deepseek-ai/dsh-api-remote-access/client": ["./packages/api/remote-access/src/client/index.ts"],
+      "@deepseek-ai/dsh-api-remote-access/types": ["./packages/api/remote-access/src/types.ts"],
+      
       "@deepseek-ai/dsh-tool-agent-community": ["./packages/tool/tool-agent-community/src"],
       "@deepseek-ai/dsh-api-agent-community/types": ["./packages/api/agent-community/src/types.ts"],
       "@deepseek-ai/dsh-api-agent-community/client": ["./packages/api/agent-community/src/client/index.ts"],

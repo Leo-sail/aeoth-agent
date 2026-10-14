@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, rm, stat } from 'node:fs/promises'
 import { homedir } from 'node:os'
-import { isAbsolute, join, relative, resolve } from 'node:path'
+import { join, resolve } from 'node:path'
 import { Context } from '@deepseek-ai/cordis'
 import { withFileLock, writeFileAtomic } from '@deepseek-ai/dsh-atomic-write'
 import { SessionId } from '@deepseek-ai/dsh-session'
@@ -11,14 +11,14 @@ import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
 import z from '@deepseek-ai/schemastery'
 import type {
   BotCommunitySnapshot, BotId, BotIdentity, BotMessage, BotMessageId,
-  BotRoom, BotRoomId, BotRun, BotRunId, BotMailboxItem,
+  BotRoom, BotRoomId, BotRun, BotRunId,
   ControlBotRunRequest, CreateBotRequest, CreateRoomRequest,
   DeleteBotRequest, DeleteRoomRequest, RetryBotRunRequest,
   SendRoomMessageRequest, SettleBotRunRequest, UpdateBotRequest, UpdateRoomRequest,
   SendRoomMessageAttachment, BotMessageAttachment,
   BotProfileBinding, BotPresence, BotTeam, BotTeamMembership,
   DismissTeamRequest, PostTeamMessageRequest, TeamMessageResult,
-  CreateTeamRequest, BotTeamMessageKind, BotTeamRunOrigin,
+  CreateTeamRequest,
   BotTask, BotTaskStatus,
   DecomposeTasksRequest, AssignTasksRequest, ReportTaskRequest,
   PostBotMessageRequest, SubmitFinalRequest,
@@ -32,7 +32,7 @@ import type {
 import { routeMessage, namedBotIdsIn } from './routing.ts'
 import { renderAttachmentReference, storeAttachments, type StoredAttachment } from './attachments.ts'
 import { RunExecutor } from './runs.ts'
-import { LedgerProjector, type SeedRoomItem } from './ledger.ts'
+import { LedgerProjector } from './ledger.ts'
 import type { LedgerEntry } from './ledger.ts'
 import { ApprovalBridge } from './approval-bridge.ts'
 import { QuestionBridge } from './question-bridge.ts'
@@ -41,7 +41,7 @@ import type { ApprovalBridgeAccessor } from './approval-bridge.ts'
 import { SkillLifecycle, type LlmStream, type SkillEntry } from './skills-profile.ts'
 import { DEFAULT_MAX_ROUNDS, GroupFlowService, type GroupFlowPort } from './group-flow.ts'
 import { SessionRunner, optionalService } from './session-runner.ts'
-import { CURRENT_VERSION, emptyState, parsePersistedState, type PersistedState, type RoomAgentSession } from './persistence.ts'
+import { emptyState, parsePersistedState, type PersistedState, type RoomAgentSession } from './persistence.ts'
 import { readWaterMarkFor, repairReadMarks, resolveReadMark, totalUnread, unreadByRoom } from './unread.ts'
 import { LedgerProjection } from './ledger-projection.ts'
 import { GroupTaskDriver, type GroupTaskState } from './group-task.ts'
@@ -470,7 +470,6 @@ export class AgentCommunityService extends TypertRemoteService {
   /** Set when the state file is unreadable/damaged: no writer may run. See blockWrites(). */
   private writesBlocked = false
   /** Human-readable reason surfaced through snapshot() when writes are blocked. */
-  private stateError: string | undefined
   /** Monotonic id of the newest state handed to the writer, so a stale snapshot cannot land late. */
   private writeRevision = 0
   private writtenRevision = 0
@@ -498,7 +497,6 @@ export class AgentCommunityService extends TypertRemoteService {
    * skill lifecycle to exist first, and building it eagerly would let a partially
    * constructed service hand out agents.
    */
-  private sessionRunner: SessionRunner | undefined
   /** Projects native session events into ledger rows. */
   private ledgerProjection: LedgerProjection | undefined
   /** Leader-driven group coordination. */
@@ -684,7 +682,7 @@ export class AgentCommunityService extends TypertRemoteService {
         idleLimit: config.idleLimit ?? 12,
         hardLimit: config.hardLimit ?? 24,
       })
-      this.sessionRunner = runner
+      // this._sessionRunner = runner
 
       this.ledgerProjection = new LedgerProjection({
         ledger: this.ledger,
@@ -1237,7 +1235,7 @@ export class AgentCommunityService extends TypertRemoteService {
    */
   private blockWrites(reason: string): void {
     this.writesBlocked = true
-    this.stateError = reason
+    // this._stateError = reason
     this.ctx.logger.error(`agent-community: state writes disabled — ${reason}`)
   }
 
@@ -2468,7 +2466,7 @@ export class AgentCommunityService extends TypertRemoteService {
   }
 
   async postTeamMessage(input: PostTeamMessageRequest): Promise<TeamMessageResult> {
-    const room = requireRoom(this.state, input.roomId)
+    void requireRoom(this.state, input.roomId)
     const msg: BotMessage = {
       id: brandId<BotMessageId>(randomUUID()),
       roomId: brandId<BotRoomId>(input.roomId),
@@ -2548,8 +2546,8 @@ export class AgentCommunityService extends TypertRemoteService {
    * (sendMessage, clear-then-reseed) no longer churn state.json.
    */
   ensureStableSession(roomId: string, botId: string): SessionId {
-    const room = requireRoom(this.state, roomId)
-    const bot = requireBot(this.state, botId)
+    void requireRoom(this.state, roomId)
+    void requireBot(this.state, botId)
     const sessionId = this.sessionIdFor(roomId, botId)
     const existing = this.state.roomAgentSessions.find(
       s => s.roomId === roomId && s.botId === botId,
@@ -2677,8 +2675,8 @@ export class AgentCommunityService extends TypertRemoteService {
    * Session creation is now handled by ensureStableSession; this is read-only.
    */
   ensureRoomAgentSession(roomId: string, botId: string): SessionId {
-    const room = requireRoom(this.state, roomId)
-    const bot = requireBot(this.state, botId)
+    void requireRoom(this.state, roomId)
+    void requireBot(this.state, botId)
     const existing = this.state.roomAgentSessions.find(
       s => s.roomId === roomId && s.botId === botId,
     )
@@ -2799,7 +2797,7 @@ export class AgentCommunityService extends TypertRemoteService {
 
   /** Post a message from a Bot, with optional a2a direct delivery. */
   async postBotMessage(input: PostBotMessageRequest): Promise<BotMessage> {
-    const room = requireRoom(this.state, input.roomId)
+    void requireRoom(this.state, input.roomId)
     // Resolve sender bot from session id
     const senderEntry = this.state.roomAgentSessions.find(s => s.sessionId === input.senderSessionId)
     const senderBot = senderEntry ? this.state.bots.find(b => b.id === senderEntry.botId) : undefined
@@ -3022,7 +3020,7 @@ export class AgentCommunityService extends TypertRemoteService {
 
   /** Leader tool: finalize the round and post a summary message. */
   async submitFinal(input: SubmitFinalRequest): Promise<BotMessage> {
-    const room = requireRoom(this.state, input.roomId)
+    void requireRoom(this.state, input.roomId)
     const leaderEntry = this.state.roomAgentSessions.find(s => s.sessionId === input.leaderSessionId)
     const leaderBot = leaderEntry ? this.state.bots.find(b => b.id === leaderEntry.botId) : undefined
     const msg: BotMessage = {

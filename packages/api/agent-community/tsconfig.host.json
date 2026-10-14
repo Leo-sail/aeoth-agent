@@ -8,12 +8,12 @@
   },
   "files": [
     "src/index.ts",
-    "src/types.ts",
-    "src/team.ts",
-    "src/team-tools.ts"
+    "src/types.ts"
   ],
   "references": [
-    { "path": "../../interaction/commands" },
+    {
+      "path": "../../interaction/commands"
+    },
     {
       "path": "../../../vendor/cordis"
     },

@@ -36,7 +36,6 @@ import type { Context } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
 import type { SessionId } from '@deepseek-ai/dsh-session'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { BotId, BotRoomId } from './types.ts'
 
 /** What the runner needs from the community service. Narrow on purpose. */
 export interface SessionRunnerAccessor {

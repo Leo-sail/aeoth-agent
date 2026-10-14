@@ -51,8 +51,6 @@ export function adaptAeothManifest<T extends object>(
   const raw = object(manifest)
   const upstream = object(raw.dsh)
   let own = object(raw.aeoth)
-  const profile = object(own.profile)
-  const bundles = profile.bundles
   const hasUpstream = Object.keys(upstream).length > 0
   const hasOwn = Object.keys(own).length > 0
   if (!hasOwn) return { ...manifest, ...(hasUpstream ? { dsh: raw.dsh as DshManifest } : {}) }

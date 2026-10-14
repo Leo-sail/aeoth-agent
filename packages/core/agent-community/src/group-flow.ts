@@ -721,7 +721,7 @@ export class GroupFlowService {
 
   /** The direct-chat bot's own judgement, via a session-less model call. */
   private async consultModel(
-    room: BotRoom,
+    _room: BotRoom,
     sourceBot: BotIdentity | undefined,
     text: string,
     alive: readonly BotIdentity[],

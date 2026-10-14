@@ -20,7 +20,6 @@
  *  dispatch     — host agent scheduling action (system row, non-bubble)
  */
 
-import { randomUUID } from 'node:crypto'
 import type { BotId, BotMessageAttachment, BotRoomId, BotRunId } from './types.ts'
 
 export type LedgerEntryType =
@@ -193,10 +192,6 @@ export type LedgerEntryInput = LedgerEntry extends infer T
   : never
 
 /** Minimal bot info needed to annotate ledger entries. */
-interface BotInfo {
-  readonly id: BotId
-  readonly name: string
-}
 
 // ── LedgerProjector ───────────────────────────────────────────────────────────
 

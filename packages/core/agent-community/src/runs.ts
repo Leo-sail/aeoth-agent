@@ -13,10 +13,8 @@ import type { SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
 import type { Agent } from '@deepseek-ai/dsh-agent'
 import type {
   BotId,
-  BotIdentity,
   BotRoomId,
   BotRunId,
-  BotMessageId,
 } from './types.ts'
 import { VisibilityController } from './visibility.ts'
 import { toolSchemas, ToolRunner, type ToolInvocation } from './tools.ts'
@@ -168,11 +166,6 @@ interface MessageSnapshot {
   readonly createdAt: string
 }
 
-interface RoomAgentSessionEntry {
-  readonly roomId: BotRoomId
-  readonly botId: BotId
-  readonly sessionId: SessionId
-}
 
 // The community service exposes these accessors; typed minimally to avoid
 // tight coupling (the service owns its full shape, we only need what we use).
