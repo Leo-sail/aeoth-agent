@@ -54,7 +54,7 @@ export class AgentCommunityController extends TypertRemoteService {
     try { return await this.service().updateBot(input) }
     catch (error) { throw new RemoteError('gateway/bad-request', safeError(error), {}) }
   }
-  @Remote async describeBotCredential(botId: string, ref: string): Promise<{ botId: string; ref: string; namespace: string } & Awaited<ReturnType<import('@deepseek-ai/dsh-credentials').CredentialProvider['describe']>>> {
+  @Remote async describeBotCredential(botId: string, ref: string): Promise<{ botId: string; ref: string; namespace: string } & import('@deepseek-ai/dsh-credentials/types').CredentialInfo> {
     try {
       const target = await this.credentialTarget(botId, ref)
       const info = await this.credentials().describe(target.scopedRef)
