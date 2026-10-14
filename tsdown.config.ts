@@ -31,5 +31,6 @@ export default defineConfig(({ env }) => {
     dts: false,
     clean: false,
     plugins: client ? [] : [typertPlugin({ mode: 'workspace', faces: ['host'] })],
+    maxWorkers: 4,
   }
 })
