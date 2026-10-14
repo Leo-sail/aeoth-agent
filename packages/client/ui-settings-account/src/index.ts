@@ -48,7 +48,7 @@ export function apply(ctx: Context, config: Config): void {
     scope.effect(() => scope.settings.configure({ auto: false }, ctx.fiber))
   })
   ctx.on('webserver/index-inject', (table) => {
-    table.push({ kind: 'global', name: ACCOUNT_FEATURES_GLOBAL, value: ctx.get('profileContext') === undefined })
+    table.push({ kind: 'global', name: ACCOUNT_FEATURES_GLOBAL, value: true })
     table.push({ kind: 'global', name: CONTACT_CONFIG_GLOBAL, value: {
       contactFormUrl: config.contactFormUrl, contactSource: config.contactSource,
       bonusAckRetryDelayMs: config.bonusAckRetryDelayMs, bonusAckRetryMaxDelayMs: config.bonusAckRetryMaxDelayMs,
