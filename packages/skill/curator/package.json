@@ -1,7 +1,7 @@
 {
   "name": "@deepseek-ai/dsh-skill-curator",
   "description": "Durable skill proposals, review, archive, restore, and feedback loop",
-  "version": "0.2.0-rc.2",
+  "version": "0.2.1-alpha.3",
   "publishConfig": {
     "access": "public"
   },

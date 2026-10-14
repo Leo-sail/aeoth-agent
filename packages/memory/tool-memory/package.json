@@ -1,7 +1,7 @@
 {
   "name": "@deepseek-ai/dsh-tool-memory",
   "description": "Model-facing MEMORY/USER long-term memory tool",
-  "version": "0.2.0-rc.2",
+  "version": "0.2.1-alpha.3",
   "publishConfig": {
     "access": "public"
   },
