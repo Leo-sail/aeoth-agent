@@ -9,14 +9,13 @@
  *
  * @module
  */
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { LedgerEntry } from '../types.ts'
 import { IconAgentPresetOutlineRegular, IconApiOutlineRegular, IconBranchOutlineRegular,
-  IconBrowseOutlineRegular, IconCheckOutlineRegular, IconChecklistOutlineRegular,
-  IconChevronDownOutlineRegular, IconChevronRightOutlineRegular, IconChevronUpOutlineRegular,
-  IconClockOutlineRegular, IconCodeOutlineRegular, IconCopyOutlineRegular,
+  IconBrowseOutlineRegular, IconChecklistOutlineRegular,
+  IconClockOutlineRegular, IconCodeOutlineRegular,
   IconCordisPluginOutlineRegular, IconEditOutlineRegular, IconGlobeOutlineRegular,
-  IconGoalOutlineRegular, IconInspectOutlineRegular, IconPlayOutlineRegular,
+  IconGoalOutlineRegular,
   IconQuestionOutlineRegular, IconSearchOutlineRegular, IconSparkleRegular,
   IconUsersOutlineRegular } from '../NativeIcons.tsx'
 
@@ -173,8 +172,7 @@ export const TOOL_VARIANTS: Readonly<Record<string, ToolVariant>> = {
   cordis_runtime_inspect: 'read',
   cordis_run: 'others',
   cordis_stop: 'others',
-  cordis_undefine: 'others',
-}
+  cordis_undefine: 'others' }
 
 /** `VARIANT_TITLE_KEYS`, `tool:65-73`. */
 export const VARIANT_TITLE_KEYS: Readonly<Record<ToolVariant, string>> = {
@@ -184,8 +182,7 @@ export const VARIANT_TITLE_KEYS: Readonly<Record<ToolVariant, string>> = {
   write: 'tool.title.write',
   edit: 'tool.title.edit',
   code: 'tool.title.code',
-  others: 'tool.title.generic',
-}
+  others: 'tool.title.generic' }
 
 /** `TOOL_TITLE_KEYS`, `tool:102-149` — 48 entries, first lookup level. */
 export const TOOL_TITLE_KEYS: Readonly<Record<string, string>> = {
@@ -234,8 +231,7 @@ export const TOOL_TITLE_KEYS: Readonly<Record<string, string>> = {
   team_task_get: 'tool.title.getTeamTask',
   team_task_update: 'tool.title.updateTeamTask',
   team_task_list: 'tool.title.listTeamTasks',
-  wait_agent: 'tool.title.waitAgent',
-}
+  wait_agent: 'tool.title.waitAgent' }
 
 /** `zh` values of every key above (the shipped `conversation` dictionary). */
 export const TITLES: Readonly<Record<string, string>> = {
@@ -294,16 +290,14 @@ export const TITLES: Readonly<Record<string, string>> = {
   'tool.title.listTeamTasks': '查看团队任务',
   'tool.title.waitAgent': '等待子智能体',
   'todo.rowTitle': '更新任务清单',
-  'ask.rowTitle': '提问',
-}
+  'ask.rowTitle': '提问' }
 
 /** `row.*` status text, zh. `ok` is intentionally absent (`tool:1485-1493`). */
 export const STATE_STATUS: Readonly<Partial<Record<ToolRowState, string>>> = {
   preparing: '正在准备调用',
   running: '运行中',
   error: '失败',
-  stopped: '已停止',
-}
+  stopped: '已停止' }
 
 /** Row / card chrome labels, zh (`conversation` + `common` dictionaries). */
 export const ROW_INPUT = '输入'
@@ -317,22 +311,19 @@ export const DIFF_LABELS = {
   collapse: LABEL_COLLAPSE,
   expand: (n: number) => `… 其余 ${n} 行`,
   collapseAria: '收起差异',
-  expandAria: (n: number) => `展开其余 ${n} 行差异`,
-} as const
+  expandAria: (n: number) => `展开其余 ${n} 行差异` } as const
 export const READ_LABELS = {
   collapse: LABEL_COLLAPSE,
   expand: (n: number) => `… 其余 ${n} 行`,
   collapseAria: '收起内容',
   expandAria: (n: number) => `展开其余 ${n} 行`,
-  window: (shown: number, total: number) => `显示 ${shown} / ${total} 行`,
-} as const
+  window: (shown: number, total: number) => `显示 ${shown} / ${total} 行` } as const
 export const SEARCH_LABELS = {
   collapse: LABEL_COLLAPSE,
   expand: (n: number) => `… 其余 ${n} 行`,
   collapseAria: '收起结果',
   expandAria: (n: number) => `展开其余 ${n} 行结果`,
-  noResults: '无结果',
-} as const
+  noResults: '无结果' } as const
 export const WEB_NO_RESULTS = '未找到结果'
 export const WEB_SOURCES_TRUNCATED = '来源列表已截断'
 export const WEB_CONTENT_TRUNCATED = '内容已截断'
@@ -346,16 +337,14 @@ export const SUMMARY_KEYS: Readonly<Record<ToolVariant, readonly string[]>> = {
   write: ['path', 'file_path'],
   edit: ['path', 'file_path'],
   code: ['description'],
-  others: [],
-}
+  others: [] }
 
 /** Keyed toolviews whose title is hard-coded inside their own row component. */
 export const HARD_TITLE_KEYS: Readonly<Record<string, string>> = {
   grep: 'tool.title.grep',
   glob: 'tool.title.glob',
   web_search: 'tool.title.webSearch',
-  web_fetch: 'tool.title.webFetch',
-}
+  web_fetch: 'tool.title.webFetch' }
 
 /** `TEAMMATE_TOOLS`, `tool:3982-3990`. */
 export const TEAMMATE_TOOLS = new Set(['spawn_teammate', 'list_agents', 'send_message', 'interrupt_agent', 'wait_agent'])
@@ -605,8 +594,7 @@ export const LANGUAGE_LABELS: Readonly<Record<string, string>> = {
   less: 'less', html: 'html', htm: 'html', py: 'python', sh: 'shell', bash: 'shell',
   zsh: 'shell', yml: 'yaml', yaml: 'yaml', toml: 'toml', rs: 'rust', go: 'go',
   java: 'java', rb: 'ruby', php: 'php', sql: 'sql', xml: 'xml', svg: 'xml',
-  c: 'c', h: 'c', cc: 'cpp', cpp: 'cpp', hpp: 'cpp', txt: 'text',
-}
+  c: 'c', h: 'c', cc: 'cpp', cpp: 'cpp', hpp: 'cpp', txt: 'text' }
 
 /**
  * The language id for a workspace path — primitives' `languageForPath`, minus the
@@ -692,8 +680,7 @@ export function diffCardModel(toolName: string, argsRaw: string | null): DiffCar
   if (typeof newText !== 'string') return null
   return {
     path,
-    rows: [{ kind: 'path', text: path }, ...buildDiffRows(contentLines(typeof oldText === 'string' ? oldText : ''), contentLines(newText))],
-  }
+    rows: [{ kind: 'path', text: path }, ...buildDiffRows(contentLines(typeof oldText === 'string' ? oldText : ''), contentLines(newText))] }
 }
 
 /** `readCardModel()` — numbered lines from the call's arguments and output. */
@@ -747,8 +734,7 @@ export function searchCardModel(toolName: string, argsRaw: string | null, output
     parsed: false,
     matchCount: raw.length,
     fileCount: pattern === null ? 0 : 1,
-    total: raw.length,
-  }
+    total: raw.length }
 }
 
 /** `webCardModel()` — parses the JSON payload DSH's web tools return. */
@@ -830,8 +816,7 @@ export const FIELD_LABELS: Readonly<Record<string, string>> = {
   revision: '版本',
   methods: '方法',
   warnings: '提示',
-  diagnostics: '诊断',
-}
+  diagnostics: '诊断' }
 
 /** The record-array each list-shaped tool reports, in preference order. */
 export const LIST_KEYS: Readonly<Record<string, readonly string[]>> = {
@@ -845,8 +830,7 @@ export const LIST_KEYS: Readonly<Record<string, readonly string[]>> = {
   session_trace: ['events', 'nodes'],
   session_event_trace: ['events', 'nodes'],
   terminal_list: ['terminals', 'sessions'],
-  lsp: ['symbols', 'definitions', 'references', 'implementations'],
-}
+  lsp: ['symbols', 'definitions', 'references', 'implementations'] }
 
 /** Title / field keys per list tool; the first present key wins. */
 export const ENTRY_TITLE_KEYS: Readonly<Record<string, readonly string[]>> = {
@@ -860,8 +844,7 @@ export const ENTRY_TITLE_KEYS: Readonly<Record<string, readonly string[]>> = {
   session_trace: ['message', 'type', 'id'],
   session_event_trace: ['message', 'type', 'id'],
   terminal_list: ['command', 'name', 'sessionId', 'id'],
-  lsp: ['name', 'symbol', 'id'],
-}
+  lsp: ['name', 'symbol', 'id'] }
 
 /** Field keys per list tool, in display order. */
 export const ENTRY_FIELD_KEYS: Readonly<Record<string, readonly string[]>> = {
@@ -875,16 +858,14 @@ export const ENTRY_FIELD_KEYS: Readonly<Record<string, readonly string[]>> = {
   session_trace: ['type', 'time', 'seq', 'turn', 'step', 'callId', 'depth', 'parent'],
   session_event_trace: ['type', 'time', 'seq', 'turn', 'depth', 'parent'],
   terminal_list: ['id', 'pid', 'exitCode', 'signal'],
-  lsp: ['type', 'source', 'result'],
-}
+  lsp: ['type', 'source', 'result'] }
 
 /** Group labels, in the order the folds render. */
 export const GROUP_LABELS: Readonly<Record<string, string>> = {
   in_progress: '进行中',
   pending: '待处理',
   completed: '已完成',
-  failed: '失败',
-}
+  failed: '失败' }
 export const GROUP_ORDER = ['in_progress', 'pending', 'completed', 'failed'] as const
 
 export function asString(value: unknown): string | null {
@@ -958,8 +939,7 @@ export function itemFromEntry(toolName: string, entry: unknown, state: ToolRowSt
     subtitle: asString(record['description']) !== null && record['description'] !== title ? firstLine(String(record['description'])) : null,
     badge: badgeOf(statusValue),
     fields: fieldsFrom(record, ENTRY_FIELD_KEYS[toolName] ?? []),
-    description: null,
-  }
+    description: null }
 }
 
 /** Group a list of items by their native status mark (≥2 groups only). */
@@ -1012,8 +992,7 @@ export function detailsCardModel(
         subtitle: null,
         badge: null,
         fields: [],
-        description: null,
-      })
+        description: null })
     }
     if (items.length === 0) return null
     return { caption: null, statusText: null, items, groups: [] }
@@ -1038,8 +1017,7 @@ export function detailsCardModel(
         caption: `${rows.length} 项`,
         statusText: stateStatus(state),
         items: groups === null ? rows.map(row => row.item) : [],
-        groups: groups ?? [],
-      }
+        groups: groups ?? [] }
     }
   }
 
@@ -1058,8 +1036,7 @@ export function detailsCardModel(
     subtitle: null,
     badge: state === 'error' ? { tone: 'error', label: '失败' } : null,
     fields,
-    description: output !== null && payload === undefined ? output : null,
-  }]
+    description: output !== null && payload === undefined ? output : null }]
   return { caption: argsRaw === null && output === null ? null : ROW_INPUT, statusText: stateStatus(state), items, groups: [] }
 }
 
@@ -1124,7 +1101,6 @@ export function toolRowModel(
     bodyRaw: argsRaw === '' ? null : argsRaw,
     output,
     errorSummary,
-    filePath,
-  }
+    filePath }
 }
 

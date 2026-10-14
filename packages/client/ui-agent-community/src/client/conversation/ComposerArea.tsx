@@ -4,7 +4,7 @@
  */
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { clearDraft, getDraft, setDraft } from '../drafts.ts'
-import type { ReactNode } from 'react'
+import type {} from 'react'
 import type { AttachmentItem, InFlightMessage } from './types.ts'
 import type { LedgerEntry } from './types.ts'
 import { IconSendOutlineRegular, IconPlusOutlineMedium } from './NativeIcons.tsx'
@@ -171,8 +171,7 @@ function escapeXmlAttr(v: string): string {
 export function ComposerArea({
   roomId, isGroup, bots, isRunning, pendingApproval, queue,
   modelGroups, onSend, onStop, onApprove, onReject,
-  onEditQueue, onRemoveQueue, onSteerQueue, onCommand, skills = [], onLoadSkill, onListSkillFiles, skillsError,
-}: ComposerProps) {
+  onEditQueue, onRemoveQueue, onSteerQueue, onCommand, skills = [], onLoadSkill, onListSkillFiles, skillsError }: ComposerProps) {
   // The draft belongs to the ROOM: this component unmounts when the user switches rooms, and its
   // local text used to vanish with it (reported as "输入框中的内容消失了").
   const [text, setTextState] = useState(() => getDraft(roomId))
@@ -547,8 +546,7 @@ export function ComposerArea({
       {attachError !== undefined && (
         <div style={{
           padding: '8px 16px 0', fontSize: 12,
-          color: 'var(--dsw-alias-state-error-primary)',
-        }}>{attachError}</div>
+          color: 'var(--dsw-alias-state-error-primary)' }}>{attachError}</div>
       )}
       {attachments.length > 0 && (
         <AttachmentBar
@@ -674,8 +672,7 @@ function SendButton({ variant, label, disabled, onClick }: {
         cursor: disabled ? 'default' : 'pointer',
         display: 'flex', alignItems: 'center', gap: 6,
         transition: 'background 120ms',
-        opacity: disabled ? 0.5 : 1,
-      }}
+        opacity: disabled ? 0.5 : 1 }}
     >
       {isStop ? <StopIcon /> : isQueue ? <QueueIcon /> : <SendIcon />}
       {label}

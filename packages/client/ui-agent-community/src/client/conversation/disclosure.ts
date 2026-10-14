@@ -7,7 +7,7 @@
  *
  * @module
  */
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function resolveDisclosure(toggled: boolean | undefined, isStreaming: boolean): boolean {
   // Collapsed until the user opens it — the THINKING section only.

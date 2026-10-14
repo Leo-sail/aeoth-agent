@@ -10,7 +10,6 @@
  */
 import type { BotCommunitySnapshot, BotIdentity, BotRoom, BotRun } from '@deepseek-ai/dsh-agent-community'
 import { useState } from 'react'
-import { exportTranscript } from './exportTranscript.ts'
 import type { CommunityRemote, ModelGroup } from './types.ts'
 import { describe } from './types.ts'
 import { css } from '../styles.ts'
@@ -57,8 +56,7 @@ export interface ConversationAreaProps {
 export function ConversationArea({
   room, roomId, bots, runs, modelGroups, tasks, skills, skillsError, error, isBotMode,
   remote, onLoadSkill, onListSkillFiles, listLedger, onNotice, onDetectProposal, onReload,
-  onOpenBotRoom,
-}: ConversationAreaProps) {
+  onOpenBotRoom }: ConversationAreaProps) {
   /**
    * Bumped after a compaction to REMOUNT the transcript.
    *
@@ -112,7 +110,7 @@ export function ConversationArea({
           skillsError={skillsError}
           onLoadSkill={onLoadSkill}
           onListSkillFiles={onListSkillFiles}
-          onSend={async (roomId, text, modelPayload, attachments, mentions) => {
+          onSend={async (roomId, text, modelPayload, attachments) => {
             // `text` is the draft (what the bubble shows); `modelPayload` adds the
             // expanded `/skill` bodies for the model only. Attachments travel as base64
             // bytes: the page cannot see the host's filesystem, and the host refuses to
@@ -123,8 +121,7 @@ export function ConversationArea({
               roomId, text, modelText: modelPayload,
               ...(attachments.length > 0
                 ? { attachments: await readAttachmentsForRpc(attachments) }
-                : {}),
-            } as Parameters<typeof remote.sendMessage>[0])
+                : {}) } as Parameters<typeof remote.sendMessage>[0])
             // ── THE USER'S OWN MESSAGE IS NOT UNREAD ────────────────────────────────
             //
             // Sending means "I have seen everything up to this point", so the room's read
@@ -270,8 +267,7 @@ export function ConversationArea({
           round={room.taskState?.round}
           tasks={tasks.filter(t => t.roomId === roomId).map(t => ({
             id: t.id, subject: t.subject, status: t.status, round: t.round,
-            ...(t.assigneeName !== undefined ? { assigneeName: t.assigneeName } : {}),
-          }))}
+            ...(t.assigneeName !== undefined ? { assigneeName: t.assigneeName } : {}) }))}
           listLedger={listLedger}
           onFork={room.directBotId === undefined ? undefined : (messageId) => {
             const botId = room.directBotId
@@ -306,8 +302,7 @@ async function readAttachmentsForRpc(
   return Promise.all(items.map(async item => ({
     name: item.name,
     ...(item.file.type !== '' ? { mime: item.file.type } : {}),
-    dataBase64: await readAsBase64(item.file),
-  })))
+    dataBase64: await readAsBase64(item.file) })))
 }
 
 function readAsBase64(file: File): Promise<string> {

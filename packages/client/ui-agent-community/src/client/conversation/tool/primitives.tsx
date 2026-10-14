@@ -7,8 +7,7 @@
  *
  * @module
  */
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
-import * as M from './toolModel.tsx'
+import { createContext, useCallback, useContext, useState, type ReactNode } from 'react'
 
 export const DecorativeCopy = createContext<boolean | undefined>(undefined)
 

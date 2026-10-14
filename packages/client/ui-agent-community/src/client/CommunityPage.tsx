@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useRef, useState, createElement } from 'react'
+import { useCallback, useEffect, useRef, useState} from 'react'
 import type { SetStateAction } from 'react'
 import type {
   BotCommunitySnapshot,
   BotIdentity,
   BotRoom,
-  BotRun,
-} from '@deepseek-ai/dsh-agent-community'
-import { Pill } from '@deepseek-ai/dsh-client-ui-primitives'
+  BotRun } from '@deepseek-ai/dsh-agent-community'
 import type { ActiveTab, CommunityPageProps, ModelGroup } from './community/types.ts'
 import { useCommunitySnapshot } from './community/useCommunitySnapshot.ts'
 import { useGroupProposal } from './community/useGroupProposal.ts'
@@ -27,8 +25,7 @@ import type { LedgerEntry } from './conversation/types.ts'
  * `CommunityPage.tsx`. The definitions themselves live in `community/types.ts`.
  */
 export type {
-  ActiveTab, CommunityDiagnostics, CommunityPageProps, CommunityRemote, ModelGroup,
-} from './community/types.ts'
+  ActiveTab, CommunityDiagnostics, CommunityPageProps, CommunityRemote, ModelGroup } from './community/types.ts'
 
 export function CommunityPage({ remote, diagnostics }: CommunityPageProps) {
   const [tab, setTab] = useState<ActiveTab>('bots')
@@ -107,13 +104,11 @@ export function CommunityPage({ remote, diagnostics }: CommunityPageProps) {
 
   // Snapshot fetching, the poll schedule and the direct-room repair pass: see community/.
   const { snapshot, setSnapshot, error, setError, load, roomIdsKey } = useCommunitySnapshot({
-    remote, tab, selectedId, setSelectedId,
-  })
+    remote, tab, selectedId, setSelectedId })
   // P1-4 / §5.4: the pending group proposal for the open DM room, its gate, and the
   // navigation that follows an answer — see community/useGroupProposal.ts.
   const proposalFlow = useGroupProposal({
-    remote, snapshot, selectedId, roomIdsKey, setTab, setSelectedId, setNotice, load,
-  })
+    remote, snapshot, selectedId, roomIdsKey, setTab, setSelectedId, setNotice, load })
   const proposal = proposalFlow.proposal
   const isBotMode = tab === 'bots'
 
@@ -166,8 +161,7 @@ export function CommunityPage({ remote, diagnostics }: CommunityPageProps) {
         : [...mine].reverse().find(m => m.createdAt <= openedAt)
     void remote.markRoomRead({
       roomId,
-      ...(upTo !== undefined ? { upToId: upTo.id } : {}),
-    }).then(() => {
+      ...(upTo !== undefined ? { upToId: upTo.id } : {}) }).then(() => {
       // Clear it HERE as well as on the host: the host's answer only reaches this panel on
       // the next snapshot poll, and until then the room the user is sitting in keeps showing
       // the unread dot it was opened to clear (「明明处在会话界面却依然显示未读」). Dropping
@@ -305,8 +299,7 @@ export function CommunityPage({ remote, diagnostics }: CommunityPageProps) {
   const roomActions = useRoomActions({
     remote, selectedId, selectedRoom, runs,
     snapshotMessages: snapshot?.messages ?? [],
-    busy, setBusy, setError, load,
-  })
+    busy, setBusy, setError, load })
   const confirmDelete = roomActions.confirmDelete
   const diag = diagnostics?.()
 
@@ -439,8 +432,7 @@ export function CommunityPage({ remote, diagnostics }: CommunityPageProps) {
             id: b.id,
             name: b.name,
             description: b.description ?? '',
-            avatarSeed: b.avatar.seed,
-          }))}
+            avatarSeed: b.avatar.seed }))}
           onConfirm={proposalFlow.onConfirm}
           onDecline={proposalFlow.onDecline}
           onConfirmed={proposalFlow.onConfirmed}

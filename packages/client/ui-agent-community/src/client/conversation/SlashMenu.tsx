@@ -4,11 +4,9 @@
  */
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
-  IconPaperclipOutlineRegular, IconGoalOutlineRegular, IconPlanOutlineRegular,
-  IconSendOutlineRegular, IconDownloadOutlineRegular, IconShieldOutlineRegular,
+  IconPaperclipOutlineRegular, IconShieldOutlineRegular,
   IconDatabaseOutlineRegular, IconCircleOutlineRegular, IconCheckOutlineRegular,
-  IconSkillOutlineRegular,
-} from './NativeIcons.tsx'
+  IconSkillOutlineRegular } from './NativeIcons.tsx'
 
 export interface SlashCommand {
   id: string
@@ -86,8 +84,7 @@ export function SlashMenu({ query, commands, onSelect, onClose, openSubmenu, set
       const items: MenuOption[] = submenuCmd.submenuItems.map(it => ({
         id: it.id, name: it.label,
         ...(it.description !== undefined ? { description: it.description } : {}),
-        active: it.id === submenuCmd.submenuItems?.find(x => x.value !== undefined)?.value,
-      }))
+        active: it.id === submenuCmd.submenuItems?.find(x => x.value !== undefined)?.value }))
       return [{ title: submenuCmd.title ?? submenuCmd.label, options: items }]
     }
     const groups = new Map<string, MenuOption[]>()
@@ -104,8 +101,7 @@ export function SlashMenu({ query, commands, onSelect, onClose, openSubmenu, set
           ? { alias: cmd.label } : {}),
         description: cmd.description,
         ...(cmd.icon !== undefined ? { icon: cmd.icon } : {}),
-        ...(cmd.hasSubmenu === true ? { drill: true } : {}),
-      })
+        ...(cmd.hasSubmenu === true ? { drill: true } : {}) })
       groups.set(cmd.group, list)
     }
     return [...groups.entries()].map(([title, options]) => ({ title, options }))
@@ -366,8 +362,7 @@ export function buildSlashCommands(
     // 添加 — the native `file` command registered by the conversation bundle.
     {
       id: 'file', label: 'file', title: '文件', description: '选择文件以添加到消息', group: '添加',
-      icon: <IconPaperclipOutlineRegular size={14} />,
-    },
+      icon: <IconPaperclipOutlineRegular size={14} /> },
     // 指令
     {
       id: 'compact', label: 'compact', title: '压缩',
@@ -375,8 +370,7 @@ export function buildSlashCommands(
       // the newest few stay verbatim. "压缩以上对话内容" said nothing about the tail, so a
       // user could not tell whether their latest messages were at risk.
       description: '把更早的对话压缩成摘要，保留最近几条', group: '指令',
-      icon: <IconCircleOutlineRegular size={14} />,
-    },
+      icon: <IconCircleOutlineRegular size={14} /> },
     {
       id: 'permission', label: 'permission', title: '权限',
       description: '切换权限预设（沙箱模式与审批策略）', group: '指令',
@@ -386,14 +380,12 @@ export function buildSlashCommands(
         { id: 'read-only', label: '仅可查看', description: 'Read Only' },
         { id: 'workspace-write', label: '工作区内修改', description: 'Workspace Write' },
         { id: 'full-access', label: '完全权限', description: 'Full access' },
-      ],
-    },
+      ] },
     {
       id: 'model', label: 'model', title: '模型', description: '选择本会话使用的模型', group: '指令',
       icon: <IconDatabaseOutlineRegular size={14} />,
       hasSubmenu: true,
-      submenuItems: modelItems.length > 0 ? modelItems : [{ id: 'default', label: '(使用默认)' }],
-    },
+      submenuItems: modelItems.length > 0 ? modelItems : [{ id: 'default', label: '(使用默认)' }] },
     // 技能 — each skill is its own top-level row under the 技能 section, so they are
     // visible immediately instead of hidden behind a drill-in sub-menu.
     ...skills.map(sk => ({
@@ -402,8 +394,7 @@ export function buildSlashCommands(
       title: sk.name,
       description: sk.description || '（无说明）',
       group: '技能',
-      icon: <IconSkillOutlineRegular size={14} />,
-    })),
+      icon: <IconSkillOutlineRegular size={14} /> })),
     // An explicit empty state, because a section with no rows renders nothing at all.
     ...(skills.length === 0
       ? [{
@@ -412,8 +403,7 @@ export function buildSlashCommands(
         title: '技能',
         description: skillsError !== undefined ? `读取失败：${skillsError}` : '未发现技能',
         group: '技能',
-        icon: <IconSkillOutlineRegular size={14} />,
-      }]
+        icon: <IconSkillOutlineRegular size={14} /> }]
       : []),
   ]
 }

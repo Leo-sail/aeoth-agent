@@ -7,11 +7,11 @@
  *
  * @module
  */
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {useState, type CSSProperties, type ReactNode } from 'react'
 import * as M from './toolModel.tsx'
-import { copyToClipboard, cx, TextContent, TextShimmer, useCopy, INERT, handleDisclosureKeyDown } from './primitives.tsx'
+import { copyToClipboard, cx, useCopy} from './primitives.tsx'
 import { IconCheckOutlineRegular, IconChevronRightOutlineRegular, IconCopyOutlineRegular, IconGlobeOutlineRegular, IconPlayOutlineRegular } from '../NativeIcons.tsx'
-import { Markdown, highlightCode, tokenizeCode } from '../Markdown.tsx'
+import { Markdown, tokenizeCode } from '../Markdown.tsx'
 
 export function CodeText({ code, lang }: { code: string; lang: string }) {
   if (code === '') return null
@@ -90,8 +90,7 @@ export const DIFF_ROW_CLASS: Readonly<Record<M.DiffRow['kind'], string>> = {
   gap: 'ac-diff-gap',
   del: 'ac-diff-del',
   add: 'ac-diff-add',
-  context: 'ac-diff-context',
-}
+  context: 'ac-diff-context' }
 
 /** `DiffBlock` (`primitives/index.js:9801-9864`) with `maxLines = 9`. */
 

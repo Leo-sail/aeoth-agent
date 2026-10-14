@@ -144,7 +144,6 @@
       "path": "./packages/client/ui-subagent"
     },
     {
-      "path": "./packages/experimental/client-ui-agent-team"
     },
     {
       "path": "./packages/client/ui-dockkit"

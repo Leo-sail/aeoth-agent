@@ -54,8 +54,7 @@ const dockShell = {
   backdropFilter: 'var(--dsw-menu-backdrop-filter)',
   boxShadow: 'var(--dsw-elevation-panel, 0 8px 24px rgba(0,0,0,.12))',
   width: 'calc(100% - var(--dsh-composer-side-clearance, 48px) - var(--dsh-composer-side-clearance, 48px))',
-  maxWidth: 'calc(var(--dsh-composer-card-max-width, 760px) - 24px)',
-} as const
+  maxWidth: 'calc(var(--dsh-composer-card-max-width, 760px) - 24px)' } as const
 
 const headerStyle = {
   display: 'flex',
@@ -69,15 +68,13 @@ const headerStyle = {
   textAlign: 'left',
   color: 'var(--dsw-alias-label-secondary)',
   fontSize: 12,
-  lineHeight: '18px',
-} as const
+  lineHeight: '18px' } as const
 
 const bodyStyle = {
   display: 'flex',
   flexDirection: 'column',
   gap: 8,
-  padding: '0 12px 8px',
-} as const
+  padding: '0 12px 8px' } as const
 
 const STATUS_LABEL: Record<string, string> = {
   open: '待认领',
@@ -86,8 +83,7 @@ const STATUS_LABEL: Record<string, string> = {
   reported: '已汇报',
   done: '已完成',
   blocked: '受阻',
-  cancelled: '已取消',
-}
+  cancelled: '已取消' }
 
 /**
  * The board rows that belong to the CURRENT round.
@@ -105,8 +101,6 @@ export function currentRoundTasks(tasks: ReadonlyArray<RoomTaskRow>, round?: num
   return tasks.filter(t => (t.round ?? 0) === wanted)
 }
 
-const TASK_UNFINISHED = (status: string): boolean =>
-  status !== 'done' && status !== 'cancelled'
 
 /**
  * Each bot's todo list for the CURRENT round, from the ledger rows the panel holds.
@@ -204,8 +198,7 @@ export function latestTodosByBot(entries: ReadonlyArray<LedgerEntry>): BotTodoRo
     newest.set(botId, {
       at,
       botName: String((entry as { botName?: string }).botName ?? botId),
-      items,
-    })
+      items })
   }
   return [...newest.entries()].map(([botId, v]) => ({ botId, botName: v.botName, items: v.items }))
 }

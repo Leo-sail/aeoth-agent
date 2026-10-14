@@ -28,37 +28,15 @@
  *   6. Titles come from a two-level lookup (`M.TOOL_TITLE_KEYS` → variant key),
  *      never `tool.<name>`; `grep`/`glob`/`web_search`/`web_fetch` hard-code theirs.
  */
-import { useCallback, useMemo, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import type { LedgerEntry } from './types.ts'
 import * as M from './tool/toolModel.tsx'
 import * as P from './tool/primitives.tsx'
 import * as C from './tool/cards.tsx'
-import * as model from './tool/toolModel.tsx'
-import { Markdown, highlightCode, tokenizeCode } from './Markdown.tsx'
-import {
-  IconAgentPresetOutlineRegular,
-  IconApiOutlineRegular,
-  IconBranchOutlineRegular,
-  IconBrowseOutlineRegular,
-  IconCheckOutlineRegular,
-  IconChecklistOutlineRegular,
-  IconChevronDownOutlineRegular,
-  IconChevronRightOutlineRegular,
+import {highlightCode} from './Markdown.tsx'
+import {IconChevronDownOutlineRegular,
   IconChevronUpOutlineRegular,
-  IconClockOutlineRegular,
-  IconCodeOutlineRegular,
-  IconCopyOutlineRegular,
-  IconCordisPluginOutlineRegular,
-  IconEditOutlineRegular,
-  IconGlobeOutlineRegular,
-  IconGoalOutlineRegular,
-  IconInspectOutlineRegular,
-  IconPlayOutlineRegular,
-  IconQuestionOutlineRegular,
-  IconSearchOutlineRegular,
-  IconSparkleRegular,
-  IconUsersOutlineRegular,
-} from './NativeIcons.tsx'
+  IconInspectOutlineRegular } from './NativeIcons.tsx'
 
 // ── P.TextShimmer (primitives contract) ────────────────────────────────────────
 
@@ -104,8 +82,7 @@ interface ToolRowViewProps extends ToolRowProps {
 function ToolRowView({
   state, variant, toolName, icon, title, summary, summarySuffix, diffStat,
   bodyRaw, output, errorSummary, filePath, onOpenFile, href, inspect,
-  expanded, onToggle,
-}: ToolRowViewProps) {
+  expanded, onToggle }: ToolRowViewProps) {
   const inputRaw = bodyRaw ?? null
   const outputText = output ?? null
   // ── CARD MODELS ARE BUILT ONLY WHEN THE ROW IS OPEN ────────────────────────────────────────────
@@ -332,8 +309,7 @@ function toolRowProps(
     bodyRaw: model.bodyRaw,
     output: model.output,
     errorSummary: model.errorSummary,
-    filePath: model.filePath,
-  }
+    filePath: model.filePath }
 }
 
 /** Ledger-driven row: a `tool-call` entry plus its optional `tool-result`. */

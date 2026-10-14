@@ -3,17 +3,12 @@
  * Composes TranscriptArea + ComposerArea + SessionHeader.
  * Data comes from the plugin's own ledger RPC — no DSH session dependency.
  */
-import { useState, useEffect, useCallback, useRef } from 'react'
-import type { CSSProperties } from 'react'
+import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
 import type { LedgerEntry, AttachmentItem, InFlightMessage } from './types.ts'
-import {
-  IconChevronDownOutlineRegular, IconPanelLeftOutlineRegular,
-} from './NativeIcons.tsx'
 import { TranscriptArea } from './TranscriptArea.tsx'
 import { ComposerArea } from './ComposerArea.tsx'
 import { QuestionComposer, pendingQuestion } from './QuestionComposer.tsx'
 import { TaskDockCard, currentRoundTasks, currentRoundTodos, shouldShowTaskDock, type RoomTaskRow } from './TaskDockCard.tsx'
-import type { ComposerProps } from './ComposerArea.tsx'
 import { QUEUE_LABEL, QUEUE_NOTE, QUEUE_WAIT_PREVIOUS, QUEUE_WAIT_SLOT } from './nativeStrings.ts'
 
 export interface BotInfo { id: string; name: string; avatarSeed?: string | undefined }
@@ -110,8 +105,7 @@ export function describeQueue(runs: readonly RunInfo[], now = Date.now()): Queue
   return {
     count: queued.length,
     waitingForSlot,
-    detail: waitingForSlot ? QUEUE_WAIT_SLOT : QUEUE_WAIT_PREVIOUS,
-  }
+    detail: waitingForSlot ? QUEUE_WAIT_SLOT : QUEUE_WAIT_PREVIOUS }
 }
 
 export interface BotConversationPanelProps {
@@ -201,9 +195,8 @@ function byTimeThenSequence(a: LedgerEntry, b: LedgerEntry): number {
 }
 
 export function BotConversationPanel({
-  roomId, roomName, isGroup, bots, runs, modelGroups, skills, onLoadSkill, onListSkillFiles, skillsError,
-  onSend, onStop, onApprove, onReject, onAnswerQuestion, onSkipQuestion, onCommand, onClear, listLedger, onFork, tasks, round,
-}: BotConversationPanelProps) {
+  isGroup, roomId, roomName, bots, runs, modelGroups, skills, onLoadSkill, onListSkillFiles, skillsError,
+  onSend, onStop, onApprove, onReject, onAnswerQuestion, onSkipQuestion, onCommand, onClear, listLedger, onFork, tasks, round }: BotConversationPanelProps) {
   const [entries, setEntries] = useState<LedgerEntry[]>([])
   const [hasEarlier, setHasEarlier] = useState(false)
   const [loadingEarlier, setLoadingEarlier] = useState(false)
@@ -445,8 +438,7 @@ export function BotConversationPanel({
         // the whole panel (and push right-aligned content out of view) instead of
         // being clipped inside the transcript.
         minWidth: 0, maxWidth: '100%', overflow: 'hidden',
-        background: 'var(--dsw-alias-bg-base)',
-      }}
+        background: 'var(--dsw-alias-bg-base)' }}
     >
       {/* Header */}
       <SessionHeader
@@ -475,8 +467,7 @@ export function BotConversationPanel({
           color: 'var(--dsw-alias-state-error-primary)',
           background: 'var(--dsw-alias-bg-base)',
           borderBottom: '0.5px solid var(--dsw-alias-state-error-primary)',
-          overflowWrap: 'anywhere',
-        }}>
+          overflowWrap: 'anywhere' }}>
           消息加载失败（listLedger）：{ledgerError}
         </div>
       )}
@@ -506,8 +497,7 @@ export function BotConversationPanel({
         minHeight: 0,
         display: 'flex',
         position: 'relative',
-        overflow: 'hidden',
-      }}>
+        overflow: 'hidden' }}>
         {/* §24.8: the leader's final report is projected into the ledger as an
             ordinary `bot-text` row, so it renders HERE like any other group message.
             A dedicated leader surface is explicitly not wanted — nothing in this
@@ -598,14 +588,11 @@ const clearBtn: CSSProperties = {
   border: '0.5px solid var(--dsw-alias-border-l3)',
   borderRadius: 'var(--dsw-radius-sm, 4px)',
   background: 'transparent', color: 'var(--dsw-alias-label-secondary)',
-  fontSize: 12, cursor: 'pointer',
-}
+  fontSize: 12, cursor: 'pointer' }
 
 // ── SessionHeader ─────────────────────────────────────────────────────────────
 
-function SessionHeader({
-  name, isGroup, isRunning, onStop, onClear,
-}: {
+function SessionHeader({isRunning, onStop, onClear }: {
   name: string
   isGroup: boolean
   isRunning: boolean
@@ -617,16 +604,14 @@ function SessionHeader({
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
     border: 'none', borderRadius: 'var(--dsw-radius-sm, 4px)',
     background: 'transparent', color: 'var(--dsw-alias-label-secondary)',
-    cursor: 'pointer', padding: 0,
-  }
+    cursor: 'pointer', padding: 0 }
 
   return (
     <div style={{
       flexShrink: 0, position: 'relative',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       gap: 8, padding: '14px 12px 10px',
-      background: 'var(--dsw-alias-bg-base)',
-    }}>
+      background: 'var(--dsw-alias-bg-base)' }}>
       {/* Right: run control and clear, nothing else. */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
         {isRunning && (

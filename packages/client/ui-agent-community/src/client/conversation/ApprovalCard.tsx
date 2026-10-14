@@ -8,7 +8,7 @@
  * for "grant permission" must never be global; it is bound to the card here, and the card is
  * focusable so the shortcut is still reachable with Tab or a click.
  */
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import type { LedgerEntry } from './types.ts'
 
 interface Props {
@@ -48,14 +48,12 @@ export function ApprovalCard({ entry, onApprove, onReject }: Props) {
       display: 'flex', flexDirection: 'column', gap: 12,
       padding: '16px 20px',
       borderTop: '0.5px solid var(--dsw-alias-border-l2)',
-      background: 'var(--dsw-alias-bg-base)',
-    }}>
+      background: 'var(--dsw-alias-bg-base)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{
           width: 8, height: 8, borderRadius: '50%',
           background: 'var(--dsw-alias-state-warn-primary, #f59e0b)',
-          flexShrink: 0,
-        }} />
+          flexShrink: 0 }} />
         <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--dsw-alias-label-primary)' }}>
           等待审批
         </span>
@@ -79,8 +77,7 @@ export function ApprovalCard({ entry, onApprove, onReject }: Props) {
               background: 'var(--dsw-alias-bg-base)',
               fontSize: 11, lineHeight: '16px', overflowX: 'auto',
               whiteSpace: 'pre-wrap', overflowWrap: 'anywhere',
-              color: 'var(--dsw-alias-label-primary)',
-            }}>
+              color: 'var(--dsw-alias-label-primary)' }}>
               {entry.args}
             </pre>
           )}
@@ -95,8 +92,7 @@ export function ApprovalCard({ entry, onApprove, onReject }: Props) {
             border: '0.5px solid var(--dsw-alias-border-l2)',
             background: 'var(--dsw-alias-bg-base)',
             color: 'var(--dsw-alias-label-primary)',
-            fontSize: 13, cursor: 'pointer',
-          }}
+            fontSize: 13, cursor: 'pointer' }}
         >
           拒绝
         </button>
@@ -108,8 +104,7 @@ export function ApprovalCard({ entry, onApprove, onReject }: Props) {
             border: 'none',
             background: 'var(--dsw-alias-state-business-primary, #3b82f6)',
             color: '#fff',
-            fontSize: 13, fontWeight: 500, cursor: 'pointer',
-          }}
+            fontSize: 13, fontWeight: 500, cursor: 'pointer' }}
         >
           允许一次
           <kbd style={{ marginLeft: 6, fontSize: 10, opacity: 0.7, fontFamily: 'monospace' }}>Enter</kbd>

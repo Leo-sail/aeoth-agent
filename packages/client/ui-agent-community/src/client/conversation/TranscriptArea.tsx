@@ -2,7 +2,7 @@
  * TranscriptArea — scrolling message list with stick-to-bottom, load-earlier,
  * back-to-bottom button.
  */
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { useStickToBottom } from '../useStickToBottom.ts'
 import { UserMessage, BotTurn } from './MessageRows.tsx'
 import { DispatchRow, ErrorRow } from './SimpleRows.tsx'
@@ -48,8 +48,7 @@ interface Props {
 }
 
 export function TranscriptArea({
-  entries, onLoadEarlier, loadingEarlier = false, hasEarlier = false, bots, onFork, skillNames, liveRunIds, runDurations, runStarts, stoppedRunIds,
-}: Props) {
+  entries, onLoadEarlier, loadingEarlier = false, hasEarlier = false, bots, onFork, skillNames, liveRunIds, runDurations, runStarts, stoppedRunIds }: Props) {
   const { containerRef, atBottom, scrollToBottom, captureAnchor, restoreAnchor } = useStickToBottom()
   // Pure function of `atBottom`, which is already state: mirroring it through an effect cost an
   // extra render per scroll event and created a second source of truth.
@@ -135,8 +134,7 @@ export function TranscriptArea({
           overflowY: 'auto', overflowX: 'hidden',
           padding: '16px 24px',
           display: 'flex', flexDirection: 'column', gap: 16,
-          background: 'var(--dsw-alias-bg-base)',
-        }}
+          background: 'var(--dsw-alias-bg-base)' }}
       >
         {/* Observed for content growth; the observer drives auto-follow. */}
         {/* Observed for content growth; the observer drives auto-follow.
@@ -152,8 +150,7 @@ export function TranscriptArea({
           gridTemplateColumns: 'minmax(0, 1fr)',
           gap: 16,
           minWidth: 0,
-          maxWidth: '100%',
-        }}>
+          maxWidth: '100%' }}>
         {/* Load earlier */}
         {hasEarlier && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -167,8 +164,7 @@ export function TranscriptArea({
                 background: 'var(--dsw-alias-bg-base)',
                 color: 'var(--dsw-alias-label-secondary)',
                 cursor: loadingEarlier ? 'default' : 'pointer',
-                opacity: loadingEarlier ? 0.6 : 1,
-              }}
+                opacity: loadingEarlier ? 0.6 : 1 }}
             >
               {loadingEarlier ? '载入历史…' : '加载更早'}
             </button>
@@ -179,8 +175,7 @@ export function TranscriptArea({
         {entries.length === 0 && !loadingEarlier && (
           <div style={{
             flex: 1, display: 'grid', placeItems: 'center',
-            color: 'var(--dsw-alias-label-tertiary)', fontSize: 13,
-          }}>
+            color: 'var(--dsw-alias-label-tertiary)', fontSize: 13 }}>
             发消息开始对话
           </div>
         )}
@@ -239,8 +234,7 @@ export function TranscriptArea({
         <div
           style={{
             position: 'absolute', bottom: 12, left: '50%',
-            transform: 'translateX(-50%)', zIndex: 10,
-          }}
+            transform: 'translateX(-50%)', zIndex: 10 }}
         >
           <button
             onClick={scrollToBottom}
@@ -252,8 +246,7 @@ export function TranscriptArea({
               boxShadow: '0 2px 8px rgba(0,0,0,.12)',
               color: 'var(--dsw-alias-label-primary)',
               cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}
+              display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <ArrowDown /> 回到底部
           </button>

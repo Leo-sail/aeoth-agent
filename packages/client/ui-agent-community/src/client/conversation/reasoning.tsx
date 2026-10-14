@@ -7,13 +7,12 @@
  *
  * @module
  */
-import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Markdown } from './Markdown.tsx'
 import { TextShimmer } from './tool/primitives.tsx'
-import { resolveDisclosure, useStreamingDisclosure } from './disclosure.ts'
+import {useStreamingDisclosure } from './disclosure.ts'
 import { groupIntoTurns } from './turns.ts'
 import type { TurnGroup } from './turns.ts'
-import { REASONING_DONE, THINK } from './nativeStrings.ts'
+import {THINK } from './nativeStrings.ts'
 import { IconThinkOutlineRegular } from './NativeIcons.tsx'
 import { Chevron } from './messageActions.tsx'
 
