@@ -96,7 +96,6 @@
     "@deepseek-ai/dsh-api-account-controller": "workspace:*",
     "@deepseek-ai/dsh-deepseek-account": "workspace:*",
     "@deepseek-ai/dsh-client-product-analytics": "workspace:*",
-    "@deepseek-ai/dsh-api-memory-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-agent-community": "workspace:*"
+    "@deepseek-ai/dsh-api-memory-controller": "workspace:*"
   }
 }
