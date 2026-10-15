@@ -721,6 +721,12 @@ export class AgentLoop extends Service implements AgentFactory {
     return tracked
   }
 
+  /**
+   * Dispose the live agent owned for `sessionId` through the handle this
+   * runtime tracks; a no-op when no tracked handle exists for that session.
+   * @param _ownerCtx - the caller context, unused because the tracked handle already owns teardown.
+   * @param sessionId - session id of the agent whose tracked handle to dispose.
+   */
   async disposeAgent(_ownerCtx: Context, sessionId: SessionId): Promise<void> {
     await this.handles.get(sessionId)?.dispose()
   }

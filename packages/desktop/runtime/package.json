@@ -13,7 +13,7 @@
   "type": "module",
   "files": [
     "lib/*.js",
-    "lib/types/**/*.d.ts"
+    "lib/types/*.d.ts"
   ],
   "license": "MIT",
   "dependencies": {

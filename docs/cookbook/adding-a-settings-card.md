@@ -8,6 +8,7 @@ Declare live fields in the plugin Config schema and expose them through a produc
 
 ```ts
 import type { Context, Volatile } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/cordis-plugin-loader'
 import z from '@deepseek-ai/schemastery'
 
 export interface Config {

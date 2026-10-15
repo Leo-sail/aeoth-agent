@@ -148,22 +148,21 @@ export function hostLabel(): string {
 
 ## 5. Test it
 
-On the owner side, assert the code that was thrown: recover the failure with `remoteErrorOf` after catching, then compare `code` and the details fields you care about with `toMatchObject` — never deep-compare the error object with `toEqual`, and never assert `instanceof`.
+On the owner side, assert the code that was thrown: recover the failure with `remoteErrorOf` after catching, then compare `code` and the details fields you care about on that value — never deep-compare the error object, and never assert `instanceof`.
 
 ```ts
 import { remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import { expect, it } from 'vitest'
 
 declare function rename(noteId: string, title: string): Promise<void>
 
-it('refuses an unknown note before writing', async () => {
+export async function assertUnknownNoteRefused(): Promise<void> {
   const failure = await rename('n-404', 'fresh title').catch((error: unknown) => error)
+  const reported: { code?: string; details?: unknown } | undefined = remoteErrorOf(failure)
 
-  expect(remoteErrorOf(failure)).toMatchObject({
-    code: 'note/not-found',
-    details: { noteId: 'n-404' },
-  })
-})
+  if (reported?.code !== 'note/not-found') {
+    throw new Error(`expected note/not-found, received ${String(reported?.code)}`)
+  }
+}
 ```
 
 

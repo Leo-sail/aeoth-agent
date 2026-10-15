@@ -194,9 +194,18 @@ async write(session: Session): Promise<void>
  * @returns the projection cut at the log end.
  */
 coldSnapshot( meta: SessionHeader, inheritedEventCount: SessionLogOffset, events: readonly SessionEvent[], ): ProjectionSnapshot
+
+/**
+ * Drop the stored record of a session whose log was deleted, so no fold
+ * shortcut (title input text included) outlives it. Dispose the live
+ * session first: its detach checkpoint is enqueued on the same domain write
+ * chain ahead of this delete and therefore cannot re-create the record.
+ * @param id - the deleted session.
+ */
+async remove(id: SessionId): Promise<void>
 ```
 
-Types: [Session](session.zh.md) · [SessionEvent](session.zh.md) · [SessionHeader](persistence.zh.md) · [SessionLogOffset](session.zh.md)
+Types: [Session](session.zh.md) · [SessionEvent](session.zh.md) · [SessionHeader](persistence.zh.md) · [SessionId](core.zh.md) · [SessionLogOffset](session.zh.md)
 
 Source: [`packages/session/session-projection-cache/src/index.ts`](../../packages/session/session-projection-cache/src/index.ts)
 

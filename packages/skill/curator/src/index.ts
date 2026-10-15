@@ -132,6 +132,12 @@ export function apply(ctx: Context): void {
   }))
 }
 
+/**
+ * Persistent, lock-serialized skill proposal state for one profile: candidates
+ * moving through propose, review, archive, and restore, plus the feedback
+ * recorded against them. Approved candidates render the active `SKILL.md`, and
+ * an interrupted review is repaired before the next operation runs.
+ */
 export class SkillCurator {
   private tail: Promise<unknown> = Promise.resolve()
   private readonly root: string
@@ -143,6 +149,10 @@ export class SkillCurator {
     this.statePath = join(this.root, '.curator', 'curator.json')
   }
 
+  /**
+   * List every known skill candidate with its recorded feedback summary.
+   * @returns each candidate paired with use, success, and failure counts for its active (or base) revision.
+   */
   async list(): Promise<readonly SkillCuratorView[]> {
     const state = await this.serial(() => this.readState())
     const summaries = new Map<string, SkillFeedbackSummary>()
@@ -159,11 +169,22 @@ export class SkillCurator {
     return state.candidates.map(candidate => ({ ...candidate, feedback: summaries.get(candidate.name + ':' + (candidate.activeRevision ?? candidate.baseRevision ?? '')) ?? { uses: 0, successes: 0, failures: 0 } }))
   }
 
+  /**
+   * Read the most recent feedback records recorded for one skill.
+   * @param name - the skill name to filter feedback by, validated as a managed skill name.
+   * @returns up to the last 50 feedback records for that skill, oldest first.
+   */
   async history(name: string): Promise<readonly SkillFeedback[]> {
     if (!isSkillName(name)) throw new Error('invalid skill name')
     return this.serial(async () => (await this.readState()).feedback.filter(item => item.name === name).slice(-50))
   }
 
+  /**
+   * Record a pending candidate for a proposed skill, reusing an identical
+   * pending candidate for the same base revision instead of duplicating it.
+   * @param input - proposed name, description, content, and optional source evidence.
+   * @returns the stored candidate, either newly created or the equivalent pending one.
+   */
   async propose(input: SkillProposalInput): Promise<SkillCandidate> {
     return this.serial(async () => {
       validateSkill(input.name, input.description, input.content)
@@ -183,6 +204,15 @@ export class SkillCurator {
     })
   }
 
+  /**
+   * Apply one reviewer decision to a candidate: approve and restore render and
+   * write the active `SKILL.md`, archive removes it, and reject only records
+   * the decision. An interrupted write is repaired before the result returns.
+   * @param id - id of the candidate to review.
+   * @param decision - the transition to apply: approve, reject, archive, or restore.
+   * @param note - optional reviewer note stored on the updated candidate.
+   * @returns the candidate after the decision and its status update.
+   */
   async review(id: string, decision: SkillReviewDecision, note?: string): Promise<SkillCandidate> {
     return this.serial(async () => {
       const state = await this.readState()
@@ -214,6 +244,12 @@ export class SkillCurator {
     })
   }
 
+  /**
+   * Record a usage or outcome report for one skill revision, returning an
+   * existing record when the same session event already reported it.
+   * @param input - feedback kind, skill name and revision, outcome, and optional note/session evidence.
+   * @returns the stored feedback entry, either newly appended or the duplicate it matched.
+   */
   async feedback(input: SkillFeedbackInput): Promise<SkillFeedback> {
     return this.serial(async () => {
       if (!isSkillName(input.name)) throw new Error('invalid skill name')
@@ -238,6 +274,13 @@ export class SkillCurator {
     })
   }
 
+  /**
+   * Record a usage note for a loaded managed skill so a later outcome report
+   * has a revision to attach to.
+   * @param skill - the loaded skill definition, whose path and revision identify a managed skill.
+   * @param context - evidence describing the session, event, workspace, or reason for the load.
+   * @returns the recorded revision, or undefined when the skill is not managed by this curator.
+   */
   async recordUsage(skill: SkillDefinition, context: SkillEvidence): Promise<string | undefined> {
     if (skill.path === undefined) return undefined
     let root: string

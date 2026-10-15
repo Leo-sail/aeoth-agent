@@ -443,7 +443,10 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     }
   }
 
-  if (dir.startsWith('apps/') && dir !== desktopApplicationDirectory && manifest.name?.startsWith('@deepseek-ai/')) {
+  // An installable application package may be hosted under `packages/` (the Desktop renderer is);
+  // its publication files follow the app policy above instead of the library payload list.
+  const isAppPackage = manifest.name !== undefined && appPackageFiles[manifest.name] !== undefined
+  if ((dir.startsWith('apps/') || isAppPackage) && dir !== desktopApplicationDirectory && manifest.name?.startsWith('@deepseek-ai/')) {
     const expectedFiles = appPackageFiles[manifest.name]
     if (expectedFiles === undefined) {
       errors.push(`${label}: app package has no publication files policy`)
@@ -461,7 +464,7 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     }
   }
 
-  if (dir.startsWith('packages/') && manifest.name?.startsWith('@deepseek-ai/dsh-')) {
+  if (dir.startsWith('packages/') && manifest.name?.startsWith('@deepseek-ai/dsh-') && !isAppPackage) {
     const peer = manifest.peerDependencies?.['@deepseek-ai/cordis']
     const dev = manifest.devDependencies?.['@deepseek-ai/cordis']
 

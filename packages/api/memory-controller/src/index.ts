@@ -25,6 +25,9 @@ declare module '@deepseek-ai/cordis' {
   }
 }
 
+/**
+ * Host Remote owner for MEMORY/USER documents, skill curation, and legacy migration plans.
+ */
 export class MemoryController extends TypertRemoteService {
   static inject = ['typert', ...inject]
   private readonly managed: ManagedSkills
@@ -34,6 +37,10 @@ export class MemoryController extends TypertRemoteService {
     this.managed = new ManagedSkills(join(profile?.dir ?? resolveAeothHome(), 'skills'))
   }
 
+  /**
+   * Describe the configured provider and the current MEMORY/USER snapshots.
+   * @returns the provider name plus one snapshot view per memory target.
+   */
   @Remote
   async describe(): Promise<MemoryDescribeValue> {
     const memories = this.requireMemories()
@@ -42,6 +49,14 @@ export class MemoryController extends TypertRemoteService {
     return { provider: memories.providerName, memory: snapshotView(memory), user: snapshotView(user) }
   }
 
+  /**
+   * Apply one add/replace/remove mutation to a target and return its new snapshot.
+   * @param target - the MEMORY or USER target to mutate.
+   * @param action - the mutation to perform: add, replace, or remove.
+   * @param content - the new entry text for add and replace; unused for remove.
+   * @param oldText - a unique substring identifying the entry to replace or remove.
+   * @returns the target snapshot after the mutation settled.
+   */
   @Remote
   async mutate(
     target: RemoteMemoryTarget,
@@ -58,6 +73,12 @@ export class MemoryController extends TypertRemoteService {
     }
   }
 
+  /**
+   * Replace a target document with the supplied entries in one serialized write.
+   * @param target - the MEMORY or USER target to replace.
+   * @param entries - the complete replacement entries, each bare text or text with provenance.
+   * @returns the target snapshot reflecting the replaced document.
+   */
   @Remote
   async replaceDocument(target: RemoteMemoryTarget, entries: readonly (string | { readonly text: string; readonly source?: { readonly sessionId?: string; readonly eventSeq?: number; readonly workspace?: string; readonly createdAt: string } })[]): Promise<MemorySnapshotView> {
     try {
@@ -67,6 +88,12 @@ export class MemoryController extends TypertRemoteService {
     }
   }
 
+  /**
+   * Search memory entries through the configured provider.
+   * @param query - the non-empty search text.
+   * @param target - restrict hits to one target, or undefined to search both.
+   * @returns matching hits with target, index, text, score, and provenance.
+   */
   @Remote
   async search(query: string, target: RemoteMemoryTarget | undefined): Promise<readonly MemorySearchHitView[]> {
     try {
@@ -76,6 +103,11 @@ export class MemoryController extends TypertRemoteService {
     }
   }
 
+  /**
+   * Resolve one memory source against Session storage and report its availability.
+   * @param source - the session id, optional event sequence, and optional workspace to look up.
+   * @returns the source with its resolution status and any located session or event details.
+   */
   @Remote
   async resolveSource(source: MemorySourceRequest): Promise<MemorySourceResolution> {
     if (!source.sessionId || source.sessionId.length > 256 || /[\x00-\x1f]/u.test(source.sessionId)
@@ -117,6 +149,10 @@ export class MemoryController extends TypertRemoteService {
     }
   }
 
+  /**
+   * List the skill-curator candidates awaiting or reflecting review.
+   * @returns every curator candidate with its review status.
+   */
   @Remote
   async listCuratorCandidates(): Promise<readonly MemoryCuratorCandidate[]> {
     const curator = this.ctx.get('skillCurator')
@@ -124,6 +160,13 @@ export class MemoryController extends TypertRemoteService {
     return curator.list()
   }
 
+  /**
+   * Record one review decision on a curator candidate and return its updated record.
+   * @param id - identity of the curator candidate to review.
+   * @param decision - the review outcome: approve, reject, archive, or restore.
+   * @param note - optional reviewer note stored with the decision.
+   * @returns the candidate as it stands after the decision was recorded.
+   */
   @Remote
   async reviewSkill(id: string, decision: 'approve' | 'reject' | 'archive' | 'restore', note?: string): Promise<MemoryCuratorCandidate> {
     const curator = this.ctx.get('skillCurator')
@@ -131,6 +174,13 @@ export class MemoryController extends TypertRemoteService {
     try { await curator.review(id, decision, note); const item = (await curator.list()).find(candidate => candidate.id === id); if (item === undefined) throw new Error('curator candidate disappeared'); return item } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * Record an observed outcome for a skill with the curator.
+   * @param name - the skill name the outcome belongs to.
+   * @param outcome - the observed result: success, failure, or neutral.
+   * @param note - optional detail explaining the outcome.
+   * @param revision - optional exact skill revision the outcome was observed on.
+   */
   @Remote
   async recordSkillFeedback(name: string, outcome: 'success' | 'failure' | 'neutral', note?: string, revision?: string): Promise<void> {
     const curator = this.ctx.get('skillCurator')
@@ -138,6 +188,10 @@ export class MemoryController extends TypertRemoteService {
     try { await curator.feedback({ name, outcome, ...(note === undefined ? {} : { note }), ...(revision === undefined ? {} : { revision }) }) } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * List the journaled legacy-memory migration plans.
+   * @returns every plan summary, newest update first.
+   */
   @Remote
   async listMigrationPlans(): Promise<readonly MemoryMigrationPlan[]> {
     const migration = this.ctx.get('memoryMigration')
@@ -145,6 +199,11 @@ export class MemoryController extends TypertRemoteService {
     return migration.list()
   }
 
+  /**
+   * Parse a legacy memory export and journal a preview plan without touching memory.
+   * @param path - filesystem path of the legacy export to read.
+   * @returns the previewed plan with its parsed entries, skipped records, and fingerprint.
+   */
   @Remote
   async previewMigration(path: string): Promise<MemoryMigrationPlan> {
     const migration = this.ctx.get('memoryMigration')
@@ -152,6 +211,11 @@ export class MemoryController extends TypertRemoteService {
     try { return await migration.preview(path) } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * Commit a previewed migration plan to the live memory documents.
+   * @param id - identity of the journaled plan returned by previewMigration.
+   * @returns the plan advanced to its applied state.
+   */
   @Remote
   async applyMigration(id: string): Promise<MemoryMigrationPlan> {
     const migration = this.ctx.get('memoryMigration')
@@ -159,6 +223,11 @@ export class MemoryController extends TypertRemoteService {
     try { return await migration.apply(id) } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * Restore the memory documents captured before an applied migration plan.
+   * @param id - identity of the journaled plan to roll back.
+   * @returns the plan advanced to its rolled-back state.
+   */
   @Remote
   async rollbackMigration(id: string): Promise<MemoryMigrationPlan> {
     const migration = this.ctx.get('memoryMigration')
@@ -166,6 +235,10 @@ export class MemoryController extends TypertRemoteService {
     try { return await migration.rollback(id) } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * List registered skills merged with the managed profile skills.
+   * @returns one summary per skill sorted by name, flagged writable when this service may write it.
+   */
   @Remote
   async listSkills(): Promise<readonly MemorySkillSummary[]> {
     const skills = await this.requireSkills().list({ cwd: process.cwd() })
@@ -177,6 +250,11 @@ export class MemoryController extends TypertRemoteService {
     return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name))
   }
 
+  /**
+   * Load one skill by name, preferring the writable managed copy.
+   * @param name - the exact skill name to load.
+   * @returns the skill summary plus its full content.
+   */
   @Remote
   async getSkill(name: string): Promise<MemorySkillValue> {
     const summary = (await this.listSkills()).find(skill => skill.name === name)
@@ -190,6 +268,14 @@ export class MemoryController extends TypertRemoteService {
     return { ...summary, content: skill.content }
   }
 
+  /**
+   * Create or update a managed skill under the profile skills directory.
+   * @param name - the skill name to write.
+   * @param description - the one-line skill description.
+   * @param content - the full Markdown skill body.
+   * @param expectedRevision - the revision the caller based this write on, or null for a new skill.
+   * @returns the saved skill with its new revision.
+   */
   @Remote
   async saveSkill(name: string, description: string, content: string, expectedRevision: string | null): Promise<MemorySkillValue> {
     try {
@@ -199,6 +285,11 @@ export class MemoryController extends TypertRemoteService {
     } catch (error) { throw new RemoteError('gateway/bad-request', String(error), {}) }
   }
 
+  /**
+   * Delete a writable managed skill.
+   * @param name - the skill name to delete.
+   * @param expectedRevision - the revision the caller based the removal on.
+   */
   @Remote
   async removeSkill(name: string, expectedRevision: string): Promise<void> {
     try {

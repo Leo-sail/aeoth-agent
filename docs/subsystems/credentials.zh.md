@@ -339,16 +339,18 @@ abstract watch(signal: AbortSignal): AsyncIterable<AccountView>
 /**
  * Resolve a credential only for the inference origin allowed by the provider.
  * @param url - actual request destination or API base URL.
+ * @param credentialNamespace - optional Agent credential namespace; omitted keeps the global account grant.
  * @returns stored token, or undefined for other origins or a signed-out account.
  */
-abstract resolveToken(url: string): Promise<string | undefined>
+abstract resolveToken(url: string, credentialNamespace?: string): Promise<string | undefined>
 
 /**
  * Remove an inference-rejected token only while it still matches the stored login.
  * @param token - token captured by the rejected inference request.
- * @returns after matching credentials are removed and the expiry notification is emitted.
+ * @param credentialNamespace - optional Agent credential namespace matching the request.
+ * @returns after matching credentials are removed.
  */
-abstract rejectToken(token: string): Promise<void>
+abstract rejectToken(token: string, credentialNamespace?: string): Promise<void>
 
 /**
  * Read credentials for the configured Platform origin, bound to their issuing environment, and

@@ -35,6 +35,10 @@ export const name = 'memory-migration'
 export const inject = ['memories']
 declare module '@deepseek-ai/cordis' { interface Context { memoryMigration: MemoryMigrationRuntime } }
 
+/**
+ * Journaled preview/apply/rollback service for legacy MCP memory exports; every
+ * committed plan records its before/after documents so rollback stays safe.
+ */
 export class MemoryMigrationRuntime {
   private readonly root: string
   private readonly journal: string
@@ -46,6 +50,11 @@ export class MemoryMigrationRuntime {
     this.journal = join(this.root, 'plans')
   }
 
+  /**
+   * Parse a legacy export, journal a preview plan, and leave memory untouched.
+   * @param path - path of the legacy export file to parse.
+   * @returns the persisted preview plan with its entries and skipped records.
+   */
   async preview(path: string): Promise<MigrationPlan> {
     const absolute = resolve(path)
     const raw = await readSource(absolute)
@@ -59,6 +68,10 @@ export class MemoryMigrationRuntime {
     return plan
   }
 
+  /**
+   * List journaled migration plans without their before and after documents.
+   * @returns plan summaries ordered by most recently updated first.
+   */
   async list(): Promise<readonly MigrationSummary[]> {
     await ensureJournal(this.journal, false)
     let files: string[]
@@ -73,6 +86,11 @@ export class MemoryMigrationRuntime {
     return plans.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   }
 
+  /**
+   * Commit a previewed plan, appending its entries and journaling the transaction.
+   * @param id - identity of the journaled plan to apply.
+   * @returns the plan advanced to its applied state.
+   */
   async apply(id: string): Promise<MigrationPlan> {
     return this.serial(async () => {
       const plan = await this.read(id)
@@ -103,6 +121,11 @@ export class MemoryMigrationRuntime {
     })
   }
 
+  /**
+   * Restore the documents captured before an applied plan, refusing when memory changed since.
+   * @param id - identity of the journaled plan to roll back.
+   * @returns the plan advanced to its rolled-back state.
+   */
   async rollback(id: string): Promise<MigrationPlan> {
     return this.serial(async () => {
       const plan = await this.read(id)

@@ -199,7 +199,7 @@ export class CordisCatalogProjector {
         }
         const mode = event.mode
         if (!isMode(mode)) {
-          violations.push(`${where} is missing an @mode tag. Add '@mode emit|bail|waterfall|parallel|serial' to its JSDoc (see AGENTS.md).`)
+          violations.push(`${where} is missing an @mode tag. Add '@mode emit|bail|waterfall|parallel|serial' to its JSDoc (see CONTRIBUTING.md#jsdoc-conventions).`)
         }
         const last = node.signature.parameters.at(-1)
         const hasNext = last?.name === 'next'
@@ -574,7 +574,7 @@ function checkReturns(
 function reportViolations(gate: string, violations: readonly string[]): void {
   if (violations.length === 0) return
   throw new Error(
-    `${gate}: ${String(violations.length)} JSDoc completeness violation(s) (see AGENTS.md):\n`
+    `${gate}: ${String(violations.length)} JSDoc completeness violation(s) (see CONTRIBUTING.md#jsdoc-conventions):\n`
     + violations.map(violation => `  ${violation}`).join('\n'),
   )
 }

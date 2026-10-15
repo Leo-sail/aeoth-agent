@@ -117,6 +117,11 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the published running agent.',
       },
       {
+        signature: 'async disposeAgent(_ownerCtx: Context, sessionId: SessionId): Promise<void>',
+        description: 'Dispose the live agent owned for `sessionId` through the handle this runtime tracks; a no-op when no tracked handle exists for that session.',
+        parameters: [{ name: '_ownerCtx', description: 'the caller context, unused because the tracked handle already owns teardown.' }, { name: 'sessionId', description: 'session id of the agent whose tracked handle to dispose.' }],
+      },
+      {
         signature: 'async createAgent(ownerCtx: Context, options: CreateAgentOptions): Promise<AgentHandle>',
         description: 'Create an owned agent on a caller-supplied session id.',
         parameters: [{ name: 'ownerCtx', description: 'caller context that structurally owns the lifecycle.' }, { name: 'options', description: 'identities, optional live parent, session seed/metadata, loop options, setup, and cancellation.' }],
@@ -261,6 +266,11 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the handle after setup, rollback-covered publication, and loop start complete.',
       },
       {
+        signature: 'async dispose(sessionId: SessionId): Promise<void>',
+        description: 'Dispose one live Agent through the registered factory\'s owner handle. A no-op when the factory cannot dispose agents.',
+        parameters: [{ name: 'sessionId', description: 'the live agent\'s session id whose handle to dispose.' }],
+      },
+      {
         signature: 'async resume(options: ResumeAgentOptions): Promise<AgentHandle>',
         description: 'Load a persisted session and resume an agent on it through the registered factory. Rejects if no factory is registered; the factory rejects if session persistence is not configured or persistence/setup fails.',
         parameters: [{ name: 'options', description: 'persisted identity, optional live parent, configuration, and setup.' }],
@@ -308,79 +318,6 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'All live top-level agents in registration order. A top-level agent was created without an owning agent context; durable session lineage does not affect this runtime relation, so a resumed fork may still be a root.',
         parameters: [],
         returns: 'a fresh array; mutating it does not affect the registry.',
-      },
-    ],
-  },
-  {
-    key: 'agentTeams',
-    summary: 'Agent Teams service backed by the exact live Lead Session log.',
-    description: 'Agent Teams service backed by the exact live Lead Session log.',
-    methods: [
-      {
-        signature: 'membership(agent: Agent): TeamMembership',
-        description: 'Resolve one exact live Agent\'s Team role.',
-        parameters: [{ name: 'agent', description: 'exact live Agent used as the authority credential.' }],
-        returns: 'its root, Team identity, role, and model-facing name.',
-      },
-      {
-        signature: 'listMembers(agent: Agent): TeamMemberView[]',
-        description: 'List the runtime-enriched roster visible to one Team member.',
-        parameters: [{ name: 'agent', description: 'exact live Team member.' }],
-        returns: 'Lead and teammate rows in creation order.',
-      },
-      {
-        signature: 'async spawnTeammate(caller: Agent, request: SpawnTeammateRequest): Promise<SpawnTeammateResult>',
-        description: 'Create one named, continuable direct child of the Team Lead.',
-        parameters: [{ name: 'caller', description: 'exact live Lead Agent.' }, { name: 'request', description: 'immutable name, description, prompt, context mode, provider, and cancellation.' }],
-        returns: 'the active roster row.',
-      },
-      {
-        signature: 'async sendMessage(caller: Agent, request: SendTeamMessageRequest): Promise<SendTeamMessageResult>',
-        description: 'Queue one durable peer message, then attempt immediate delivery.',
-        parameters: [{ name: 'caller', description: 'exact live sending Team member.' }, { name: 'request', description: 'target name, content, and pre-queue cancellation.' }],
-        returns: 'durable message identity and immediate-delivery observation.',
-      },
-      {
-        signature: 'async createTask(caller: Agent, request: CreateTeamTaskRequest): Promise<TeamTaskView>',
-        description: 'Create one unowned pending task in the Team Lead log.',
-        parameters: [{ name: 'caller', description: 'exact live Team member creating the task.' }, { name: 'request', description: 'task text, blockers, and advisory write scopes.' }],
-        returns: 'the revision-one task view.',
-      },
-      {
-        signature: 'getTask(caller: Agent, id: TeamTaskId): TeamTaskView',
-        description: 'Return one task, including a deleted tombstone.',
-        parameters: [{ name: 'caller', description: 'exact live Team member reading the task.' }, { name: 'id', description: 'Team-local task identity.' }],
-        returns: 'the latest task value and derived readiness diagnostics.',
-      },
-      {
-        signature: 'listTasks(caller: Agent): TeamTaskView[]',
-        description: 'List current non-deleted tasks in numeric creation order.',
-        parameters: [{ name: 'caller', description: 'exact live Team member reading the board.' }],
-        returns: 'detached current task views.',
-      },
-      {
-        signature: 'async updateTask(caller: Agent, request: UpdateTeamTaskRequest): Promise<TeamTaskView>',
-        description: 'Compare-and-set one authorized task transition.',
-        parameters: [{ name: 'caller', description: 'exact live Team member authorizing the mutation.' }, { name: 'request', description: 'task identity, expected revision, action, and action fields.' }],
-        returns: 'the committed next task revision.',
-      },
-      {
-        signature: 'async waitForChange(caller: Agent, timeoutMs: number, signal: AbortSignal): Promise<TeamWaitResult>',
-        description: 'Wait for the next Team-domain or member-status change.',
-        parameters: [{ name: 'caller', description: 'exact live Team member waiting for activity.' }, { name: 'timeoutMs', description: 'bounded wait duration from ten seconds through one hour.' }, { name: 'signal', description: 'caller cancellation for the wait only.' }],
-        returns: 'one observed change or a timeout result.',
-      },
-      {
-        signature: 'interrupt(caller: Agent, targetName: string): { previousStatus: \'running\' | \'inactive\' }',
-        description: 'Interrupt one live teammate turn without clearing its pending inbox.',
-        parameters: [{ name: 'caller', description: 'exact live Lead Agent.' }, { name: 'targetName', description: 'durable teammate name.' }],
-        returns: 'the target status sampled before cancellation.',
-      },
-      {
-        signature: 'tryMembership(agent: Agent): TeamMembership | undefined',
-        description: 'Resolve a caller without throwing, used by scoped-tool installation and observers.',
-        parameters: [{ name: 'agent', description: 'candidate exact live Agent.' }],
-        returns: 'Team membership, or undefined for non-Team subagents and stale identities.',
       },
     ],
   },
@@ -902,16 +839,16 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'complete snapshots as account state changes.',
       },
       {
-        signature: 'abstract resolveToken(url: string): Promise<string | undefined>',
+        signature: 'abstract resolveToken(url: string, credentialNamespace?: string): Promise<string | undefined>',
         description: 'Resolve a credential only for the inference origin allowed by the provider.',
-        parameters: [{ name: 'url', description: 'actual request destination or API base URL.' }],
+        parameters: [{ name: 'url', description: 'actual request destination or API base URL.' }, { name: 'credentialNamespace', description: 'optional Agent credential namespace; omitted keeps the global account grant.' }],
         returns: 'stored token, or undefined for other origins or a signed-out account.',
       },
       {
-        signature: 'abstract rejectToken(token: string): Promise<void>',
+        signature: 'abstract rejectToken(token: string, credentialNamespace?: string): Promise<void>',
         description: 'Remove an inference-rejected token only while it still matches the stored login.',
-        parameters: [{ name: 'token', description: 'token captured by the rejected inference request.' }],
-        returns: 'after matching credentials are removed and the expiry notification is emitted.',
+        parameters: [{ name: 'token', description: 'token captured by the rejected inference request.' }, { name: 'credentialNamespace', description: 'optional Agent credential namespace matching the request.' }],
+        returns: 'after matching credentials are removed.',
       },
       {
         signature: 'abstract getPlatformSession(): Promise<PlatformSession | null>',
@@ -1242,23 +1179,6 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
-    key: 'inspector',
-    summary: 'Shared Host/Client service façade over the realm\'s source publisher.',
-    description: 'Shared Host/Client service façade over the realm\'s source publisher.',
-    methods: [
-      {
-        signature: 'publish(topic: string, payload: InspectorJsonValue, monotonicMs?: number): void',
-        description: 'Publish one JSON observation without waiting for Worker delivery.',
-        parameters: [{ name: 'topic', description: 'Domain-owned topic name.' }, { name: 'payload', description: 'JSON value validated before it reaches the carrier.' }, { name: 'monotonicMs', description: 'Source-clock timestamp; defaults to `performance.now()`.' }],
-      },
-      {
-        signature: 'readonly cordis: CordisRuntimeTreeReader',
-        description: 'Read-only Cordis topology queries independent of CDP sessions.',
-        parameters: [],
-      },
-    ],
-  },
-  {
     key: 'invariants',
     summary: 'Package-owned invariant registry with global and regex-based selection.',
     description: 'Package-owned invariant registry with global and regex-based selection.',
@@ -1484,10 +1404,249 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     description: 'Scoped resource access plus three tools shared by configured MCP servers.',
     methods: [
       {
-        signature: 'register(server: string, provider: McpResourceProvider): () => void',
+        signature: 'register(server: string, provider: McpResourceProvider, toolProvider?: McpToolProvider): () => void',
         description: 'Register one server and expose resource tools while that scope has providers.',
-        parameters: [{ name: 'server', description: 'configured server name, unique in this scope.' }, { name: 'provider', description: 'connection-owned resource operations.' }],
+        parameters: [{ name: 'server', description: 'configured server name, unique in this scope.' }, { name: 'provider', description: 'connection-owned resource operations.' }, { name: 'toolProvider', description: 'callable tools for this server, or undefined when it serves resources only.' }],
         returns: 'the effect disposer for this exact registration.',
+      },
+      {
+        signature: 'callTool(server: string, name: string, arguments_: JsonValue | undefined, exec: McpToolCallContext): Promise<JsonValue>',
+        description: 'Call a server-qualified MCP tool through the live connection registry.',
+        parameters: [{ name: 'server', description: 'configured MCP tool server name, resolved in the calling agent\'s scope.' }, { name: 'name', description: 'tool name to invoke on that server.' }, { name: 'arguments_', description: 'JSON arguments for the call, or undefined when the tool takes none.' }, { name: 'exec', description: 'tool execution context; its agent selects the scoped provider and is forwarded to the call.' }],
+        returns: 'the tool result as JSON.',
+      },
+    ],
+  },
+  {
+    key: 'memories',
+    summary: 'Profile-scoped long-term memory service: registers the active provider and owns bounded MEMORY/USER documents, cached snapshots, mutations, and search.',
+    description: 'Profile-scoped long-term memory service: registers the active provider and owns bounded MEMORY/USER documents, cached snapshots, mutations, and search.',
+    methods: [
+      {
+        signature: 'registerProvider(provider: MemoryProvider): () => Promise<void>',
+        description: 'Register a provider under its own name for later selection by config.',
+        parameters: [{ name: 'provider', description: 'the memory provider implementation to register.' }],
+        returns: 'an unregister callback that drains mutations, drops snapshots, and closes the provider.',
+      },
+      {
+        signature: 'listProviders(): string[]',
+        description: 'List the names of every registered memory provider.',
+        parameters: [],
+        returns: 'registered provider names in sorted order.',
+      },
+      {
+        signature: 'limits(target: MemoryTarget): number',
+        description: 'Report the configured character budget for one target.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to look up.' }],
+        returns: 'the configured character limit for that target.',
+      },
+      {
+        signature: 'snapshot(target: MemoryTarget, context?: MemoryRequestContext): MemorySnapshot',
+        description: 'Read the last cached snapshot for one target without touching the provider.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to read.' }, { name: 'context', description: 'optional namespace selecting an isolated snapshot cache slot.' }],
+        returns: 'the cached snapshot, or an empty one when nothing is cached yet.',
+      },
+      {
+        signature: 'async read(target: MemoryTarget, context?: MemoryRequestContext): Promise<MemorySnapshot>',
+        description: 'Load one target from the configured provider and cache the resulting snapshot.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to load.' }, { name: 'context', description: 'optional per-call namespace and source provenance.' }],
+        returns: 'the validated snapshot of the loaded document.',
+      },
+      {
+        signature: 'async refresh(context?: MemoryRequestContext): Promise<readonly MemorySnapshot[]>',
+        description: 'Re-read both targets from the configured provider.',
+        parameters: [{ name: 'context', description: 'optional per-call namespace and source provenance.' }],
+        returns: 'MEMORY then USER snapshots in target order.',
+      },
+      {
+        signature: 'async mutate( target: MemoryTarget, action: \'add\' | \'replace\' | \'remove\', content: string | undefined, oldText: string | undefined, context?: MemoryRequestContext, ): Promise<{ changed: boolean; snapshot: MemorySnapshot; message: string }>',
+        description: 'Apply one serialized add/replace/remove mutation and report what changed.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to mutate.' }, { name: 'action', description: 'the mutation to perform: add, replace, or remove.' }, { name: 'content', description: 'the new entry text for add and replace; unused for remove.' }, { name: 'oldText', description: 'a unique substring identifying the entry to replace or remove.' }, { name: 'context', description: 'optional per-call namespace and source provenance.' }],
+        returns: 'whether anything changed, the current snapshot, and an outcome message.',
+      },
+      {
+        signature: 'async replaceDocument(target: MemoryTarget, texts: readonly (string | MemoryEntry)[], context?: MemoryRequestContext): Promise<MemorySnapshot>',
+        description: 'Overwrite one target document with the supplied entries in one serialized save.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to replace.' }, { name: 'texts', description: 'the complete replacement entries, each bare text or a full entry.' }, { name: 'context', description: 'optional per-call namespace and source provenance.' }],
+        returns: 'the snapshot persisted for the target.',
+      },
+      {
+        signature: 'changeDocuments( build: (before: Readonly<Record<MemoryTarget, MemoryDocument>>) => Readonly<Record<MemoryTarget, MemoryDocument>>, checkpoint: (before: Readonly<Record<MemoryTarget, MemoryDocument>>, after: Readonly<Record<MemoryTarget, MemoryDocument>>) => Promise<void>, ): Promise<void>',
+        description: 'Journal before a validated, serialized multi-document change.',
+        parameters: [{ name: 'build', description: 'derives the proposed MEMORY and USER documents from the current ones.' }, { name: 'checkpoint', description: 'awaits after validation and before the first save, for journaling the transaction.' }],
+      },
+      {
+        signature: 'async search(query: string, target: MemoryTarget | undefined, limit: number | undefined, context?: MemoryRequestContext): Promise<readonly MemorySearchHit[]>',
+        description: 'Search entries through the provider hook, falling back to a local term scan.',
+        parameters: [{ name: 'query', description: 'the non-empty search text.' }, { name: 'target', description: 'restrict hits to one target, or undefined to search both.' }, { name: 'limit', description: 'optional maximum hit count, bounded by the configured maximum.' }, { name: 'context', description: 'optional per-call namespace and source provenance.' }],
+        returns: 'matching hits ordered by descending score.',
+      },
+      {
+        signature: 'renderPrompt(): string',
+        description: 'Render the cached MEMORY/USER snapshots as prompt text.',
+        parameters: [],
+        returns: 'an advisory header followed by one labeled block per target.',
+      },
+    ],
+  },
+  {
+    key: 'memoryController',
+    summary: 'Host Remote owner for MEMORY/USER documents, skill curation, and legacy migration plans.',
+    description: 'Host Remote owner for MEMORY/USER documents, skill curation, and legacy migration plans.',
+    methods: [
+      {
+        signature: '@Remote async describe(): Promise<MemoryDescribeValue>',
+        description: 'Describe the configured provider and the current MEMORY/USER snapshots.',
+        parameters: [],
+        returns: 'the provider name plus one snapshot view per memory target.',
+      },
+      {
+        signature: '@Remote async mutate( target: RemoteMemoryTarget, action: \'add\' | \'replace\' | \'remove\', content: string | undefined, oldText: string | undefined, ): Promise<MemorySnapshotView>',
+        description: 'Apply one add/replace/remove mutation to a target and return its new snapshot.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to mutate.' }, { name: 'action', description: 'the mutation to perform: add, replace, or remove.' }, { name: 'content', description: 'the new entry text for add and replace; unused for remove.' }, { name: 'oldText', description: 'a unique substring identifying the entry to replace or remove.' }],
+        returns: 'the target snapshot after the mutation settled.',
+      },
+      {
+        signature: '@Remote async replaceDocument(target: RemoteMemoryTarget, entries: readonly (string | { readonly text: string; readonly source?: { readonly sessionId?: string; readonly eventSeq?: number; readonly workspace?: string; readonly createdAt: string } })[]): Promise<MemorySnapshotView>',
+        description: 'Replace a target document with the supplied entries in one serialized write.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to replace.' }, { name: 'entries', description: 'the complete replacement entries, each bare text or text with provenance.' }],
+        returns: 'the target snapshot reflecting the replaced document.',
+      },
+      {
+        signature: '@Remote async search(query: string, target: RemoteMemoryTarget | undefined): Promise<readonly MemorySearchHitView[]>',
+        description: 'Search memory entries through the configured provider.',
+        parameters: [{ name: 'query', description: 'the non-empty search text.' }, { name: 'target', description: 'restrict hits to one target, or undefined to search both.' }],
+        returns: 'matching hits with target, index, text, score, and provenance.',
+      },
+      {
+        signature: '@Remote async resolveSource(source: MemorySourceRequest): Promise<MemorySourceResolution>',
+        description: 'Resolve one memory source against Session storage and report its availability.',
+        parameters: [{ name: 'source', description: 'the session id, optional event sequence, and optional workspace to look up.' }],
+        returns: 'the source with its resolution status and any located session or event details.',
+      },
+      {
+        signature: '@Remote async listCuratorCandidates(): Promise<readonly MemoryCuratorCandidate[]>',
+        description: 'List the skill-curator candidates awaiting or reflecting review.',
+        parameters: [],
+        returns: 'every curator candidate with its review status.',
+      },
+      {
+        signature: '@Remote async reviewSkill(id: string, decision: \'approve\' | \'reject\' | \'archive\' | \'restore\', note?: string): Promise<MemoryCuratorCandidate>',
+        description: 'Record one review decision on a curator candidate and return its updated record.',
+        parameters: [{ name: 'id', description: 'identity of the curator candidate to review.' }, { name: 'decision', description: 'the review outcome: approve, reject, archive, or restore.' }, { name: 'note', description: 'optional reviewer note stored with the decision.' }],
+        returns: 'the candidate as it stands after the decision was recorded.',
+      },
+      {
+        signature: '@Remote async recordSkillFeedback(name: string, outcome: \'success\' | \'failure\' | \'neutral\', note?: string, revision?: string): Promise<void>',
+        description: 'Record an observed outcome for a skill with the curator.',
+        parameters: [{ name: 'name', description: 'the skill name the outcome belongs to.' }, { name: 'outcome', description: 'the observed result: success, failure, or neutral.' }, { name: 'note', description: 'optional detail explaining the outcome.' }, { name: 'revision', description: 'optional exact skill revision the outcome was observed on.' }],
+      },
+      {
+        signature: '@Remote async listMigrationPlans(): Promise<readonly MemoryMigrationPlan[]>',
+        description: 'List the journaled legacy-memory migration plans.',
+        parameters: [],
+        returns: 'every plan summary, newest update first.',
+      },
+      {
+        signature: '@Remote async previewMigration(path: string): Promise<MemoryMigrationPlan>',
+        description: 'Parse a legacy memory export and journal a preview plan without touching memory.',
+        parameters: [{ name: 'path', description: 'filesystem path of the legacy export to read.' }],
+        returns: 'the previewed plan with its parsed entries, skipped records, and fingerprint.',
+      },
+      {
+        signature: '@Remote async applyMigration(id: string): Promise<MemoryMigrationPlan>',
+        description: 'Commit a previewed migration plan to the live memory documents.',
+        parameters: [{ name: 'id', description: 'identity of the journaled plan returned by previewMigration.' }],
+        returns: 'the plan advanced to its applied state.',
+      },
+      {
+        signature: '@Remote async rollbackMigration(id: string): Promise<MemoryMigrationPlan>',
+        description: 'Restore the memory documents captured before an applied migration plan.',
+        parameters: [{ name: 'id', description: 'identity of the journaled plan to roll back.' }],
+        returns: 'the plan advanced to its rolled-back state.',
+      },
+      {
+        signature: '@Remote async listSkills(): Promise<readonly MemorySkillSummary[]>',
+        description: 'List registered skills merged with the managed profile skills.',
+        parameters: [],
+        returns: 'one summary per skill sorted by name, flagged writable when this service may write it.',
+      },
+      {
+        signature: '@Remote async getSkill(name: string): Promise<MemorySkillValue>',
+        description: 'Load one skill by name, preferring the writable managed copy.',
+        parameters: [{ name: 'name', description: 'the exact skill name to load.' }],
+        returns: 'the skill summary plus its full content.',
+      },
+      {
+        signature: '@Remote async saveSkill(name: string, description: string, content: string, expectedRevision: string | null): Promise<MemorySkillValue>',
+        description: 'Create or update a managed skill under the profile skills directory.',
+        parameters: [{ name: 'name', description: 'the skill name to write.' }, { name: 'description', description: 'the one-line skill description.' }, { name: 'content', description: 'the full Markdown skill body.' }, { name: 'expectedRevision', description: 'the revision the caller based this write on, or null for a new skill.' }],
+        returns: 'the saved skill with its new revision.',
+      },
+      {
+        signature: '@Remote async removeSkill(name: string, expectedRevision: string): Promise<void>',
+        description: 'Delete a writable managed skill.',
+        parameters: [{ name: 'name', description: 'the skill name to delete.' }, { name: 'expectedRevision', description: 'the revision the caller based the removal on.' }],
+      },
+    ],
+  },
+  {
+    key: 'memoryMcp',
+    summary: 'Memory provider that keeps MEMORY/USER documents in an MCP memory server, either through its read and write tools or as hash-named reference entities.',
+    description: 'Memory provider that keeps MEMORY/USER documents in an MCP memory server, either through its read and write tools or as hash-named reference entities.',
+    methods: [
+      {
+        signature: 'close(): void',
+        description: 'Abort in-flight MCP calls by ending this provider\'s lifetime signal.',
+        parameters: [],
+      },
+      {
+        signature: 'async load(target: MemoryTarget, context?: MemoryRequestContext): Promise<MemoryDocument>',
+        description: 'Read one target\'s entries from the MCP server.',
+        parameters: [{ name: 'target', description: 'the MEMORY or USER target to load.' }, { name: 'context', description: 'optional per-call provenance and cancellation context.' }],
+        returns: 'the document assembled from the MCP read or the reference graph.',
+      },
+      {
+        signature: 'async save(document: MemoryDocument, context?: MemoryRequestContext): Promise<void>',
+        description: 'Persist one document through the MCP server and verify the server kept it.',
+        parameters: [{ name: 'document', description: 'the complete document to write.' }, { name: 'context', description: 'optional per-call provenance and cancellation context.' }],
+      },
+      {
+        signature: 'async search(query: string, target: MemoryTarget | undefined, limit: number, context?: MemoryRequestContext): Promise<readonly MemorySearchHit[]>',
+        description: 'Search the MCP memory server, or scan the reference graph in reference-memory mode.',
+        parameters: [{ name: 'query', description: 'the search text; whitespace splits it into terms.' }, { name: 'target', description: 'restrict hits to one target, or undefined to search both.' }, { name: 'limit', description: 'the maximum number of hits to return.' }, { name: 'context', description: 'optional per-call provenance and cancellation context.' }],
+        returns: 'matching hits ordered by descending score.',
+      },
+    ],
+  },
+  {
+    key: 'memoryMigration',
+    summary: 'Journaled preview/apply/rollback service for legacy MCP memory exports; every committed plan records its before/after documents so rollback stays safe.',
+    description: 'Journaled preview/apply/rollback service for legacy MCP memory exports; every committed plan records its before/after documents so rollback stays safe.',
+    methods: [
+      {
+        signature: 'async preview(path: string): Promise<MigrationPlan>',
+        description: 'Parse a legacy export, journal a preview plan, and leave memory untouched.',
+        parameters: [{ name: 'path', description: 'path of the legacy export file to parse.' }],
+        returns: 'the persisted preview plan with its entries and skipped records.',
+      },
+      {
+        signature: 'async list(): Promise<readonly MigrationSummary[]>',
+        description: 'List journaled migration plans without their before and after documents.',
+        parameters: [],
+        returns: 'plan summaries ordered by most recently updated first.',
+      },
+      {
+        signature: 'async apply(id: string): Promise<MigrationPlan>',
+        description: 'Commit a previewed plan, appending its entries and journaling the transaction.',
+        parameters: [{ name: 'id', description: 'identity of the journaled plan to apply.' }],
+        returns: 'the plan advanced to its applied state.',
+      },
+      {
+        signature: 'async rollback(id: string): Promise<MigrationPlan>',
+        description: 'Restore the documents captured before an applied plan, refusing when memory changed since.',
+        parameters: [{ name: 'id', description: 'identity of the journaled plan to roll back.' }],
+        returns: 'the plan advanced to its rolled-back state.',
       },
     ],
   },
@@ -1544,25 +1703,6 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Read the current rendering generation before reusing a Client PDF.',
         parameters: [{ name: 'signal', description: 'Remote caller cancellation.' }],
         returns: 'provider lifetime, replaced with rendering, font, or engine configuration.',
-      },
-    ],
-  },
-  {
-    key: 'otel',
-    summary: 'Shared transport provider.',
-    description: 'Shared transport provider. Mounting creates no queue, identity, or network connection.',
-    methods: [
-      {
-        signature: 'createEventReporter(options: EventLogOptions): EventLogReporter',
-        description: 'Create an independent ordinary-event channel with count-based batching. The injected consumer must drain it during its fiber disposal.',
-        parameters: [{ name: 'options', description: 'transport, scope, resource, queue, and diagnostic settings selected by the consumer.' }],
-        returns: 'the caller-owned channel; no state is shared with other channels.',
-      },
-      {
-        signature: 'createSessionLogReporter(options: SessionLogOptions): SessionLogReporter',
-        description: 'Create an independent byte-bounded Session-log channel. Authorization and redaction precede reporting; the consumer owns shutdown and its outer deadline.',
-        parameters: [{ name: 'options', description: 'transport, scope, resource, queue, and diagnostic settings selected by the consumer.' }],
-        returns: 'the caller-owned channel, preserving complete accepted events within the request byte ceiling.',
       },
     ],
   },
@@ -2112,6 +2252,11 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         parameters: [{ name: 'options', description: 'optional cancellation.' }],
         returns: 'one snapshot per stored session.',
       },
+      {
+        signature: 'abstract remove(id: SessionId, options?: SessionPersistenceRemoveOptions): Promise<void>',
+        description: 'Permanently remove one stored session and its local artifacts. Idempotent.',
+        parameters: [{ name: 'id', description: 'the stored session to remove.' }, { name: 'options', description: 'optional cancellation observed before deletion starts.' }],
+      },
     ],
   },
   {
@@ -2148,6 +2293,11 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Cold-read one session\'s projections from its complete log. Each unit is seeded from the identity-checked cached rows — the registry skips `apply` for the already-folded prefix (events at or below the row\'s `seq`) — and the refreshed checkpoint is written back (fail-soft, fire-and-forget), so the first cold read creates the cache row and later ones seed from it. The caller supplies the complete log in seq order: this service never consults the persistence layer.',
         parameters: [{ name: 'meta', description: 'the stored session header (identity witness).' }, { name: 'inheritedEventCount', description: 'exact inherited prefix length for projection initialization and identity.' }, { name: 'events', description: 'the session\'s complete log, in seq order.' }],
         returns: 'the projection cut at the log end.',
+      },
+      {
+        signature: 'async remove(id: SessionId): Promise<void>',
+        description: 'Drop the stored record of a session whose log was deleted, so no fold shortcut (title input text included) outlives it. Dispose the live session first: its detach checkpoint is enqueued on the same domain write chain ahead of this delete and therefore cannot re-create the record.',
+        parameters: [{ name: 'id', description: 'the deleted session.' }],
       },
     ],
   },
@@ -2615,6 +2765,49 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Enumerate plugin-contributed variables without executing their resolvers.',
         parameters: [],
         returns: 'declarations sorted by environment variable name.',
+      },
+    ],
+  },
+  {
+    key: 'skillCurator',
+    summary: 'Persistent, lock-serialized skill proposal state for one profile: candidates moving through propose, review, archive, and restore, plus the feedback recorded against them.',
+    description: 'Persistent, lock-serialized skill proposal state for one profile: candidates moving through propose, review, archive, and restore, plus the feedback recorded against them. Approved candidates render the active `SKILL.md`, and an interrupted review is repaired before the next operation runs.',
+    methods: [
+      {
+        signature: 'async list(): Promise<readonly SkillCuratorView[]>',
+        description: 'List every known skill candidate with its recorded feedback summary.',
+        parameters: [],
+        returns: 'each candidate paired with use, success, and failure counts for its active (or base) revision.',
+      },
+      {
+        signature: 'async history(name: string): Promise<readonly SkillFeedback[]>',
+        description: 'Read the most recent feedback records recorded for one skill.',
+        parameters: [{ name: 'name', description: 'the skill name to filter feedback by, validated as a managed skill name.' }],
+        returns: 'up to the last 50 feedback records for that skill, oldest first.',
+      },
+      {
+        signature: 'async propose(input: SkillProposalInput): Promise<SkillCandidate>',
+        description: 'Record a pending candidate for a proposed skill, reusing an identical pending candidate for the same base revision instead of duplicating it.',
+        parameters: [{ name: 'input', description: 'proposed name, description, content, and optional source evidence.' }],
+        returns: 'the stored candidate, either newly created or the equivalent pending one.',
+      },
+      {
+        signature: 'async review(id: string, decision: SkillReviewDecision, note?: string): Promise<SkillCandidate>',
+        description: 'Apply one reviewer decision to a candidate: approve and restore render and write the active `SKILL.md`, archive removes it, and reject only records the decision. An interrupted write is repaired before the result returns.',
+        parameters: [{ name: 'id', description: 'id of the candidate to review.' }, { name: 'decision', description: 'the transition to apply: approve, reject, archive, or restore.' }, { name: 'note', description: 'optional reviewer note stored on the updated candidate.' }],
+        returns: 'the candidate after the decision and its status update.',
+      },
+      {
+        signature: 'async feedback(input: SkillFeedbackInput): Promise<SkillFeedback>',
+        description: 'Record a usage or outcome report for one skill revision, returning an existing record when the same session event already reported it.',
+        parameters: [{ name: 'input', description: 'feedback kind, skill name and revision, outcome, and optional note/session evidence.' }],
+        returns: 'the stored feedback entry, either newly appended or the duplicate it matched.',
+      },
+      {
+        signature: 'async recordUsage(skill: SkillDefinition, context: SkillEvidence): Promise<string | undefined>',
+        description: 'Record a usage note for a loaded managed skill so a later outcome report has a revision to attach to.',
+        parameters: [{ name: 'skill', description: 'the loaded skill definition, whose path and revision identify a managed skill.' }, { name: 'context', description: 'evidence describing the session, event, workspace, or reason for the load.' }],
+        returns: 'the recorded revision, or undefined when the skill is not managed by this curator.',
       },
     ],
   },
@@ -4134,6 +4327,14 @@ export const EVENT_API: readonly EventApiEntry[] = [
     parameters: [{ name: 'options', description: 'the full request. A LOOP-built request carries the process-local {@link markAgentLoopRequest} identity and arrives deep-frozen (mutation throws): its content is a pure function of the session log (the reconstructability Agent Note), so listeners read it, never rewrite it. Hand-built calls do not carry that marker; callers own their request inputs and must keep them unchanged until the stream settles.' }],
   },
   {
+    name: 'memories/change',
+    mode: 'emit',
+    signature: '\'memories/change\'(change: { target: MemoryTarget; snapshot: MemorySnapshot; namespace?: string }): void',
+    summary: 'A memory mutation settled: the target\'s snapshot is current, so listeners may re-read it or drop caches.',
+    description: 'A memory mutation settled: the target\'s snapshot is current, so listeners may re-read it or drop caches.',
+    parameters: [{ name: 'change', description: 'the changed target, its current snapshot, and the namespace when one applies.' }],
+  },
+  {
     name: 'permission-presets/catalog-changed',
     mode: 'emit',
     signature: '\'permission-presets/catalog-changed\'(): void',
@@ -4471,7 +4672,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'AgentFactory',
-    declaration: 'export interface AgentFactory {\n    createAgent(ownerCtx: Context, options: CreateAgentOptions): Promise<AgentHandle>;\n    resume(ownerCtx: Context, options: ResumeAgentOptions): Promise<AgentHandle>;\n}',
+    declaration: 'export interface AgentFactory {\n    createAgent(ownerCtx: Context, options: CreateAgentOptions): Promise<AgentHandle>;\n    resume(ownerCtx: Context, options: ResumeAgentOptions): Promise<AgentHandle>;\n    disposeAgent?(ownerCtx: Context, sessionId: SessionId): Promise<void>;\n}',
   },
   {
     name: 'AgentHandle',
@@ -4504,6 +4705,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'AgentResolver',
     declaration: 'export type AgentResolver = (sessionId: SessionId) => Promise<Agent>;',
+  },
+  {
+    name: 'AgentResourceScope',
+    declaration: 'export interface AgentResourceScope {\n    readonly profileId: string;\n    readonly memoryNamespace: string;\n    readonly skillScope?: string;\n    readonly credentialNamespace?: string;\n}',
   },
   {
     name: 'AgentSetup',
@@ -4910,48 +5115,8 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export type CordisInspectRequestId = Branded<\'CordisInspectRequestId\'>;',
   },
   {
-    name: 'CordisRuntimeConnection',
-    declaration: 'export type CordisRuntimeConnection = {\n    readonly state: \'connected\';\n} | {\n    readonly state: \'disconnected\';\n    readonly reason: string;\n};',
-  },
-  {
-    name: 'CordisRuntimeContext',
-    declaration: 'export interface CordisRuntimeContext {\n    readonly kind: \'context\';\n    readonly children: readonly CordisRuntimeNode[];\n}',
-  },
-  {
-    name: 'CordisRuntimeFiber',
-    declaration: 'export interface CordisRuntimeFiber {\n    readonly kind: \'fiber\';\n    readonly uid: number;\n    readonly children: readonly [\n        CordisRuntimeContext\n    ];\n}',
-  },
-  {
-    name: 'CordisRuntimeNode',
-    declaration: 'export type CordisRuntimeNode = CordisRuntimeContext | CordisRuntimeFiber;',
-  },
-  {
-    name: 'CordisRuntimeRealm',
-    declaration: 'export interface CordisRuntimeRealm {\n    readonly source: CordisRuntimeSource;\n    readonly connection: CordisRuntimeConnection;\n    readonly revision: number;\n    readonly truncated: boolean;\n    readonly root: CordisRuntimeContext;\n}',
-  },
-  {
-    name: 'CordisRuntimeSource',
-    declaration: 'export interface CordisRuntimeSource {\n    readonly sourceId: CordisRuntimeSourceId;\n    readonly kind: CordisRuntimeSourceKind;\n    readonly label: string;\n}',
-  },
-  {
-    name: 'CordisRuntimeSourceId',
-    declaration: 'export type CordisRuntimeSourceId = InspectorId<\'CordisRuntimeSourceId\'>;',
-  },
-  {
-    name: 'CordisRuntimeSourceKind',
-    declaration: 'export type CordisRuntimeSourceKind = \'host\' | \'client\';',
-  },
-  {
-    name: 'CordisRuntimeTree',
-    declaration: 'export interface CordisRuntimeTree {\n    readonly schemaVersion: typeof CORDIS_RUNTIME_TREE_SCHEMA_VERSION;\n    readonly host: CordisRuntimeRealm | null;\n    readonly clients: readonly CordisRuntimeRealm[];\n}',
-  },
-  {
-    name: 'CordisRuntimeTreeReader',
-    declaration: 'export interface CordisRuntimeTreeReader {\n    getTree(): Promise<CordisRuntimeTree>;\n}',
-  },
-  {
     name: 'CreateAgentOptions',
-    declaration: 'export interface CreateAgentOptions {\n    readonly sessionId: SessionId;\n    readonly parentAgent?: Agent;\n    readonly meta?: {\n        readonly cwd?: string;\n        readonly parentSession?: SessionId;\n        readonly isSeeded?: boolean;\n        readonly origin?: \'subagent\';\n        readonly delegationDepth?: number;\n        readonly agentPreset?: string;\n    };\n    readonly inheritedEventCount?: SessionLogOffset;\n    readonly seed?: readonly SessionEvent[];\n    readonly agentOptions?: AgentOptions;\n    readonly signal?: AbortSignal;\n    readonly setup?: AgentSetup;\n}',
+    declaration: 'export interface CreateAgentOptions {\n    readonly sessionId: SessionId;\n    readonly parentAgent?: Agent;\n    readonly meta?: {\n        readonly cwd?: string;\n        readonly parentSession?: SessionId;\n        readonly isSeeded?: boolean;\n        readonly origin?: \'subagent\' | \'agent-community\';\n        readonly delegationDepth?: number;\n        readonly agentPreset?: string;\n    };\n    readonly inheritedEventCount?: SessionLogOffset;\n    readonly seed?: readonly SessionEvent[];\n    readonly agentOptions?: AgentOptions;\n    readonly signal?: AbortSignal;\n    readonly setup?: AgentSetup;\n}',
   },
   {
     name: 'CreateGoalRequest',
@@ -4963,11 +5128,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'CreateSessionOptions',
-    declaration: 'export interface CreateSessionOptions {\n    readonly seed?: readonly SessionEvent[];\n    readonly inheritedEventCount?: SessionLogOffset;\n    readonly meta?: {\n        readonly cwd?: string;\n        readonly parentSession?: SessionId;\n        readonly createdAt?: number;\n        readonly isSeeded?: boolean;\n        readonly origin?: \'subagent\';\n        readonly delegationDepth?: number;\n        readonly agentPreset?: string;\n    };\n}',
-  },
-  {
-    name: 'CreateTeamTaskRequest',
-    declaration: 'export interface CreateTeamTaskRequest {\n    readonly subject: string;\n    readonly description: string;\n    readonly blockedBy?: readonly TeamTaskId[];\n    readonly writeScopes?: readonly string[];\n}',
+    declaration: 'export interface CreateSessionOptions {\n    readonly seed?: readonly SessionEvent[];\n    readonly inheritedEventCount?: SessionLogOffset;\n    readonly meta?: {\n        readonly cwd?: string;\n        readonly parentSession?: SessionId;\n        readonly createdAt?: number;\n        readonly isSeeded?: boolean;\n        readonly origin?: \'subagent\' | \'agent-community\';\n        readonly delegationDepth?: number;\n        readonly agentPreset?: string;\n    };\n}',
   },
   {
     name: 'CredentialInfo',
@@ -5158,14 +5319,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface EpochHeader {\n    config: LlmCallConfig;\n    adapterDefaults?: LlmCallConfigAdapterDefaults;\n    tools?: ToolSchema[];\n    system?: never;\n}',
   },
   {
-    name: 'EventLogOptions',
-    declaration: 'export interface EventLogOptions {\n    exporter: SessionLogOptions[\'exporter\'];\n    resourceAttributes: Attributes;\n    scope: {\n        name: string;\n        version?: string;\n    };\n    processor: Omit<BatchLogRecordProcessorOptions, \'exporter\'>;\n    onFailure: SessionLogOptions[\'onFailure\'];\n}',
-  },
-  {
-    name: 'EventLogReporter',
-    declaration: 'export class EventLogReporter {\n    constructor(options: EventLogOptions);\n    emit(record: OTelEventRecord): void;\n    async shutdown(signal?: AbortSignal): Promise<void>;\n}',
-  },
-  {
     name: 'EveryScheduleRecord',
     declaration: 'export interface EveryScheduleRecord {\n    readonly id: ScheduleId;\n    readonly kind: \'every\';\n    readonly title: string;\n    readonly prompt: string;\n    readonly everySeconds: number;\n    readonly scheduledAt: string;\n}',
   },
@@ -5263,7 +5416,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'GenerateOptions',
-    declaration: 'export interface GenerateOptions {\n    provider: string;\n    model: string;\n    reasoningEffort?: ReasoningEffortId;\n    messages: RequestMessage[];\n    system?: string;\n    tools?: ToolSchema[];\n    toolHistory?: ToolHistory;\n    temperature?: number;\n    maxTokens?: number;\n    stop?: string[];\n    signal?: AbortSignal;\n    sessionId?: Branded<\'SessionId\'>;\n    purpose?: \'compaction\' | \'session-title\';\n}',
+    declaration: 'export interface GenerateOptions {\n    provider: string;\n    model: string;\n    credentialNamespace?: string;\n    reasoningEffort?: ReasoningEffortId;\n    messages: RequestMessage[];\n    system?: string;\n    tools?: ToolSchema[];\n    toolHistory?: ToolHistory;\n    temperature?: number;\n    maxTokens?: number;\n    stop?: string[];\n    signal?: AbortSignal;\n    sessionId?: Branded<\'SessionId\'>;\n    purpose?: \'compaction\' | \'session-title\';\n}',
   },
   {
     name: 'GenericCallView',
@@ -5364,22 +5517,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'InspectOptions',
     declaration: 'export interface InspectOptions {\n    readonly registry?: Registry;\n}',
-  },
-  {
-    name: 'InspectorId',
-    declaration: 'export type InspectorId<Role extends string> = Branded<Role>;',
-  },
-  {
-    name: 'InspectorJsonObject',
-    declaration: 'export interface InspectorJsonObject {\n    readonly [key: string]: InspectorJsonValue;\n}',
-  },
-  {
-    name: 'InspectorJsonPrimitive',
-    declaration: 'export type InspectorJsonPrimitive = null | boolean | number | string;',
-  },
-  {
-    name: 'InspectorJsonValue',
-    declaration: 'export type InspectorJsonValue = InspectorJsonPrimitive | readonly InspectorJsonValue[] | InspectorJsonObject;',
   },
   {
     name: 'InstallBundleOptions',
@@ -5583,7 +5720,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'LlmCallConfig',
-    declaration: 'export interface LlmCallConfig {\n    provider: string;\n    model: string;\n    reasoningEffort?: ReasoningEffortId;\n    temperature?: number;\n    maxTokens?: number;\n    stop?: string[];\n}',
+    declaration: 'export interface LlmCallConfig {\n    provider: string;\n    model: string;\n    credentialNamespace?: string;\n    reasoningEffort?: ReasoningEffortId;\n    temperature?: number;\n    maxTokens?: number;\n    stop?: string[];\n}',
   },
   {
     name: 'LlmCallConfigAdapterDefaults',
@@ -5706,6 +5843,94 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export type McpResourceRequest = {\n    method: \'resources/list\' | \'resources/templates/list\';\n    cursor?: string;\n} | {\n    method: \'resources/read\';\n    uri: string;\n};',
   },
   {
+    name: 'McpToolCallContext',
+    declaration: 'export type McpToolCallContext = Pick<ToolExecution, \'signal\' | \'agent\'>;',
+  },
+  {
+    name: 'McpToolProvider',
+    declaration: 'export interface McpToolProvider {\n    callTool(name: string, arguments_: JsonValue | undefined, exec: McpToolCallContext): Promise<JsonValue>;\n}',
+  },
+  {
+    name: 'MemoryCuratorCandidate',
+    declaration: 'export interface MemoryCuratorCandidate {\n    readonly id: string;\n    readonly name: string;\n    readonly description: string;\n    readonly content: string;\n    readonly status: \'pending\' | \'approved\' | \'rejected\' | \'archived\';\n    readonly source?: {\n        readonly sessionId?: string;\n        readonly eventSeq?: number;\n        readonly workspace?: string;\n        readonly reason?: string;\n    };\n    readonly baseRevision?: string;\n    readonly activeRevision?: string;\n    readonly activeContent?: string;\n    readonly reviewerNote?: string;\n    readonly createdAt: string;\n    readonly updatedAt: string;\n    readonly feedback: {\n        readonly uses: number;\n        readonly successes: number;\n        readonly failures: number;\n        readonly lastOutcome?: \'success\' | \'failure\' | \'neutral\';\n    };\n}',
+  },
+  {
+    name: 'MemoryDescribeValue',
+    declaration: 'export interface MemoryDescribeValue {\n    readonly provider: string;\n    readonly memory: MemorySnapshotView;\n    readonly user: MemorySnapshotView;\n}',
+  },
+  {
+    name: 'MemoryDocument',
+    declaration: 'export interface MemoryDocument {\n    readonly target: MemoryTarget;\n    readonly entries: readonly MemoryEntry[];\n}',
+  },
+  {
+    name: 'MemoryEntry',
+    declaration: 'export interface MemoryEntry {\n    readonly text: string;\n    readonly source?: MemorySource;\n}',
+  },
+  {
+    name: 'MemoryEntryView',
+    declaration: 'export interface MemoryEntryView {\n    readonly text: string;\n    readonly source?: MemorySourceView;\n}',
+  },
+  {
+    name: 'MemoryMigrationPlan',
+    declaration: 'export interface MemoryMigrationPlan {\n    readonly id: string;\n    readonly path: string;\n    readonly format: string;\n    readonly fingerprint: string;\n    readonly entries: readonly {\n        readonly target: MemoryTarget;\n        readonly text: string;\n        readonly source?: {\n            readonly legacyKey?: string;\n        };\n    }[];\n    readonly skipped: readonly string[];\n    readonly status: \'preview\' | \'applying\' | \'applied\' | \'rollback-in-progress\' | \'rolled-back\';\n    readonly createdAt: string;\n    readonly updatedAt: string;\n}',
+  },
+  {
+    name: 'MemoryProvider',
+    declaration: 'export interface MemoryProvider {\n    readonly name: string;\n    readonly load: (target: MemoryTarget, context?: MemoryRequestContext) => Promise<MemoryDocument>;\n    readonly save: (document: MemoryDocument, context?: MemoryRequestContext) => Promise<void>;\n    readonly search?: (query: string, target: MemoryTarget | undefined, limit: number, context?: MemoryRequestContext) => Promise<readonly MemorySearchHit[]>;\n    readonly close?: () => Promise<void> | void;\n}',
+  },
+  {
+    name: 'MemoryRequestContext',
+    declaration: 'export interface MemoryRequestContext {\n    readonly signal?: AbortSignal;\n    readonly agentId?: string;\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n    readonly workspace?: string;\n    readonly namespace?: string;\n}',
+  },
+  {
+    name: 'MemorySearchHit',
+    declaration: 'export interface MemorySearchHit {\n    readonly target: MemoryTarget;\n    readonly index: number;\n    readonly entry: string;\n    readonly score: number;\n    readonly source?: MemorySource;\n}',
+  },
+  {
+    name: 'MemorySearchHitView',
+    declaration: 'export interface MemorySearchHitView {\n    readonly target: MemoryTarget;\n    readonly index: number;\n    readonly entry: string;\n    readonly score: number;\n    readonly source?: MemorySourceView;\n}',
+  },
+  {
+    name: 'MemorySkillSummary',
+    declaration: 'export interface MemorySkillSummary {\n    readonly name: string;\n    readonly description: string;\n    readonly source: string;\n    readonly path?: string;\n    readonly whenToUse?: string;\n    readonly writable: boolean;\n    readonly modelInvocable: boolean;\n    readonly userInvocable: boolean;\n}',
+  },
+  {
+    name: 'MemorySkillValue',
+    declaration: 'export interface MemorySkillValue extends MemorySkillSummary {\n    readonly content: string;\n    readonly revision?: string;\n    readonly resourceBase?: {\n        readonly kind: \'directory\' | \'url\' | \'opaque\';\n        readonly path?: string;\n        readonly url?: string;\n        readonly description?: string;\n    };\n}',
+  },
+  {
+    name: 'MemorySnapshot',
+    declaration: 'export interface MemorySnapshot extends MemoryDocument {\n    readonly provider: string;\n    readonly charLimit: number;\n    readonly charCount: number;\n}',
+  },
+  {
+    name: 'MemorySnapshotView',
+    declaration: 'export interface MemorySnapshotView {\n    readonly target: MemoryTarget;\n    readonly entries: readonly MemoryEntryView[];\n    readonly provider: string;\n    readonly charLimit: number;\n    readonly charCount: number;\n}',
+  },
+  {
+    name: 'MemorySource',
+    declaration: 'export interface MemorySource {\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n    readonly workspace?: string;\n    readonly createdAt: string;\n}',
+  },
+  {
+    name: 'MemorySourceEventView',
+    declaration: 'export interface MemorySourceEventView {\n    readonly seq: number;\n    readonly type: string;\n    readonly time: number;\n    readonly snippet?: string;\n    readonly available: boolean;\n}',
+  },
+  {
+    name: 'MemorySourceRequest',
+    declaration: 'export interface MemorySourceRequest extends MemorySourceView {\n    readonly sessionId: string;\n}',
+  },
+  {
+    name: 'MemorySourceResolution',
+    declaration: 'export interface MemorySourceResolution {\n    readonly status: \'available\' | \'session-missing\' | \'event-missing\' | \'unavailable\' | \'workspace-mismatch\';\n    readonly source: MemorySourceView;\n    readonly session?: MemorySourceSessionView;\n    readonly event?: MemorySourceEventView;\n}',
+  },
+  {
+    name: 'MemorySourceSessionView',
+    declaration: 'export interface MemorySourceSessionView {\n    readonly id: string;\n    readonly title?: string;\n    readonly cwd?: string;\n    readonly live: boolean;\n    readonly persisted: boolean;\n}',
+  },
+  {
+    name: 'MemorySourceView',
+    declaration: 'export interface MemorySourceView {\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n    readonly workspace?: string;\n    readonly createdAt: string;\n}',
+  },
+  {
     name: 'Message',
     declaration: 'export type Message = MessageRoleMap[keyof MessageRoleMap];',
   },
@@ -5798,6 +6023,22 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface MessageSourceMap {\n    user: {\n        kind: \'user\';\n    };\n    model: ModelMessageSource;\n    tool: ToolMessageSource;\n    \'system-prompt\': SystemPromptMessageSource;\n}',
   },
   {
+    name: 'MigrationEntry',
+    declaration: 'export interface MigrationEntry {\n    readonly target: MemoryTarget;\n    readonly text: string;\n    readonly source?: {\n        readonly legacyKey?: string;\n    };\n}',
+  },
+  {
+    name: 'MigrationPlan',
+    declaration: 'export interface MigrationPlan {\n    readonly id: string;\n    readonly path: string;\n    readonly format: string;\n    readonly fingerprint: string;\n    readonly entries: readonly MigrationEntry[];\n    readonly skipped: readonly string[];\n    readonly status: MigrationStatus;\n    readonly provider?: string;\n    readonly createdAt: string;\n    readonly updatedAt: string;\n    readonly before?: {\n        readonly memory: MemoryDocument;\n        readonly user: MemoryDocument;\n    };\n    readonly after?: {\n        readonly memory: MemoryDocument;\n        readonly user: MemoryDocument;\n    };\n}',
+  },
+  {
+    name: 'MigrationStatus',
+    declaration: 'export type MigrationStatus = \'preview\' | \'applying\' | \'applied\' | \'rollback-in-progress\' | \'rolled-back\';',
+  },
+  {
+    name: 'MigrationSummary',
+    declaration: 'export type MigrationSummary = Omit<MigrationPlan, \'before\' | \'after\'>;',
+  },
+  {
     name: 'ModelCatalog',
     declaration: 'export interface ModelCatalog {\n    readonly default: ModelSelection;\n    readonly routableProviders: readonly string[];\n    readonly groups: readonly ModelProviderGroup[];\n    readonly failures: readonly ModelCatalogFailure[];\n}',
   },
@@ -5888,14 +6129,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'OptionalSessionSeq',
     declaration: 'export type OptionalSessionSeq = SessionSeq | null;',
-  },
-  {
-    name: 'OTelEventRecord',
-    declaration: 'export interface OTelEventRecord {\n    eventName: string;\n    body: string;\n    timestamp: number;\n    severityNumber?: SeverityNumber;\n    attributes?: Record<string, OTelEventScalar | Record<string, OTelEventScalar>>;\n}',
-  },
-  {
-    name: 'OTelEventScalar',
-    declaration: 'export type OTelEventScalar = string | number | boolean;',
   },
   {
     name: 'PackageResult',
@@ -6410,14 +6643,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export type SearchResultView = SearchMatchesResultView | SearchPathsResultView;',
   },
   {
-    name: 'SendTeamMessageRequest',
-    declaration: 'export interface SendTeamMessageRequest {\n    readonly target: string;\n    readonly content: ContentBlock[];\n    readonly signal: AbortSignal;\n}',
-  },
-  {
-    name: 'SendTeamMessageResult',
-    declaration: 'export interface SendTeamMessageResult {\n    readonly messageId: TeamMessageId;\n    readonly status: \'accepted\' | \'queued\';\n}',
-  },
-  {
     name: 'ServerResponse',
     declaration: 'export interface ServerResponse {\n    readonly type: \'server-response\';\n    readonly rpcId: RpcId;\n    readonly result: ConnectionRpcResult<unknown>;\n}',
   },
@@ -6495,7 +6720,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionCreateRequest',
-    declaration: 'export interface SessionCreateRequest {\n    readonly workspaceId?: WorkspaceId;\n    readonly cwd?: string;\n    readonly sessionId?: SessionId;\n    readonly agentPreset?: string;\n}',
+    declaration: 'export interface SessionCreateRequest {\n    readonly workspaceId?: WorkspaceId;\n    readonly cwd?: string;\n    readonly sessionId?: SessionId;\n    readonly agentPreset?: string;\n    readonly agentProfile?: AgentResourceScope;\n    readonly origin?: \'subagent\' | \'agent-community\';\n}',
   },
   {
     name: 'SessionCreateValue',
@@ -6627,7 +6852,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionHeader',
-    declaration: 'export interface SessionHeader {\n    readonly version: typeof SESSION_FORMAT_VERSION;\n    readonly id: SessionId;\n    readonly createdAt: number;\n    readonly cwd?: string;\n    readonly parentSession?: SessionId;\n    readonly isSeeded: boolean;\n    readonly origin?: \'subagent\';\n    readonly delegationDepth?: number;\n    readonly agentPreset?: string;\n}',
+    declaration: 'export interface SessionHeader {\n    readonly version: typeof SESSION_FORMAT_VERSION;\n    readonly id: SessionId;\n    readonly createdAt: number;\n    readonly cwd?: string;\n    readonly parentSession?: SessionId;\n    readonly isSeeded: boolean;\n    readonly origin?: \'subagent\' | \'agent-community\';\n    readonly delegationDepth?: number;\n    readonly agentPreset?: string;\n}',
   },
   {
     name: 'SessionHistoryRecord',
@@ -6660,18 +6885,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SessionLogOffset',
     declaration: 'export type SessionLogOffset = BrandedNumber<\'SessionLogOffset\'>;',
-  },
-  {
-    name: 'SessionLogOptions',
-    declaration: 'export interface SessionLogOptions {\n    exporter: OTLPExporterNodeConfigBase & {\n        url: string;\n    };\n    processor?: Omit<BatchLogRecordProcessorOptions, \'exporter\'>;\n    maxRequestBytes?: number;\n    scope: {\n        name: string;\n        version?: string;\n    };\n    resourceAttributes: Attributes;\n    onFailure: (message: string, error?: Error) => void;\n}',
-  },
-  {
-    name: 'SessionLogRecord',
-    declaration: 'export interface SessionLogRecord {\n    sessionId: SessionId;\n    event: Omit<SessionEvent, \'data\'> & {\n        data: unknown;\n    };\n    attributes?: Attributes;\n    severityNumber?: SeverityNumber;\n}',
-  },
-  {
-    name: 'SessionLogReporter',
-    declaration: 'export class SessionLogReporter {\n    constructor(options: SessionLogOptions);\n    reportSessionLog(record: SessionLogRecord): void;\n    stopPending(): void;\n    shutdown(): Promise<void>;\n}',
   },
   {
     name: 'SessionLogSnapshot',
@@ -6720,6 +6933,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SessionPersistenceOpenOptions',
     declaration: 'export interface SessionPersistenceOpenOptions {\n    readonly signal?: AbortSignal;\n}',
+  },
+  {
+    name: 'SessionPersistenceRemoveOptions',
+    declaration: 'export interface SessionPersistenceRemoveOptions {\n    readonly signal?: AbortSignal;\n}',
   },
   {
     name: 'SessionPersistenceRevision',
@@ -6843,7 +7060,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionSelectModelRequest',
-    declaration: 'export interface SessionSelectModelRequest extends ModelSelection {\n    readonly sessionId: SessionId;\n}',
+    declaration: 'export interface SessionSelectModelRequest extends ModelSelection {\n    readonly sessionId: SessionId;\n    readonly persistDefault?: boolean;\n}',
   },
   {
     name: 'SessionSelectModelValue',
@@ -6867,7 +7084,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionSummary',
-    declaration: 'export interface SessionSummary {\n    readonly agentAvailable: boolean;\n    readonly sessionId: SessionId;\n    readonly updatedAt: number;\n    readonly running: boolean;\n    readonly blank: boolean;\n    readonly parentSessionId?: SessionId;\n    readonly origin?: \'subagent\';\n    readonly cwd?: string;\n    readonly projections?: SessionProjectionHints;\n}',
+    declaration: 'export interface SessionSummary {\n    readonly agentAvailable: boolean;\n    readonly sessionId: SessionId;\n    readonly updatedAt: number;\n    readonly running: boolean;\n    readonly blank: boolean;\n    readonly parentSessionId?: SessionId;\n    readonly origin?: \'subagent\' | \'agent-community\';\n    readonly cwd?: string;\n    readonly projections?: SessionProjectionHints;\n}',
   },
   {
     name: 'SessionSurface',
@@ -6947,7 +7164,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionWireHeader',
-    declaration: 'export interface SessionWireHeader {\n    readonly version: number;\n    readonly id: SessionId;\n    readonly createdAt: number;\n    readonly cwd?: string;\n    readonly parentSession?: SessionId;\n    readonly isSeeded: boolean;\n    readonly origin?: \'subagent\';\n    readonly delegationDepth?: number;\n    readonly agentPreset?: string;\n}',
+    declaration: 'export interface SessionWireHeader {\n    readonly version: number;\n    readonly id: SessionId;\n    readonly createdAt: number;\n    readonly cwd?: string;\n    readonly parentSession?: SessionId;\n    readonly isSeeded: boolean;\n    readonly origin?: \'subagent\' | \'agent-community\';\n    readonly delegationDepth?: number;\n    readonly agentPreset?: string;\n}',
   },
   {
     name: 'SessionWorkspacePathApplication',
@@ -7042,20 +7259,40 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export type SignInErrorCode = \'network\' | \'protocol\' | \'expired\' | \'storage\';',
   },
   {
-    name: 'SkillCandidate',
-    declaration: 'export interface SkillCandidate extends SkillSummary {\n    readonly rank: number;\n    readonly locator: unknown;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
-  },
-  {
     name: 'SkillCatalogSnapshot',
     declaration: 'export interface SkillCatalogSnapshot {\n    readonly skills: SkillSummary[];\n    readonly complete: boolean;\n}',
   },
   {
+    name: 'SkillCuratorView',
+    declaration: 'export interface SkillCuratorView extends SkillCandidate {\n    readonly feedback: SkillFeedbackSummary;\n}',
+  },
+  {
     name: 'SkillDefinition',
-    declaration: 'export interface SkillDefinition extends SkillSummary {\n    readonly content: string;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
+    declaration: 'export interface SkillDefinition extends SkillSummary {\n    readonly revision?: string;\n    readonly content: string;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
   },
   {
     name: 'SkillEntry',
     declaration: 'export interface SkillEntry {\n    readonly path?: string;\n    readonly name: string;\n    readonly description: string;\n    readonly whenToUse?: string;\n    readonly modelInvocable: boolean;\n}',
+  },
+  {
+    name: 'SkillEvidence',
+    declaration: 'export interface SkillEvidence {\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n    readonly workspace?: string;\n    readonly reason?: string;\n}',
+  },
+  {
+    name: 'SkillFeedback',
+    declaration: 'export interface SkillFeedback {\n    readonly kind?: \'usage\' | \'outcome\';\n    readonly id: string;\n    readonly name: string;\n    readonly revision?: string;\n    readonly outcome: SkillFeedbackOutcome;\n    readonly note?: string;\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n    readonly createdAt: string;\n}',
+  },
+  {
+    name: 'SkillFeedbackInput',
+    declaration: 'export interface SkillFeedbackInput {\n    readonly kind?: \'usage\' | \'outcome\';\n    readonly name: string;\n    readonly revision?: string;\n    readonly outcome: SkillFeedbackOutcome;\n    readonly note?: string;\n    readonly sessionId?: string;\n    readonly eventSeq?: number;\n}',
+  },
+  {
+    name: 'SkillFeedbackOutcome',
+    declaration: 'export type SkillFeedbackOutcome = \'success\' | \'failure\' | \'neutral\';',
+  },
+  {
+    name: 'SkillFeedbackSummary',
+    declaration: 'export interface SkillFeedbackSummary {\n    readonly uses: number;\n    readonly successes: number;\n    readonly failures: number;\n    readonly lastOutcome?: SkillFeedbackOutcome;\n}',
   },
   {
     name: 'SkillInvocationPolicy',
@@ -7072,6 +7309,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SkillLookupOptions',
     declaration: 'export interface SkillLookupOptions {\n    readonly cwd?: string | undefined;\n    readonly signal?: AbortSignal | undefined;\n}',
+  },
+  {
+    name: 'SkillProposalInput',
+    declaration: 'export interface SkillProposalInput {\n    readonly name: string;\n    readonly description: string;\n    readonly content: string;\n    readonly source?: SkillEvidence;\n}',
   },
   {
     name: 'SkillProvider',
@@ -7094,6 +7335,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export type SkillResourceBase = {\n    readonly kind: \'directory\';\n    readonly path: string;\n} | {\n    readonly kind: \'url\';\n    readonly url: string;\n} | {\n    readonly kind: \'opaque\';\n    readonly description: string;\n};',
   },
   {
+    name: 'SkillReviewDecision',
+    declaration: 'export type SkillReviewDecision = \'approve\' | \'reject\' | \'archive\' | \'restore\';',
+  },
+  {
     name: 'SkillSource',
     declaration: 'export type SkillSource = \'project-dsh\' | \'project-agents\' | \'runtime\' | \'user-dsh\' | \'user-agents\' | \'custom\' | \'bundled\' | (string & {});',
   },
@@ -7104,14 +7349,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SkillViewOptions',
     declaration: 'export interface SkillViewOptions extends SkillLookupOptions {\n    readonly scope?: ScopeKey | undefined;\n}',
-  },
-  {
-    name: 'SpawnTeammateRequest',
-    declaration: 'export interface SpawnTeammateRequest {\n    readonly name: string;\n    readonly description: string;\n    readonly prompt: ContentBlock[];\n    readonly context: \'fresh\' | \'fork\';\n    readonly provider: string;\n    readonly signal: AbortSignal;\n}',
-  },
-  {
-    name: 'SpawnTeammateResult',
-    declaration: 'export interface SpawnTeammateResult {\n    readonly member: TeamMemberView;\n}',
   },
   {
     name: 'SpeechCatalog',
@@ -7412,42 +7649,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'TableValueOf',
     declaration: 'export type TableValueOf<S extends DomainSpec, N extends keyof S[\'tables\']> = S[\'tables\'][N] extends DomainTableSpec<string, infer V> ? V : never;',
-  },
-  {
-    name: 'TeamId',
-    declaration: 'export type TeamId = Branded<\'TeamId\'>;',
-  },
-  {
-    name: 'TeamMembership',
-    declaration: 'export interface TeamMembership {\n    readonly root: Agent;\n    readonly id: TeamId;\n    readonly role: \'lead\' | \'teammate\';\n    readonly name: string;\n}',
-  },
-  {
-    name: 'TeamMemberView',
-    declaration: 'export interface TeamMemberView {\n    readonly id: SessionId;\n    readonly name: string;\n    readonly role: \'lead\' | \'teammate\';\n    readonly status: \'running\' | \'inactive\' | \'provisioning\' | \'failed\';\n    readonly description?: string;\n    readonly provider?: string;\n    readonly context?: \'fresh\' | \'fork\';\n    readonly model?: string;\n    readonly diagnostics: string[];\n}',
-  },
-  {
-    name: 'TeamMessageId',
-    declaration: 'export type TeamMessageId = Branded<\'TeamMessageId\'>;',
-  },
-  {
-    name: 'TeamTaskAction',
-    declaration: 'export type TeamTaskAction = \'claim\' | \'release\' | \'edit\' | \'set_dependencies\' | \'complete\' | \'reopen\' | \'reassign\' | \'delete\';',
-  },
-  {
-    name: 'TeamTaskId',
-    declaration: 'export type TeamTaskId = Branded<\'TeamTaskId\'>;',
-  },
-  {
-    name: 'TeamTaskStatus',
-    declaration: 'export type TeamTaskStatus = \'pending\' | \'in_progress\' | \'completed\' | \'deleted\';',
-  },
-  {
-    name: 'TeamTaskView',
-    declaration: 'export interface TeamTaskView {\n    readonly id: TeamTaskId;\n    readonly revision: number;\n    readonly subject: string;\n    readonly description: string;\n    readonly status: TeamTaskStatus;\n    readonly blockedBy: TeamTaskId[];\n    readonly writeScopes: string[];\n    readonly ownerName?: string;\n    readonly ready: boolean;\n    readonly writeScopeWarnings: string[];\n}',
-  },
-  {
-    name: 'TeamWaitResult',
-    declaration: 'export interface TeamWaitResult {\n    readonly timedOut: boolean;\n}',
   },
   {
     name: 'TerminalAttachmentId',
@@ -7828,10 +8029,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'TypertTypeModel',
     declaration: 'export interface TypertTypeModel {\n    readonly name: string;\n    readonly declaration: string;\n}',
-  },
-  {
-    name: 'UpdateTeamTaskRequest',
-    declaration: 'export interface UpdateTeamTaskRequest {\n    readonly taskId: TeamTaskId;\n    readonly expectedRevision: number;\n    readonly action: TeamTaskAction;\n    readonly subject?: string;\n    readonly description?: string;\n    readonly blockedBy?: readonly TeamTaskId[];\n    readonly writeScopes?: readonly string[];\n    readonly owner?: string;\n}',
   },
   {
     name: 'UserMessage',

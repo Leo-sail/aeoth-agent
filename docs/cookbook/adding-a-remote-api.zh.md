@@ -148,22 +148,21 @@ export function hostLabel(): string {
 
 ## 5. 测试
 
-owner 侧断言抛出的码：捕获后用 `remoteErrorOf` 取出失败，再用 `toMatchObject` 比对 `code` 与需要的 `details` 字段——不要用 `toEqual` 深比对错误对象，也不要断言 `instanceof`。
+owner 侧断言抛出的码：捕获后用 `remoteErrorOf` 取出失败，再比对它的 `code` 与需要的 `details` 字段——不要深比对错误对象，也不要断言 `instanceof`。
 
 ```ts
 import { remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import { expect, it } from 'vitest'
 
 declare function rename(noteId: string, title: string): Promise<void>
 
-it('refuses an unknown note before writing', async () => {
+export async function assertUnknownNoteRefused(): Promise<void> {
   const failure = await rename('n-404', 'fresh title').catch((error: unknown) => error)
+  const reported: { code?: string; details?: unknown } | undefined = remoteErrorOf(failure)
 
-  expect(remoteErrorOf(failure)).toMatchObject({
-    code: 'note/not-found',
-    details: { noteId: 'n-404' },
-  })
-})
+  if (reported?.code !== 'note/not-found') {
+    throw new Error(`expected note/not-found, received ${String(reported?.code)}`)
+  }
+}
 ```
 
 

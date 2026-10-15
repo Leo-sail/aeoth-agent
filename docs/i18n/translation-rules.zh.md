@@ -40,7 +40,7 @@
 
 ## 排版
 
-本节规则约束中文一侧；英文一侧遵循仓库常规的 Markdown 约定（根 `AGENTS.md`）。以下中西文混排规则遵循 [MDN 简体中文翻译指南](https://github.com/mdn/translated-content/blob/main/docs/zh-cn/translation-guide.md)、[Kubernetes 中文本地化指南](https://kubernetes.io/zh-cn/docs/contribute/localization_zh/)、[Vue.js 中文翻译须知](https://github.com/vuejs-translations/docs-zh-cn/wiki/%E7%BF%BB%E8%AF%91%E9%A1%BB%E7%9F%A5) 与[中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines)的跨项目共识，其根据是 [W3C clreq](https://www.w3.org/TR/clreq/) 与 GB/T 15834—2011：
+本节规则约束中文一侧；英文一侧遵循仓库常规的 Markdown 约定。以下中西文混排规则遵循 [MDN 简体中文翻译指南](https://github.com/mdn/translated-content/blob/main/docs/zh-cn/translation-guide.md)、[Kubernetes 中文本地化指南](https://kubernetes.io/zh-cn/docs/contribute/localization_zh/)、[Vue.js 中文翻译须知](https://github.com/vuejs-translations/docs-zh-cn/wiki/%E7%BF%BB%E8%AF%91%E9%A1%BB%E7%9F%A5) 与[中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines)的跨项目共识，其根据是 [W3C clreq](https://www.w3.org/TR/clreq/) 与 GB/T 15834—2011：
 
 - 必须在中文与拉丁词之间、中文与数字之间各留一个半角空格：`每个 plugin 注册 3 个 tool`。全角标点与任何字符之间不加空格。
 - 中文行文必须使用全角（中文）标点：`，。：；？！（）「」`。半角标点保留在代码内、按原样引用的完整英文句子内、以及数字内（`3.5`、`1,024`）。

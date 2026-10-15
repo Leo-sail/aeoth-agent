@@ -403,13 +403,10 @@ export class AgentRegistry extends Service {
   }
 
   /**
-   * Load a persisted session and resume an agent on it through the registered
-   * factory. Rejects if no factory is registered; the factory rejects if
-   * session persistence is not configured or persistence/setup fails.
-   * @param options - persisted identity, optional live parent, configuration, and setup.
-   * @returns the handle after setup, rollback-covered publication, and loop start complete.
+   * Dispose one live Agent through the registered factory's owner handle.
+   * A no-op when the factory cannot dispose agents.
+   * @param sessionId - the live agent's session id whose handle to dispose.
    */
-  /** Dispose one live Agent through the registered factory's owner handle. */
   async dispose(sessionId: SessionId): Promise<void> {
     const { target } = this.requireFactory()
     if (target.disposeAgent === undefined) return
@@ -417,6 +414,13 @@ export class AgentRegistry extends Service {
     await Reflect.apply(target.disposeAgent, receiver, [this.ctx, sessionId])
   }
 
+  /**
+   * Load a persisted session and resume an agent on it through the registered
+   * factory. Rejects if no factory is registered; the factory rejects if
+   * session persistence is not configured or persistence/setup fails.
+   * @param options - persisted identity, optional live parent, configuration, and setup.
+   * @returns the handle after setup, rollback-covered publication, and loop start complete.
+   */
   async resume(options: ResumeAgentOptions): Promise<AgentHandle> {
     const ownerCtx = this.ctx
     const { target } = this.requireFactory()

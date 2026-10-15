@@ -37,18 +37,36 @@ const REFERENCE_OBSERVATION_PREFIX = 'aeoth-memory-v1:'
 interface ReferenceEntity { readonly name: string; readonly entityType?: string; readonly observations?: readonly string[] }
 interface ReferenceGraph { readonly entities: readonly ReferenceEntity[] }
 
+/**
+ * Memory provider that keeps MEMORY/USER documents in an MCP memory server,
+ * either through its read and write tools or as hash-named reference entities.
+ */
 export class McpMemoryProvider implements MemoryProvider {
   readonly name: string
   private readonly lifetime = new AbortController()
   constructor(private readonly ctx: Context, private readonly config: Required<Config>) { this.name = config.providerName }
+  /**
+   * Abort in-flight MCP calls by ending this provider's lifetime signal.
+   */
   close(): void { this.lifetime.abort() }
 
+  /**
+   * Read one target's entries from the MCP server.
+   * @param target - the MEMORY or USER target to load.
+   * @param context - optional per-call provenance and cancellation context.
+   * @returns the document assembled from the MCP read or the reference graph.
+   */
   async load(target: MemoryTarget, context?: MemoryRequestContext): Promise<MemoryDocument> {
     if (this.config.mode === 'reference-memory') return { target, entries: (await this.referenceGraph(context)).entities.flatMap(entity => decodeReferenceEntity(entity, this.config.namespace)?.target === target ? [decodeReferenceEntity(entity, this.config.namespace)!.entry] : []) }
     const payload = await this.call(this.config.readTool, { target, namespace: this.config.namespace, context: publicContext(context) }, context)
     return { target, entries: extractEntries(payload, target) }
   }
 
+  /**
+   * Persist one document through the MCP server and verify the server kept it.
+   * @param document - the complete document to write.
+   * @param context - optional per-call provenance and cancellation context.
+   */
   async save(document: MemoryDocument, context?: MemoryRequestContext): Promise<void> {
     if (this.config.mode !== 'reference-memory') {
       await this.call(this.config.writeTool, { target: document.target, entries: document.entries, namespace: this.config.namespace, context: publicContext(context) }, context)
@@ -78,6 +96,14 @@ export class McpMemoryProvider implements MemoryProvider {
     if (JSON.stringify(finalNames.filter(name => name.startsWith(targetPrefix(this.config.namespace, document.target)))) !== JSON.stringify(wanted.map(entity => entity.name).sort())) throw new Error('MCP memory save is incomplete or changed concurrently; retry after reloading')
   }
 
+  /**
+   * Search the MCP memory server, or scan the reference graph in reference-memory mode.
+   * @param query - the search text; whitespace splits it into terms.
+   * @param target - restrict hits to one target, or undefined to search both.
+   * @param limit - the maximum number of hits to return.
+   * @param context - optional per-call provenance and cancellation context.
+   * @returns matching hits ordered by descending score.
+   */
   async search(query: string, target: MemoryTarget | undefined, limit: number, context?: MemoryRequestContext): Promise<readonly MemorySearchHit[]> {
     if (this.config.mode === 'reference-memory') {
       const terms = query.toLocaleLowerCase().split(/\s+/u).filter(Boolean)

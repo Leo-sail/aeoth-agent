@@ -83,6 +83,7 @@ export class McpResourceRuntime extends Service {
    * Register one server and expose resource tools while that scope has providers.
    * @param server - configured server name, unique in this scope.
    * @param provider - connection-owned resource operations.
+   * @param toolProvider - callable tools for this server, or undefined when it serves resources only.
    * @returns the effect disposer for this exact registration.
    */
   register(server: string, provider: McpResourceProvider, toolProvider?: McpToolProvider): () => void {
@@ -130,7 +131,14 @@ export class McpResourceRuntime extends Service {
     }.bind(this), 'mcpResources.tools')
   }
 
-  /** Call a server-qualified MCP tool through the live connection registry. */
+  /**
+   * Call a server-qualified MCP tool through the live connection registry.
+   * @param server - configured MCP tool server name, resolved in the calling agent's scope.
+   * @param name - tool name to invoke on that server.
+   * @param arguments_ - JSON arguments for the call, or undefined when the tool takes none.
+   * @param exec - tool execution context; its agent selects the scoped provider and is forwarded to the call.
+   * @returns the tool result as JSON.
+   */
   callTool(server: string, name: string, arguments_: JsonValue | undefined, exec: McpToolCallContext): Promise<JsonValue> {
     const provider = this.layers.merge(exec.agent, layer => layer.tools).get(server)
     if (provider === undefined) throw new Error(`MCP tool server "${server}" is unavailable in this agent's scope`)

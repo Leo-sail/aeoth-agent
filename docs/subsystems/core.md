@@ -462,6 +462,14 @@ Concrete agent factory and driver service.
 async create(id: SessionId, options: AgentOptions = {}, meta: Pick<SessionHeader, 'cwd'> = {}): Promise<Agent>
 
 /**
+ * Dispose the live agent owned for `sessionId` through the handle this
+ * runtime tracks; a no-op when no tracked handle exists for that session.
+ * @param _ownerCtx - the caller context, unused because the tracked handle already owns teardown.
+ * @param sessionId - session id of the agent whose tracked handle to dispose.
+ */
+async disposeAgent(_ownerCtx: Context, sessionId: SessionId): Promise<void>
+
+/**
  * Create an owned agent on a caller-supplied session id.
  * @param ownerCtx - caller context that structurally owns the lifecycle.
  * @param options - identities, optional live parent, session seed/metadata, loop options, setup, and cancellation.
@@ -657,6 +665,13 @@ setFactory(factory: AgentFactory): () => void
  * @returns the handle after setup, rollback-covered publication, and loop start complete.
  */
 async create(options: CreateAgentOptions): Promise<AgentHandle>
+
+/**
+ * Dispose one live Agent through the registered factory's owner handle.
+ * A no-op when the factory cannot dispose agents.
+ * @param sessionId - the live agent's session id whose handle to dispose.
+ */
+async dispose(sessionId: SessionId): Promise<void>
 
 /**
  * Load a persisted session and resume an agent on it through the registered

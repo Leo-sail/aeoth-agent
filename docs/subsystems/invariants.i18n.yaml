@@ -3,8 +3,8 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/subsystems/invariants.md
 /runtime-invariants:
-  en: eff2c13e016403bc
-  zh: 0d7cc3e6b26d0c82
+  en: 0c2f08343a49e767
+  zh: 63b24c906837ab76
 /runtime-invariants/selection:
   en: 2d3bb3a2a0212e2d
   zh: 8c8f1e1ba5790ba4

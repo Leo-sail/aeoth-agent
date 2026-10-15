@@ -36,7 +36,7 @@ import { runNativeCommand } from '@deepseek-ai/dsh-native-command'
 
 declare const script: string
 declare const signal: AbortSignal
-const { stdout, stderr } = await runNativeCommand('osascript', ['-e', script], signal)
+const { stdout, stderr } = await runNativeCommand('osascript', ['-e', script], signal, 'hidden')
 ```
 
 On exit 0 the call resolves with captured stdout and stderr. On any failure it rejects with the exit `code` and both captured streams attached, so a caller can tell a missing tool (`ENOENT`), a cancellation (`ABORT_ERR`), and a real command failure apart without re-running the command.

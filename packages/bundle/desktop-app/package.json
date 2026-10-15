@@ -30,6 +30,7 @@
     "presets/ptc.patch.yml",
     "presets/minimal.patch.yml",
     "presets/cordis.patch.yml",
+    "lib/json-stream-*.js",
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",

@@ -8,6 +8,7 @@
 
 ```ts
 import type { Context, Volatile } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/cordis-plugin-loader'
 import z from '@deepseek-ai/schemastery'
 
 export interface Config {

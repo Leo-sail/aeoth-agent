@@ -92,10 +92,19 @@ declare module '@deepseek-ai/cordis' {
   }
 
   interface Events {
+    /**
+     * A memory mutation settled: the target's snapshot is current, so listeners may re-read it or drop caches.
+     * @mode emit
+     * @param change - the changed target, its current snapshot, and the namespace when one applies.
+     */
     'memories/change'(change: { target: MemoryTarget; snapshot: MemorySnapshot; namespace?: string }): void
   }
 }
 
+/**
+ * Profile-scoped long-term memory service: registers the active provider and
+ * owns bounded MEMORY/USER documents, cached snapshots, mutations, and search.
+ */
 export class MemoryRuntime extends Service {
   static Config: z<MemoryConfig> = Config
 
@@ -118,6 +127,11 @@ export class MemoryRuntime extends Service {
     if (this.config.maxSearchResults > MEMORY_MAX_SEARCH_LIMIT) throw new TypeError(`maxSearchResults must be at most ${MEMORY_MAX_SEARCH_LIMIT}`)
   }
 
+  /**
+   * Register a provider under its own name for later selection by config.
+   * @param provider - the memory provider implementation to register.
+   * @returns an unregister callback that drains mutations, drops snapshots, and closes the provider.
+   */
   registerProvider(provider: MemoryProvider): () => Promise<void> {
     if (!provider || provider.name.trim() === '') throw new TypeError('memory provider name must be non-empty')
     if (this.providers.has(provider.name)) throw new Error(`memory provider '${provider.name}' is already registered`)
@@ -133,13 +147,34 @@ export class MemoryRuntime extends Service {
   }
 
   get providerName(): string { return this.config.provider }
+  /**
+   * List the names of every registered memory provider.
+   * @returns registered provider names in sorted order.
+   */
   listProviders(): string[] { return [...this.providers.keys()].sort() }
+  /**
+   * Report the configured character budget for one target.
+   * @param target - the MEMORY or USER target to look up.
+   * @returns the configured character limit for that target.
+   */
   limits(target: MemoryTarget): number { return target === 'memory' ? this.config.memoryCharLimit : this.config.userCharLimit }
 
+  /**
+   * Read the last cached snapshot for one target without touching the provider.
+   * @param target - the MEMORY or USER target to read.
+   * @param context - optional namespace selecting an isolated snapshot cache slot.
+   * @returns the cached snapshot, or an empty one when nothing is cached yet.
+   */
   snapshot(target: MemoryTarget, context?: MemoryRequestContext): MemorySnapshot {
     return this.snapshots.get(snapshotKey(target, context)) ?? emptySnapshot(target, this.config.provider, this.limits(target))
   }
 
+  /**
+   * Load one target from the configured provider and cache the resulting snapshot.
+   * @param target - the MEMORY or USER target to load.
+   * @param context - optional per-call namespace and source provenance.
+   * @returns the validated snapshot of the loaded document.
+   */
   async read(target: MemoryTarget, context?: MemoryRequestContext): Promise<MemorySnapshot> {
     if (!MEMORY_TARGETS.includes(target)) throw new TypeError('target must be memory or user')
     const provider = this.requireProvider()
@@ -149,10 +184,24 @@ export class MemoryRuntime extends Service {
     return snapshot
   }
 
+  /**
+   * Re-read both targets from the configured provider.
+   * @param context - optional per-call namespace and source provenance.
+   * @returns MEMORY then USER snapshots in target order.
+   */
   async refresh(context?: MemoryRequestContext): Promise<readonly MemorySnapshot[]> {
     return Promise.all(MEMORY_TARGETS.map(target => this.read(target, context)))
   }
 
+  /**
+   * Apply one serialized add/replace/remove mutation and report what changed.
+   * @param target - the MEMORY or USER target to mutate.
+   * @param action - the mutation to perform: add, replace, or remove.
+   * @param content - the new entry text for add and replace; unused for remove.
+   * @param oldText - a unique substring identifying the entry to replace or remove.
+   * @param context - optional per-call namespace and source provenance.
+   * @returns whether anything changed, the current snapshot, and an outcome message.
+   */
   async mutate(
     target: MemoryTarget,
     action: 'add' | 'replace' | 'remove',
@@ -222,6 +271,13 @@ export class MemoryRuntime extends Service {
     return { changed, snapshot, message }
   }
 
+  /**
+   * Overwrite one target document with the supplied entries in one serialized save.
+   * @param target - the MEMORY or USER target to replace.
+   * @param texts - the complete replacement entries, each bare text or a full entry.
+   * @param context - optional per-call namespace and source provenance.
+   * @returns the snapshot persisted for the target.
+   */
   async replaceDocument(target: MemoryTarget, texts: readonly (string | MemoryEntry)[], context?: MemoryRequestContext): Promise<MemorySnapshot> {
     const operation = this.mutationTail.then(async () => {
       const provider = this.requireProvider()
@@ -244,7 +300,11 @@ export class MemoryRuntime extends Service {
     return operation
   }
 
-  /** Journal before a validated, serialized multi-document change. */
+  /**
+   * Journal before a validated, serialized multi-document change.
+   * @param build - derives the proposed MEMORY and USER documents from the current ones.
+   * @param checkpoint - awaits after validation and before the first save, for journaling the transaction.
+   */
   changeDocuments(
     build: (before: Readonly<Record<MemoryTarget, MemoryDocument>>) => Readonly<Record<MemoryTarget, MemoryDocument>>,
     checkpoint: (before: Readonly<Record<MemoryTarget, MemoryDocument>>, after: Readonly<Record<MemoryTarget, MemoryDocument>>) => Promise<void>,
@@ -283,6 +343,14 @@ export class MemoryRuntime extends Service {
     return operation
   }
 
+  /**
+   * Search entries through the provider hook, falling back to a local term scan.
+   * @param query - the non-empty search text.
+   * @param target - restrict hits to one target, or undefined to search both.
+   * @param limit - optional maximum hit count, bounded by the configured maximum.
+   * @param context - optional per-call namespace and source provenance.
+   * @returns matching hits ordered by descending score.
+   */
   async search(query: string, target: MemoryTarget | undefined, limit: number | undefined, context?: MemoryRequestContext): Promise<readonly MemorySearchHit[]> {
     const normalized = query.trim()
     if (normalized.length === 0) throw new Error('query must be non-empty')
@@ -305,6 +373,10 @@ export class MemoryRuntime extends Service {
     return hits.sort((a, b) => b.score - a.score || a.target.localeCompare(b.target) || a.index - b.index).slice(0, boundedLimit)
   }
 
+  /**
+   * Render the cached MEMORY/USER snapshots as prompt text.
+   * @returns an advisory header followed by one labeled block per target.
+   */
   renderPrompt(): string {
     const blocks = MEMORY_TARGETS.map(target => {
       const snapshot = this.snapshot(target)
