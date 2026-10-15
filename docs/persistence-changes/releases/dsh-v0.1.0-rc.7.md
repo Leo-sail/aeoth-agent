@@ -49,9 +49,9 @@ tag: dsh-v0.1.0-rc.7
 previous: dsh-v0.1.0-rc.6
 sessionFormatVersion: 0
 changes:
-  - root: event:assistant/chunk
-    before: 7fd942b2189b8dbf6e1a2c7b026e9ddd1e7dba3fbe5645708a76f4cddabb281d
-    after: de04e4ae000cc4422a15fb86dce7c398c8a9970ac963b6f7f785e2276a939e62
+ - root: event:assistant/chunk
+ before: 7fd942b2189b8dbf6e1a2c7b026e9ddd1e7dba3fbe5645708a76f4cddabb281d
+ after: de04e4ae000cc4422a15fb86dce7c398c8a9970ac963b6f7f785e2276a939e62
 ```
 
 <a id="changes"></a>
@@ -72,9 +72,6 @@ Detected 1 changed root and 1 structural difference. The minimum below is calcul
 
 Extraction passed canonical-graph, root-digest, and reachable-type-digest validation, permitting the original optional `surfaceOp` only for historical surface events. The in-tree check reconstructs each tag from its predecessor and verifies before/after values, snapshot coverage, and bilingual machine declarations.
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## Dev Note

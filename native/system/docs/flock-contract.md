@@ -4,7 +4,7 @@
 
 ## Behavior tests
 
-The [native tests](../test/flock.test.js) exercise real descriptors and independent processes. The [C oracle](../test/fixtures/flock-oracle.c) calls the operating system directly, independently of `system.node`.
+The native tests exercise real descriptors and independent processes. The [C oracle](../test/fixtures/flock-oracle.c) calls the operating system directly, independently of `system.node`.
 
 | Condition | Required observation |
 |---|---|

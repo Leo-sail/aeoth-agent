@@ -70,4 +70,4 @@ kind: "package-group"
 
 ## 开发
 
-执行 `pnpm install --frozen-lockfile` 与 `pnpm run build:official`。仓库保留继承的 `@deepseek-ai/dsh-*` 标识以维持兼容。
+执行 `pnpm install --frozen-lockfile` 与 `pnpm run build`。仓库保留继承的 `@deepseek-ai/dsh-*` 标识以维持兼容。

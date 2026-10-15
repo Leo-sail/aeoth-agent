@@ -49,18 +49,18 @@ tag: dsh-v0.1.5-alpha.2
 previous: dsh-v0.1.5-alpha.1
 sessionFormatVersion: 3
 changes:
-  - root: event:deliverables/presented
-    before: null
-    after: 13d3d180f977bf78081d487ffa0ecb75857349bcab29a5a3fb48189fca2a6176
-  - root: event:feedback/message-put
-    before: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
-    after: b5086d249e8502e9ead1d39156bb8d559bde7951cac0f14ce150345b4e42a2bf
-  - root: event:feedback/record
-    before: fb9df8180a202f3c845d5aa6a81697b2f7213f6735abc17535a55656be60a575
-    after: b54940ff095c17e874c5be03815f4c2145a256cf3a1d34dae4ab2f7769dfffe8
-  - root: event:subagent/catalog
-    before: null
-    after: ae1f7110feeec697b8cab42b68f7709aa7b3279764099dfb53c25890d2e5c871
+ - root: event:deliverables/presented
+ before: null
+ after: 13d3d180f977bf78081d487ffa0ecb75857349bcab29a5a3fb48189fca2a6176
+ - root: event:feedback/message-put
+ before: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
+ after: b5086d249e8502e9ead1d39156bb8d559bde7951cac0f14ce150345b4e42a2bf
+ - root: event:feedback/record
+ before: fb9df8180a202f3c845d5aa6a81697b2f7213f6735abc17535a55656be60a575
+ after: b54940ff095c17e874c5be03815f4c2145a256cf3a1d34dae4ab2f7769dfffe8
+ - root: event:subagent/catalog
+ before: null
+ after: ae1f7110feeec697b8cab42b68f7709aa7b3279764099dfb53c25890d2e5c871
 ```
 
 <a id="changes"></a>
@@ -85,9 +85,6 @@ Detected 4 changed roots and 5 structural differences. The minimum below is calc
 
 Extraction passed canonical-graph, root-digest, and reachable-type-digest validation, permitting the original optional `surfaceOp` only for historical surface events. The in-tree check reconstructs each tag from its predecessor and verifies before/after values, snapshot coverage, and bilingual machine declarations.
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## Dev Note

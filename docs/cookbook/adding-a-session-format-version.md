@@ -71,7 +71,7 @@ Prove strict restoration through `sessionFormatCatalog.createRestore(header, { r
 <a id="current-version-consumers"></a>
 ## 4. Update current-version consumers
 
-Trace each current-version consumer, including Session creation/restoration, JSONL filename selection and publication, the catalog's current encoder/restorer, projection-cache generation identity, replay and snapshot normalization, [physical fixture-layout validation](../../scripts/session-fixture-layout.ts), and TypeScript/Python SDK recordings. Use the writer constant where a value means current; keep literal historical versions in released codecs and historical fixtures. Update current documentation and generated references through their owners.
+Trace each current-version consumer, including Session creation/restoration, JSONL filename selection and publication, the catalog's current encoder/restorer, projection-cache generation identity, replay and snapshot normalization, physical fixture-layout validation, and TypeScript/Python SDK recordings. Use the writer constant where a value means current; keep literal historical versions in released codecs and historical fixtures. Update current documentation and generated references through their owners.
 
 Do not bump unrelated versions automatically. A request wrapper's `sessionFormatVersion` identifies its embedded Session generation; its outer schema version has its own meaning. Projection-unit state versions likewise do not replace the cache's Session-generation identity.
 
@@ -84,13 +84,13 @@ Verify both read and write paths. Header-only listing must not read bodies or pu
 For unchanged replay input, use keyless refresh on the owner, then replay without write-back. These SDK commands use `text-turn` and the checkout's writer version. Implement and wire N+1 before using them to generate that version, and select the actual affected owner for a feature:
 
 ```sh
-pnpm run test:snapshot:refresh snapshots/sdk/sdk.snapshot.ts -t text-turn
-pnpm run test:snapshot snapshots/sdk/sdk.snapshot.ts -t text-turn
+# test:snapshot:refresh (upstream tooling; not included in this distribution) snapshots/sdk/sdk.snapshot.ts -t text-turn
+# test:snapshot (upstream tooling; not included in this distribution) snapshots/sdk/sdk.snapshot.ts -t text-turn
 ```
 
-Review the new generation, request sidecars, and protocol output together. Verify every predecessor remains byte-identical and that parent/child roles remain contiguous. Selection uses the numerically highest generation, so update shared references to the owner's selected parent. Do not use the packed-layout migrator as a version upgrader. If the model transcript must change, the scenario owner uses live recording under the [testing policy](../testing.md), with its required provider key.
+Review the new generation, request sidecars, and protocol output together. Verify every predecessor remains byte-identical and that parent/child roles remain contiguous. Selection uses the numerically highest generation, so update shared references to the owner's selected parent. Do not use the packed-layout migrator as a version upgrader. If the model transcript must change, the scenario owner uses live recording under the testing policy, with its required provider key.
 
-Keep cases older than the retained baseline explicit through `snapshot.yml`'s `sessionFormat.version` and supported `coverage` names; record and refresh leave pinned Session fixtures untouched. Update the [corpus policy](../../scripts/session-snapshot-corpus-policy.ts) for the current generation while retaining focused direct-edge, multi-hop, packed-row, retry/failure, and shipped-profile coverage. Check the corpus and both SDK projections; do not mass-refresh unrelated scenarios merely to silence a validation failure.
+Keep cases older than the retained baseline explicit through `snapshot.yml`'s `sessionFormat.version` and supported `coverage` names; record and refresh leave pinned Session fixtures untouched. Update the corpus policy for the current generation while retaining focused direct-edge, multi-hop, packed-row, retry/failure, and shipped-profile coverage. Check the corpus and both SDK projections; do not mass-refresh unrelated scenarios merely to silence a validation failure.
 
 <a id="validate"></a>
 ## 6. Validate the integrated result
@@ -100,7 +100,7 @@ Run from the repository root. These commands check catalog declarations, Stage c
 ```sh
 pnpm run verify-session-format-catalog
 pnpm exec vitest run scripts/gen-session-format-catalog.spec.ts packages/session/session-format/tests packages/session/session-format-v2-to-v3/tests packages/session/session-format-catalog/tests
-pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts
+# test:snapshot (upstream tooling; not included in this distribution) scripts/session-snapshot-corpus.corpus.ts
 ```
 
 After implementing the new edge, add its actual test path to the focused Vitest run. Add the changed JSONL, replay, projection, and SDK tests selected by the actual diff, plus the built publication-Worker smoke when that path changes. Require successful strict migration, identity preservation for the skeleton, malformed and unknown-required-event refusal, deterministic repeated restores, independent concurrent stage state, seeded multi-hop cuts, unchanged predecessors, and no fallback. Report exact commands and failures, not an inferred full-suite result.
@@ -109,8 +109,6 @@ Update the owning Agent Note rather than adding a redundant decision record. Kee
 
 ```sh
 pnpm run verify-translation-pairing --write docs/cookbook/adding-a-session-format-version.md
-pnpm run test:docs
-pnpm run doc-sync
 pnpm run lint
 git diff --check
 ```
@@ -137,7 +135,7 @@ While the published format remains V3 and the integration writer is V4, master c
 
 ```sh
 V3_SOURCE_REF="$(git rev-parse --verify 'origin/master^{commit}')"
-pnpm run verify-v3-event-vocabulary --source-ref "$V3_SOURCE_REF"
+# verify-v3-event-vocabulary (upstream tooling; not included in this distribution) --source-ref "$V3_SOURCE_REF"
 ```
 
 The verifier reads only that local commit and requires exact event-name equality. It rejects missing V3 names, extra copied names, and a source writer other than V3. In particular, V4-only `developer/message` must not enter the frozen V3 set. Review each difference against the V3 payload, required conversions, target admission, and consumers; adding the name alone does not establish a complete migration. Add the corresponding migration regression before accepting a new source event.

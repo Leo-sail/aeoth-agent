@@ -1,18 +1,19 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write apps/desktop/README.md
 /aeoth-agent-desktop:
   en: aee5c2beaf8c7e21
   zh: ab2eee3c6e49ba50
 /aeoth-agent-desktop/developer-preview:
-  en: 001a1878df652eaa
-  zh: e6ceb3c9adf8438e
+  en: ec246c52689725a9
+  zh: d247b0945b5cb98c
 /aeoth-agent-desktop/development:
   en: adfe47601e4c580d
   zh: 889d5c8be710cf72
 /aeoth-agent-desktop/package-for-macos:
-  en: bcef48f052481907
-  zh: a753f369b0eeca5c
+  en: 2a83f0a814344cec
+  zh: bed21bcc0dbf1c68
 /aeoth-agent-desktop/runtime:
   en: c8b4eac08d206a58
   zh: f40256ba1aa66a02

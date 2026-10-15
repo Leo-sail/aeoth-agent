@@ -1,5 +1,5 @@
 <!-- 英文源文件由 scripts/gen-tool-catalog.ts 生成；本中文文件是通过双语配对维护的经评审对侧。
-     更新时先运行 `pnpm run gen-tool-catalog` 更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/tool-catalog.md` 重新记录配对。 -->
+ 更新时先运行 工具目录生成器 更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/tool-catalog.md` 重新记录配对。 -->
 
 # 工具 Schema 目录
 
@@ -7,7 +7,7 @@
 
 已发布插件向 `ctx.tools` 提供的所有面向模型的工具：模型通过系统提示词组装获得的 `name`、`description` 和 JSON Schema `parameters`。本目录是[子系统页面](subsystems/core.zh.md)（类型及每页生成的 `cordis-surface` 接线区域）的补充；本页列出的是向 agent（智能体）提供的*工具*。
 
-英文源文件由系统**生成**，并通过 `pnpm run verify-tool-catalog`（`doc-sync`（文档同步门禁）的一部分）验证新鲜度；本中文文件作为经评审对侧通过双语配对维护。与 Cordis 目录（纯源码 AST 处理）不同，英文生成器会在真实上下文中**启动**每个工具插件并读取 `ctx.tools.schemas()`，因为工具 schema 无法通过静态分析完全确定，例如运行时展开的枚举、拼接的描述、由配置决定的名称以及使用原始 JSON Schema 的 MCP 工具。完整性守卫会 glob 匹配 `packages/*/tool-*`；如果生成器的启动 manifest（元数据清单）遗漏任何包，检查就会失败，因此新工具不会在无人察觉的情况下缺少文档。
+英文源文件由系统**生成**，并通过 工具目录校验（`doc-sync`（文档同步门禁）的一部分）验证新鲜度；本中文文件作为经评审对侧通过双语配对维护。与 Cordis 目录（纯源码 AST 处理）不同，英文生成器会在真实上下文中**启动**每个工具插件并读取 `ctx.tools.schemas()`，因为工具 schema 无法通过静态分析完全确定，例如运行时展开的枚举、拼接的描述、由配置决定的名称以及使用原始 JSON Schema 的 MCP 工具。完整性守卫会 glob 匹配 `packages/*/tool-*`；如果生成器的启动 manifest（元数据清单）遗漏任何包，检查就会失败，因此新工具不会在无人察觉的情况下缺少文档。
 
 范围：`packages/*/tool-*` 下已发布的产品工具，每个工具均使用其**默认**配置启动；但如果某个 Config 字段是**必填项**且没有默认值，生成器就必须作出选择，对应包的说明会记录本页展示的是哪个分支。注册的工具**名称**可以是加载时配置，例如 `tool-subagent` 的 `toolName`，因此部署可能以不同名称或额外名称提供某个包；如果存在随产品发布的别名，对应包的说明会予以记录。`examples/` 中的演示工具（例如 `echo`）不在范围内，这与 Cordis 目录仅涵盖包的范围一致。
 
@@ -44,7 +44,6 @@
 | `@deepseek-ai/dsh-tool-subagent` | `list_subagent_models`、`subagent` | `ctx.tools`、`ctx.subagents`、`ctx.systemPrompt`、`用于模型发现和所选路由校验的 ctx.llm` | `tool/call`、`tool/result`、`child session events through the chosen provider` | `subagent`、`subagent_fork` | 注册的委派工具名称取决于加载时 `toolName` 配置（默认为 `subagent`）；上述默认 schema 关闭模型选择，而发现 schema 则展示为已启用 Session 中可用的固定配套工具。Web preset 会在每个新顶层 Session 创建时读取插件页偏好，并为其子 Session 保留该决定；`subagent_fork` 始终使用固定路由。每个实例通过 `modelSelectionSettings`、`backgroundMode` 与 `enableRunInBackground` 独立控制是否读取模型选择设置及其后台行为。 |
 | `@deepseek-ai/dsh-tool-subagent-control` | `interrupt_agent`、`list_agents`、`send_message` | `ctx.tools`、`ctx.subagents`、`ctx.agents and ctx.sessionProjections (list_agents only)` | `tool/call`、`tool/result`、`child session events through ctx.subagents` | - | 这些是控制可继续后台 subagent 的全局命名工具：绑定提供方的 `tool-subagent` 实例注册不同的委派工具；本包注册一次 `send_message` 和 `interrupt_agent`，另由 `list_agents` 通过单独加载的 `/list-agents` 插件提供，其目录行使用 sessionProjections 和实时 Agent 注册表。 |
 | `@deepseek-ai/dsh-tool-jobs` | `job_kill`、`job_list`、`job_output` | `ctx.tools`、`ctx.jobs`、`ctx.systemPrompt` | `tool/call`、`tool/result`、`user/message via agent.inject() for background completion notices` | - | 与任务种类无关的后台任务控制器：后台 bash 命令、PTY 发送和 subagent 都通过相同的 3 个工具读取、列出和终止。加载该插件会挂接控制器，从而启用生产方的 `ctx.jobs.start()`。 |
-| `@deepseek-ai/dsh-experimental-tool-agent-team` | `interrupt_agent`、`list_agents`、`send_message`、`spawn_teammate`、`team_task_create`、`team_task_get`、`team_task_list`、`team_task_update`、`wait_agent` | `ctx.tools`、`ctx.systemPrompt`、`ctx.agentTeams`、`an exact live Team member Agent` | `tool/call`、`team/member`、`team/message/queued`、`team/message/delivered`、`team/task`、`tool/result` | - | 这 9 个工具限定于隐式 Team Lead 与持久 teammate 作用域。随产品发布的 dsh-base bundle 默认禁用该包；文档中的 Agent Teams profile patch 会启用它，并禁用旧 continuable child 的同名控制工具。 |
 | `@deepseek-ai/dsh-tool-todo` | `todo_write` | `ctx.tools`、`owning Agent session` | `tool/call`、`todo/write`、`tool/result` | - | todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为检查清单。`allowParallelInProgress` 是没有默认值的必填项，因此本目录明确选择 `true`，对应描述允许同时存在多个 `in_progress` 项。选择 `false` 的部署会获得同一工具，但描述会要求只能有 1 个活动任务。 |
 | `@deepseek-ai/dsh-tool-workflow` | `workflow` | `ctx.tools`、`ctx.workflowEngine`、`ctx.systemPrompt`、`a calling Agent (exec.agent parents the script children)` | `tool/call`、`tool/result` | - | - |
 | `@deepseek-ai/dsh-tool-workspace-dependencies` | `load_workspace_dependencies` | `ctx.tools` | `tool/call`, `tool/result` | - | - |
@@ -60,61 +59,61 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "action": {
-      "type": "string",
-      "description": "Management operation.",
-      "enum": [
-        "list_plugins",
-        "list_bundles",
-        "set_plugin",
-        "set_bundle",
-        "install_bundle",
-        "remove_bundle",
-        "list_version_exemptions",
-        "set_version_exemption"
-      ]
-    },
-    "target": {
-      "type": "string",
-      "description": "Plugin entry id, bundle package name, or installation spec, according to action."
-    },
-    "enabled": {
-      "type": "boolean",
-      "description": "Required for set operations; defaults to true for installation. For set_version_exemption, true grants and false revokes."
-    },
-    "runtimeVersion": {
-      "type": "string",
-      "description": "For set_version_exemption: exact DSH version from list_version_exemptions. Target must be the manifest package-name@version, not an alias or version range."
-    },
-    "acceptRisk": {
-      "type": "boolean",
-      "description": "For granting an exemption: true only after warning the user about possible crashes and data loss and receiving explicit permission for this exact plugin/runtime pair. General installation permission is not enough."
-    },
-    "approvedBuilds": {
-      "type": "array",
-      "description": "For install_bundle: pass names from pendingBuilds only after the user explicitly approves running their install scripts in the conversation. This grants persistent permission for this profile.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "registry": {
-      "type": "string",
-      "description": "For install_bundle: the npm registry URL asked first, when the user names one; otherwise the configured registry is asked, and its configured fallbacks while a registry is unreachable."
-    },
-    "offset": {
-      "type": "number",
-      "description": "Zero-based list offset; defaults to 0."
-    },
-    "limit": {
-      "type": "number",
-      "description": "List page size, from 1 to 100; defaults to 25."
-    }
-  },
-  "required": [
-    "action"
-  ]
+ "type": "object",
+ "properties": {
+ "action": {
+ "type": "string",
+ "description": "Management operation.",
+ "enum": [
+ "list_plugins",
+ "list_bundles",
+ "set_plugin",
+ "set_bundle",
+ "install_bundle",
+ "remove_bundle",
+ "list_version_exemptions",
+ "set_version_exemption"
+ ]
+ },
+ "target": {
+ "type": "string",
+ "description": "Plugin entry id, bundle package name, or installation spec, according to action."
+ },
+ "enabled": {
+ "type": "boolean",
+ "description": "Required for set operations; defaults to true for installation. For set_version_exemption, true grants and false revokes."
+ },
+ "runtimeVersion": {
+ "type": "string",
+ "description": "For set_version_exemption: exact DSH version from list_version_exemptions. Target must be the manifest package-name@version, not an alias or version range."
+ },
+ "acceptRisk": {
+ "type": "boolean",
+ "description": "For granting an exemption: true only after warning the user about possible crashes and data loss and receiving explicit permission for this exact plugin/runtime pair. General installation permission is not enough."
+ },
+ "approvedBuilds": {
+ "type": "array",
+ "description": "For install_bundle: pass names from pendingBuilds only after the user explicitly approves running their install scripts in the conversation. This grants persistent permission for this profile.",
+ "items": {
+ "type": "string"
+ }
+ },
+ "registry": {
+ "type": "string",
+ "description": "For install_bundle: the npm registry URL asked first, when the user names one; otherwise the configured registry is asked, and its configured fallbacks while a registry is unreachable."
+ },
+ "offset": {
+ "type": "number",
+ "description": "Zero-based list offset; defaults to 0."
+ },
+ "limit": {
+ "type": "number",
+ "description": "List page size, from 1 to 100; defaults to 25."
+ }
+ },
+ "required": [
+ "action"
+ ]
 }
 ```
 
@@ -130,20 +129,20 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "server": {
-      "type": "string",
-      "description": "Configured MCP server name."
-    },
-    "cursor": {
-      "type": "string",
-      "description": "Continuation cursor returned by this server."
-    }
-  },
-  "required": [
-    "server"
-  ]
+ "type": "object",
+ "properties": {
+ "server": {
+ "type": "string",
+ "description": "Configured MCP server name."
+ },
+ "cursor": {
+ "type": "string",
+ "description": "Continuation cursor returned by this server."
+ }
+ },
+ "required": [
+ "server"
+ ]
 }
 ```
 
@@ -155,20 +154,20 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "server": {
-      "type": "string",
-      "description": "Configured MCP server name."
-    },
-    "cursor": {
-      "type": "string",
-      "description": "Continuation cursor returned by this server."
-    }
-  },
-  "required": [
-    "server"
-  ]
+ "type": "object",
+ "properties": {
+ "server": {
+ "type": "string",
+ "description": "Configured MCP server name."
+ },
+ "cursor": {
+ "type": "string",
+ "description": "Continuation cursor returned by this server."
+ }
+ },
+ "required": [
+ "server"
+ ]
 }
 ```
 
@@ -180,21 +179,21 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "server": {
-      "type": "string",
-      "description": "Configured MCP server name."
-    },
-    "uri": {
-      "type": "string",
-      "description": "Resource URI to read."
-    }
-  },
-  "required": [
-    "server",
-    "uri"
-  ]
+ "type": "object",
+ "properties": {
+ "server": {
+ "type": "string",
+ "description": "Configured MCP server name."
+ },
+ "uri": {
+ "type": "string",
+ "description": "Resource URI to read."
+ }
+ },
+ "required": [
+ "server",
+ "uri"
+ ]
 }
 ```
 
@@ -210,22 +209,22 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "pageId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "instruction": {
-      "type": "string",
-      "minLength": 1
-    }
-  },
-  "required": [
-    "instruction"
-  ],
-  "additionalProperties": false
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ },
+ "instruction": {
+ "type": "string",
+ "minLength": 1
+ }
+ },
+ "required": [
+ "instruction"
+ ],
+ "additionalProperties": false
 }
 ```
 
@@ -237,64 +236,64 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "pageId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "instruction": {
-      "type": "string",
-      "minLength": 1
-    },
-    "schema": {
-      "type": "object",
-      "propertyNames": {
-        "type": "string"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/__schema0"
-      }
-    }
-  },
-  "required": [
-    "instruction"
-  ],
-  "additionalProperties": false,
-  "$defs": {
-    "__schema0": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "number"
-        },
-        {
-          "type": "boolean"
-        },
-        {
-          "type": "null"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/__schema0"
-          }
-        },
-        {
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {
-            "$ref": "#/$defs/__schema0"
-          }
-        }
-      ]
-    }
-  }
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ },
+ "instruction": {
+ "type": "string",
+ "minLength": 1
+ },
+ "schema": {
+ "type": "object",
+ "propertyNames": {
+ "type": "string"
+ },
+ "additionalProperties": {
+ "$ref": "#/$defs/__schema0"
+ }
+ }
+ },
+ "required": [
+ "instruction"
+ ],
+ "additionalProperties": false,
+ "$defs": {
+ "__schema0": {
+ "anyOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "number"
+ },
+ {
+ "type": "boolean"
+ },
+ {
+ "type": "null"
+ },
+ {
+ "type": "array",
+ "items": {
+ "$ref": "#/$defs/__schema0"
+ }
+ },
+ {
+ "type": "object",
+ "propertyNames": {
+ "type": "string"
+ },
+ "additionalProperties": {
+ "$ref": "#/$defs/__schema0"
+ }
+ }
+ ]
+ }
+ }
 }
 ```
 
@@ -306,22 +305,22 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "pageId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "url": {
-      "type": "string",
-      "format": "uri"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "additionalProperties": false
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ },
+ "url": {
+ "type": "string",
+ "format": "uri"
+ }
+ },
+ "required": [
+ "url"
+ ],
+ "additionalProperties": false
 }
 ```
 
@@ -333,22 +332,22 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "pageId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "instruction": {
-      "type": "string",
-      "minLength": 1
-    }
-  },
-  "required": [
-    "instruction"
-  ],
-  "additionalProperties": false
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ },
+ "instruction": {
+ "type": "string",
+ "minLength": 1
+ }
+ },
+ "required": [
+ "instruction"
+ ],
+ "additionalProperties": false
 }
 ```
 
@@ -360,22 +359,22 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "pageId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "fullPage": {
-      "default": false,
-      "type": "boolean"
-    }
-  },
-  "required": [
-    "fullPage"
-  ],
-  "additionalProperties": false
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ },
+ "fullPage": {
+ "default": false,
+ "type": "boolean"
+ }
+ },
+ "required": [
+ "fullPage"
+ ],
+ "additionalProperties": false
 }
 ```
 
@@ -387,61 +386,61 @@
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "oneOf": [
-    {
-      "type": "object",
-      "properties": {
-        "action": {
-          "type": "string",
-          "const": "list"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "properties": {
-        "action": {
-          "type": "string",
-          "const": "new"
-        },
-        "url": {
-          "type": "string",
-          "format": "uri"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "properties": {
-        "action": {
-          "type": "string",
-          "enum": [
-            "select",
-            "close"
-          ]
-        },
-        "pageId": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "required": [
-        "action",
-        "pageId"
-      ],
-      "additionalProperties": false
-    }
-  ],
-  "type": "object"
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "oneOf": [
+ {
+ "type": "object",
+ "properties": {
+ "action": {
+ "type": "string",
+ "const": "list"
+ }
+ },
+ "required": [
+ "action"
+ ],
+ "additionalProperties": false
+ },
+ {
+ "type": "object",
+ "properties": {
+ "action": {
+ "type": "string",
+ "const": "new"
+ },
+ "url": {
+ "type": "string",
+ "format": "uri"
+ }
+ },
+ "required": [
+ "action"
+ ],
+ "additionalProperties": false
+ },
+ {
+ "type": "object",
+ "properties": {
+ "action": {
+ "type": "string",
+ "enum": [
+ "select",
+ "close"
+ ]
+ },
+ "pageId": {
+ "type": "string",
+ "minLength": 1
+ }
+ },
+ "required": [
+ "action",
+ "pageId"
+ ],
+ "additionalProperties": false
+ }
+ ],
+ "type": "object"
 }
 ```
 
@@ -457,63 +456,63 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "questions": {
-      "type": "array",
-      "description": "Questions to ask the user before continuing.",
-      "items": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Stable id for this question; echoed in the answer."
-          },
-          "question": {
-            "type": "string",
-            "description": "The specific question to ask the user."
-          },
-          "header": {
-            "type": "string",
-            "description": "Optional short heading for the question, such as \"Confirm\" or \"Choose Mode\"."
-          },
-          "options": {
-            "type": "array",
-            "description": "Optional choices to show the user. If you recommend one, put it first and append \"(Recommended)\" to that label.",
-            "items": {
-              "type": "object",
-              "additionalProperties": true,
-              "properties": {
-                "label": {
-                  "type": "string",
-                  "description": "Short user-facing option label."
-                },
-                "description": {
-                  "type": "string",
-                  "description": "One sentence explaining the tradeoff or impact."
-                }
-              },
-              "required": [
-                "label"
-              ]
-            }
-          },
-          "multi_select": {
-            "type": "boolean",
-            "description": "Whether the user may select more than one option. Defaults to false."
-          }
-        },
-        "required": [
-          "id",
-          "question"
-        ]
-      }
-    }
-  },
-  "required": [
-    "questions"
-  ]
+ "type": "object",
+ "properties": {
+ "questions": {
+ "type": "array",
+ "description": "Questions to ask the user before continuing.",
+ "items": {
+ "type": "object",
+ "additionalProperties": true,
+ "properties": {
+ "id": {
+ "type": "string",
+ "description": "Stable id for this question; echoed in the answer."
+ },
+ "question": {
+ "type": "string",
+ "description": "The specific question to ask the user."
+ },
+ "header": {
+ "type": "string",
+ "description": "Optional short heading for the question, such as \"Confirm\" or \"Choose Mode\"."
+ },
+ "options": {
+ "type": "array",
+ "description": "Optional choices to show the user. If you recommend one, put it first and append \"(Recommended)\" to that label.",
+ "items": {
+ "type": "object",
+ "additionalProperties": true,
+ "properties": {
+ "label": {
+ "type": "string",
+ "description": "Short user-facing option label."
+ },
+ "description": {
+ "type": "string",
+ "description": "One sentence explaining the tradeoff or impact."
+ }
+ },
+ "required": [
+ "label"
+ ]
+ }
+ },
+ "multi_select": {
+ "type": "boolean",
+ "description": "Whether the user may select more than one option. Defaults to false."
+ }
+ },
+ "required": [
+ "id",
+ "question"
+ ]
+ }
+ }
+ },
+ "required": [
+ "questions"
+ ]
 }
 ```
 
@@ -531,37 +530,37 @@ ask_user_question 默认保持原有阻塞行为；设置 `mode: timed` 后才�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "code": {
-      "type": "string",
-      "description": "The program: the body of an async TypeScript function."
-    },
-    "description": {
-      "type": "string",
-      "description": "Clear, concise description of what this program does in active voice, 5-10 words (shown in the UI). Examples: \"Count TODO markers across packages\"; \"Read failing test and its fixture\"; \"Rename config key in every cordis.yml\"."
-    },
-    "timeoutMs": {
-      "type": "number",
-      "description": "Positive elapsed-time budget in milliseconds, capped by the deployment maximum."
-    },
-    "sandbox_permissions": {
-      "type": "string",
-      "description": "Wider sandbox mode for this complete program execution; requires justification and approval.",
-      "enum": [
-        "workspace-write",
-        "danger-full-access"
-      ]
-    },
-    "justification": {
-      "type": "string",
-      "description": "Reason this complete program needs wider access, shown to the user for approval. Use the language of the user’s current request."
-    }
-  },
-  "required": [
-    "code",
-    "description"
-  ]
+ "type": "object",
+ "properties": {
+ "code": {
+ "type": "string",
+ "description": "The program: the body of an async TypeScript function."
+ },
+ "description": {
+ "type": "string",
+ "description": "Clear, concise description of what this program does in active voice, 5-10 words (shown in the UI). Examples: \"Count TODO markers across packages\"; \"Read failing test and its fixture\"; \"Rename config key in every cordis.yml\"."
+ },
+ "timeoutMs": {
+ "type": "number",
+ "description": "Positive elapsed-time budget in milliseconds, capped by the deployment maximum."
+ },
+ "sandbox_permissions": {
+ "type": "string",
+ "description": "Wider sandbox mode for this complete program execution; requires justification and approval.",
+ "enum": [
+ "workspace-write",
+ "danger-full-access"
+ ]
+ },
+ "justification": {
+ "type": "string",
+ "description": "Reason this complete program needs wider access, shown to the user for approval. Use the language of the user’s current request."
+ }
+ },
+ "required": [
+ "code",
+ "description"
+ ]
 }
 ```
 
@@ -579,16 +578,16 @@ ask_user_question 默认保持原有阻塞行为；设置 `mode: timed` 后才�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "plan": {
-      "type": "string",
-      "description": "The complete plan, as markdown, starting with a # heading that names it."
-    }
-  },
-  "required": [
-    "plan"
-  ]
+ "type": "object",
+ "properties": {
+ "plan": {
+ "type": "string",
+ "description": "The complete plan, as markdown, starting with a # heading that names it."
+ }
+ },
+ "required": [
+ "plan"
+ ]
 }
 ```
 
@@ -606,33 +605,33 @@ ask_user_question 默认保持原有阻塞行为；设置 `mode: timed` 后才�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "command": {
-      "type": "string",
-      "description": "The bash command to execute."
-    },
-    "description": {
-      "type": "string",
-      "description": "Clear, concise description of what this command does in active voice, 5-10 words (shown in the UI). Examples: \"ls\" → \"List files in current directory\"; \"git status\" → \"Show working tree status\"; \"npm install\" → \"Install package dependencies\"."
-    },
-    "timeoutMs": {
-      "type": "number",
-      "description": "Timeout in milliseconds. The executor applies its configured default and cap; on expiry the command moves to the background as a job instead of being killed."
-    },
-    "workdir": {
-      "type": "string",
-      "description": "Working directory for this command. Defaults to the session workspace; a relative path is resolved against it."
-    },
-    "run_in_background": {
-      "type": "boolean",
-      "description": "Run in the background and return a job id immediately (collect with job_output, stop with job_kill). No timeout applies."
-    }
-  },
-  "required": [
-    "command",
-    "description"
-  ]
+ "type": "object",
+ "properties": {
+ "command": {
+ "type": "string",
+ "description": "The bash command to execute."
+ },
+ "description": {
+ "type": "string",
+ "description": "Clear, concise description of what this command does in active voice, 5-10 words (shown in the UI). Examples: \"ls\" → \"List files in current directory\"; \"git status\" → \"Show working tree status\"; \"npm install\" → \"Install package dependencies\"."
+ },
+ "timeoutMs": {
+ "type": "number",
+ "description": "Timeout in milliseconds. The executor applies its configured default and cap; on expiry the command moves to the background as a job instead of being killed."
+ },
+ "workdir": {
+ "type": "string",
+ "description": "Working directory for this command. Defaults to the session workspace; a relative path is resolved against it."
+ },
+ "run_in_background": {
+ "type": "boolean",
+ "description": "Run in the background and return a job id immediately (collect with job_output, stop with job_kill). No timeout applies."
+ }
+ },
+ "required": [
+ "command",
+ "description"
+ ]
 }
 ```
 
@@ -650,33 +649,33 @@ bash 工具是 bash 执行器 seam 面向模型的消费方。组合中有 job �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "files": {
-      "type": "array",
-      "description": "Usually the 1-2 most important deliverables; at most 4 per call.",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "path": {
-            "type": "string",
-            "description": "Path of an existing regular file. Relative paths use the Session working directory."
-          },
-          "description": {
-            "type": "string",
-            "description": "Brief description for the user."
-          }
-        },
-        "required": [
-          "path"
-        ]
-      }
-    }
-  },
-  "required": [
-    "files"
-  ]
+ "type": "object",
+ "properties": {
+ "files": {
+ "type": "array",
+ "description": "Usually the 1-2 most important deliverables; at most 4 per call.",
+ "items": {
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+ "path": {
+ "type": "string",
+ "description": "Path of an existing regular file. Relative paths use the Session working directory."
+ },
+ "description": {
+ "type": "string",
+ "description": "Brief description for the user."
+ }
+ },
+ "required": [
+ "path"
+ ]
+ }
+ }
+ },
+ "required": [
+ "files"
+ ]
 }
 ```
 
@@ -694,33 +693,33 @@ bash 工具是 bash 执行器 seam 面向模型的消费方。组合中有 job �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "command": {
-      "type": "string",
-      "description": "The PowerShell command to execute."
-    },
-    "description": {
-      "type": "string",
-      "description": "Clear, concise description of what this command does in active voice, 5-10 words (shown in the UI). Examples: \"ls\" → \"List files in current directory\"; \"git status\" → \"Show working tree status\"; \"Get-Process\" → \"List running processes\"."
-    },
-    "timeoutMs": {
-      "type": "number",
-      "description": "Timeout in milliseconds. The executor applies its configured default and cap; on expiry the command moves to the background as a job instead of being killed."
-    },
-    "workdir": {
-      "type": "string",
-      "description": "Working directory for this command. Defaults to the session workspace; a relative path is resolved against it."
-    },
-    "run_in_background": {
-      "type": "boolean",
-      "description": "Run in the background and return a job id immediately (collect with job_output, stop with job_kill). No timeout applies."
-    }
-  },
-  "required": [
-    "command",
-    "description"
-  ]
+ "type": "object",
+ "properties": {
+ "command": {
+ "type": "string",
+ "description": "The PowerShell command to execute."
+ },
+ "description": {
+ "type": "string",
+ "description": "Clear, concise description of what this command does in active voice, 5-10 words (shown in the UI). Examples: \"ls\" → \"List files in current directory\"; \"git status\" → \"Show working tree status\"; \"Get-Process\" → \"List running processes\"."
+ },
+ "timeoutMs": {
+ "type": "number",
+ "description": "Timeout in milliseconds. The executor applies its configured default and cap; on expiry the command moves to the background as a job instead of being killed."
+ },
+ "workdir": {
+ "type": "string",
+ "description": "Working directory for this command. Defaults to the session workspace; a relative path is resolved against it."
+ },
+ "run_in_background": {
+ "type": "boolean",
+ "description": "Run in the background and return a job id immediately (collect with job_output, stop with job_kill). No timeout applies."
+ }
+ },
+ "required": [
+ "command",
+ "description"
+ ]
 }
 ```
 
@@ -738,8 +737,8 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -751,33 +750,33 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "platform": {
-      "type": "string",
-      "description": "Runtime platform that owns the Provider.",
-      "enum": [
-        "host",
-        "client"
-      ]
-    },
-    "provider": {
-      "type": "string",
-      "description": "Exact Provider ID returned by cordis_inspect_list."
-    },
-    "method": {
-      "type": "string",
-      "description": "Exact method name declared by the Provider manifest."
-    },
-    "input": {
-      "description": "Optional query input; it must satisfy the method input schema."
-    }
-  },
-  "required": [
-    "platform",
-    "provider",
-    "method"
-  ]
+ "type": "object",
+ "properties": {
+ "platform": {
+ "type": "string",
+ "description": "Runtime platform that owns the Provider.",
+ "enum": [
+ "host",
+ "client"
+ ]
+ },
+ "provider": {
+ "type": "string",
+ "description": "Exact Provider ID returned by cordis_inspect_list."
+ },
+ "method": {
+ "type": "string",
+ "description": "Exact method name declared by the Provider manifest."
+ },
+ "input": {
+ "description": "Optional query input; it must satisfy the method input schema."
+ }
+ },
+ "required": [
+ "platform",
+ "provider",
+ "method"
+ ]
 }
 ```
 
@@ -795,16 +794,16 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "command": {
-      "type": "string",
-      "description": "The bash command to run. Relative path is preferred in the command."
-    }
-  },
-  "required": [
-    "command"
-  ]
+ "type": "object",
+ "properties": {
+ "command": {
+ "type": "string",
+ "description": "The bash command to run. Relative path is preferred in the command."
+ }
+ },
+ "required": [
+ "command"
+ ]
 }
 ```
 
@@ -822,16 +821,16 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "command": {
-      "type": "string",
-      "description": "The PowerShell command to run. Relative path is preferred in the command."
-    }
-  },
-  "required": [
-    "command"
-  ]
+ "type": "object",
+ "properties": {
+ "command": {
+ "type": "string",
+ "description": "The PowerShell command to run. Relative path is preferred in the command."
+ }
+ },
+ "required": [
+ "command"
+ ]
 }
 ```
 
@@ -861,85 +860,85 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "command": {
-      "type": "string",
-      "description": "The commands to run. Allowed options are: `view`, `create`, `str_replace`, `insert`.",
-      "enum": [
-        "view",
-        "create",
-        "str_replace",
-        "insert"
-      ]
-    },
-    "path": {
-      "type": "string",
-      "description": "Absolute path to file or directory, e.g. `/repo/file.py` or `/repo`."
-    },
-    "file_text": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Required string parameter of `create` command, with the content of the file to be created. A null placeholder is treated as omitted by commands that do not use this parameter."
-    },
-    "insert_line": {
-      "oneOf": [
-        {
-          "type": "integer"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Required integer parameter of `insert` command. The `new_str` will be inserted AFTER the line `insert_line` of `path`. A null placeholder is treated as omitted by commands that do not use this parameter."
-    },
-    "new_str": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Optional string parameter of `str_replace` command containing the new string (if omitted, no string will be added). Required string parameter of `insert` command containing the string to insert. A null placeholder is accepted only by commands that do not use this parameter."
-    },
-    "old_str": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Required string parameter of `str_replace` command containing the string in `path` to replace. A null placeholder is treated as omitted by commands that do not use this parameter."
-    },
-    "view_range": {
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          }
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Optional parameter of `view` command when `path` points to a file. If omitted or null, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting `[start_line, -1]` shows all lines from `start_line` to the end of the file."
-    }
-  },
-  "required": [
-    "command",
-    "path"
-  ]
+ "type": "object",
+ "properties": {
+ "command": {
+ "type": "string",
+ "description": "The commands to run. Allowed options are: `view`, `create`, `str_replace`, `insert`.",
+ "enum": [
+ "view",
+ "create",
+ "str_replace",
+ "insert"
+ ]
+ },
+ "path": {
+ "type": "string",
+ "description": "Absolute path to file or directory, e.g. `/repo/file.py` or `/repo`."
+ },
+ "file_text": {
+ "oneOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "null"
+ }
+ ],
+ "description": "Required string parameter of `create` command, with the content of the file to be created. A null placeholder is treated as omitted by commands that do not use this parameter."
+ },
+ "insert_line": {
+ "oneOf": [
+ {
+ "type": "integer"
+ },
+ {
+ "type": "null"
+ }
+ ],
+ "description": "Required integer parameter of `insert` command. The `new_str` will be inserted AFTER the line `insert_line` of `path`. A null placeholder is treated as omitted by commands that do not use this parameter."
+ },
+ "new_str": {
+ "oneOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "null"
+ }
+ ],
+ "description": "Optional string parameter of `str_replace` command containing the new string (if omitted, no string will be added). Required string parameter of `insert` command containing the string to insert. A null placeholder is accepted only by commands that do not use this parameter."
+ },
+ "old_str": {
+ "oneOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "null"
+ }
+ ],
+ "description": "Required string parameter of `str_replace` command containing the string in `path` to replace. A null placeholder is treated as omitted by commands that do not use this parameter."
+ },
+ "view_range": {
+ "oneOf": [
+ {
+ "type": "array",
+ "items": {
+ "type": "integer"
+ }
+ },
+ {
+ "type": "null"
+ }
+ ],
+ "description": "Optional parameter of `view` command when `path` points to a file. If omitted or null, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting `[start_line, -1]` shows all lines from `start_line` to the end of the file."
+ }
+ },
+ "required": [
+ "command",
+ "path"
+ ]
 }
 ```
 
@@ -957,30 +956,30 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "file_path": {
-      "type": "string",
-      "description": "Path to edit, resolved by the filesystem backend."
-    },
-    "old_string": {
-      "type": "string",
-      "description": "Literal text to replace."
-    },
-    "new_string": {
-      "type": "string",
-      "description": "Literal replacement text. Use an empty string to delete the match."
-    },
-    "replace_all": {
-      "type": "boolean",
-      "description": "Replace all matches. Defaults to false; when false, old_string must appear exactly once."
-    }
-  },
-  "required": [
-    "file_path",
-    "old_string",
-    "new_string"
-  ]
+ "type": "object",
+ "properties": {
+ "file_path": {
+ "type": "string",
+ "description": "Path to edit, resolved by the filesystem backend."
+ },
+ "old_string": {
+ "type": "string",
+ "description": "Literal text to replace."
+ },
+ "new_string": {
+ "type": "string",
+ "description": "Literal replacement text. Use an empty string to delete the match."
+ },
+ "replace_all": {
+ "type": "boolean",
+ "description": "Replace all matches. Defaults to false; when false, old_string must appear exactly once."
+ }
+ },
+ "required": [
+ "file_path",
+ "old_string",
+ "new_string"
+ ]
 }
 ```
 
@@ -992,24 +991,24 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "file_path": {
-      "type": "string",
-      "description": "Path to read, resolved by the filesystem backend."
-    },
-    "offset": {
-      "type": "number",
-      "description": "1-based first line to return. Defaults to 1."
-    },
-    "limit": {
-      "type": "number",
-      "description": "Maximum number of lines to return. Defaults to 2000."
-    }
-  },
-  "required": [
-    "file_path"
-  ]
+ "type": "object",
+ "properties": {
+ "file_path": {
+ "type": "string",
+ "description": "Path to read, resolved by the filesystem backend."
+ },
+ "offset": {
+ "type": "number",
+ "description": "1-based first line to return. Defaults to 1."
+ },
+ "limit": {
+ "type": "number",
+ "description": "Maximum number of lines to return. Defaults to 2000."
+ }
+ },
+ "required": [
+ "file_path"
+ ]
 }
 ```
 
@@ -1021,16 +1020,16 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "file_path": {
-      "type": "string",
-      "description": "Path to the image file, resolved by the filesystem backend."
-    }
-  },
-  "required": [
-    "file_path"
-  ]
+ "type": "object",
+ "properties": {
+ "file_path": {
+ "type": "string",
+ "description": "Path to the image file, resolved by the filesystem backend."
+ }
+ },
+ "required": [
+ "file_path"
+ ]
 }
 ```
 
@@ -1042,21 +1041,21 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "file_path": {
-      "type": "string",
-      "description": "Path to write, resolved by the filesystem backend."
-    },
-    "content": {
-      "type": "string",
-      "description": "Full UTF-8 text content to write."
-    }
-  },
-  "required": [
-    "file_path",
-    "content"
-  ]
+ "type": "object",
+ "properties": {
+ "file_path": {
+ "type": "string",
+ "description": "Path to write, resolved by the filesystem backend."
+ },
+ "content": {
+ "type": "string",
+ "description": "Full UTF-8 text content to write."
+ }
+ },
+ "required": [
+ "file_path",
+ "content"
+ ]
 }
 ```
 
@@ -1074,20 +1073,20 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "pattern": {
-      "type": "string",
-      "description": "Glob pattern to match file paths against (e.g. \"**/*.ts\", \"src/**/*.test.js\"). A pattern with no \"/\" matches the basename at any depth, so \"*\" and \"*.ts\" both search the whole tree; include a separator to anchor the depth."
-    },
-    "path": {
-      "type": "string",
-      "description": "Directory to search in. Defaults to the session workspace; a relative path resolves against it."
-    }
-  },
-  "required": [
-    "pattern"
-  ]
+ "type": "object",
+ "properties": {
+ "pattern": {
+ "type": "string",
+ "description": "Glob pattern to match file paths against (e.g. \"**/*.ts\", \"src/**/*.test.js\"). A pattern with no \"/\" matches the basename at any depth, so \"*\" and \"*.ts\" both search the whole tree; include a separator to anchor the depth."
+ },
+ "path": {
+ "type": "string",
+ "description": "Directory to search in. Defaults to the session workspace; a relative path resolves against it."
+ }
+ },
+ "required": [
+ "pattern"
+ ]
 }
 ```
 
@@ -1099,24 +1098,24 @@ pwsh 工具是 Windows 组合中 bash 执行器 seam 的 PowerShell 方言消费
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "pattern": {
-      "type": "string",
-      "description": "Regular expression to search for (ripgrep syntax)."
-    },
-    "path": {
-      "type": "string",
-      "description": "File or directory to search. Defaults to the session workspace; a relative path resolves against it."
-    },
-    "include": {
-      "type": "string",
-      "description": "One glob filter for which files to search (e.g. \"*.ts\", \"*.{js,jsx}\"). Not a list; negation is not supported."
-    }
-  },
-  "required": [
-    "pattern"
-  ]
+ "type": "object",
+ "properties": {
+ "pattern": {
+ "type": "string",
+ "description": "Regular expression to search for (ripgrep syntax)."
+ },
+ "path": {
+ "type": "string",
+ "description": "File or directory to search. Defaults to the session workspace; a relative path resolves against it."
+ },
+ "include": {
+ "type": "string",
+ "description": "One glob filter for which files to search (e.g. \"*.ts\", \"*.{js,jsx}\"). Not a list; negation is not supported."
+ }
+ },
+ "required": [
+ "pattern"
+ ]
 }
 ```
 
@@ -1134,16 +1133,16 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "sessionId": {
-      "type": "string",
-      "description": "Terminal session id."
-    }
-  },
-  "required": [
-    "sessionId"
-  ]
+ "type": "object",
+ "properties": {
+ "sessionId": {
+ "type": "string",
+ "description": "Terminal session id."
+ }
+ },
+ "required": [
+ "sessionId"
+ ]
 }
 ```
 
@@ -1155,8 +1154,8 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -1168,24 +1167,24 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "type": {
-      "type": "string",
-      "description": "Registered terminal backend type, usually \"shell\"."
-    },
-    "name": {
-      "type": "string",
-      "description": "Optional owner-local display name such as \"main\" or \"gdb\"."
-    },
-    "cwd": {
-      "type": "string",
-      "description": "Initial working directory. Defaults to the deployment workspace root."
-    }
-  },
-  "required": [
-    "type"
-  ]
+ "type": "object",
+ "properties": {
+ "type": {
+ "type": "string",
+ "description": "Registered terminal backend type, usually \"shell\"."
+ },
+ "name": {
+ "type": "string",
+ "description": "Optional owner-local display name such as \"main\" or \"gdb\"."
+ },
+ "cwd": {
+ "type": "string",
+ "description": "Initial working directory. Defaults to the deployment workspace root."
+ }
+ },
+ "required": [
+ "type"
+ ]
 }
 ```
 
@@ -1197,24 +1196,24 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "sessionId": {
-      "type": "string",
-      "description": "Terminal session id."
-    },
-    "offset": {
-      "type": "number",
-      "description": "Newest-relative line offset (default 0)."
-    },
-    "count": {
-      "type": "number",
-      "description": "Requested line count (default 500; backend caps apply)."
-    }
-  },
-  "required": [
-    "sessionId"
-  ]
+ "type": "object",
+ "properties": {
+ "sessionId": {
+ "type": "string",
+ "description": "Terminal session id."
+ },
+ "offset": {
+ "type": "number",
+ "description": "Newest-relative line offset (default 0)."
+ },
+ "count": {
+ "type": "number",
+ "description": "Requested line count (default 500; backend caps apply)."
+ }
+ },
+ "required": [
+ "sessionId"
+ ]
 }
 ```
 
@@ -1226,29 +1225,29 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "sessionId": {
-      "type": "string",
-      "description": "Terminal session id returned by terminal_open or terminal_list."
-    },
-    "text": {
-      "type": "string",
-      "description": "UTF-8 text to write to the terminal."
-    },
-    "submit": {
-      "type": "boolean",
-      "description": "Submit Enter after text (default true). Set false for control characters or incomplete REPL input."
-    },
-    "run_in_background": {
-      "type": "boolean",
-      "description": "Return a job id immediately; collect with job_output or stop with job_kill."
-    }
-  },
-  "required": [
-    "sessionId",
-    "text"
-  ]
+ "type": "object",
+ "properties": {
+ "sessionId": {
+ "type": "string",
+ "description": "Terminal session id returned by terminal_open or terminal_list."
+ },
+ "text": {
+ "type": "string",
+ "description": "UTF-8 text to write to the terminal."
+ },
+ "submit": {
+ "type": "boolean",
+ "description": "Submit Enter after text (default true). Set false for control characters or incomplete REPL input."
+ },
+ "run_in_background": {
+ "type": "boolean",
+ "description": "Return a job id immediately; collect with job_output or stop with job_kill."
+ }
+ },
+ "required": [
+ "sessionId",
+ "text"
+ ]
 }
 ```
 
@@ -1260,28 +1259,28 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "sessionId": {
-      "type": "string",
-      "description": "Terminal session id."
-    },
-    "signal": {
-      "type": "string",
-      "description": "Signal to deliver. Shell-targeted SIGKILL is rejected; use terminal_close.",
-      "enum": [
-        "SIGINT",
-        "SIGTERM",
-        "SIGKILL",
-        "SIGTSTP",
-        "SIGHUP"
-      ]
-    }
-  },
-  "required": [
-    "sessionId",
-    "signal"
-  ]
+ "type": "object",
+ "properties": {
+ "sessionId": {
+ "type": "string",
+ "description": "Terminal session id."
+ },
+ "signal": {
+ "type": "string",
+ "description": "Signal to deliver. Shell-targeted SIGKILL is rejected; use terminal_close.",
+ "enum": [
+ "SIGINT",
+ "SIGTERM",
+ "SIGKILL",
+ "SIGTSTP",
+ "SIGHUP"
+ ]
+ }
+ },
+ "required": [
+ "sessionId",
+ "signal"
+ ]
 }
 ```
 
@@ -1299,20 +1298,20 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "objective": {
-      "type": "string",
-      "description": "The concrete completion objective inferred from the direct human request."
-    },
-    "max_goal_rounds": {
-      "type": "number",
-      "description": "Optional positive safe-integer limit on automatic continuation rounds."
-    }
-  },
-  "required": [
-    "objective"
-  ]
+ "type": "object",
+ "properties": {
+ "objective": {
+ "type": "string",
+ "description": "The concrete completion objective inferred from the direct human request."
+ },
+ "max_goal_rounds": {
+ "type": "number",
+ "description": "Optional positive safe-integer limit on automatic continuation rounds."
+ }
+ },
+ "required": [
+ "objective"
+ ]
 }
 ```
 
@@ -1324,8 +1323,8 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -1337,45 +1336,45 @@ glob 和 grep 是无条件可用的发现工具，通过 ctx.subprocess spawn �
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "goal_id": {
-      "type": "string",
-      "description": "Exact id returned by get_goal."
-    },
-    "revision": {
-      "type": "number",
-      "description": "Exact positive revision returned by get_goal."
-    },
-    "action": {
-      "type": "string",
-      "description": "edit, pause, and resume require a direct top-level human request. complete and blocked are also allowed during an automatic continuation of this goal; blocked is rejected before the configured minimum round count.",
-      "enum": [
-        "edit",
-        "pause",
-        "resume",
-        "complete",
-        "blocked"
-      ]
-    },
-    "objective": {
-      "type": "string",
-      "description": "Replacement objective; valid only with action edit."
-    },
-    "max_goal_rounds": {
-      "type": "number",
-      "description": "Replacement cap; valid only with action edit."
-    },
-    "blocked_reason": {
-      "type": "string",
-      "description": "Required only with action blocked: the concrete condition that persisted across rounds and blocks progress."
-    }
-  },
-  "required": [
-    "goal_id",
-    "revision",
-    "action"
-  ]
+ "type": "object",
+ "properties": {
+ "goal_id": {
+ "type": "string",
+ "description": "Exact id returned by get_goal."
+ },
+ "revision": {
+ "type": "number",
+ "description": "Exact positive revision returned by get_goal."
+ },
+ "action": {
+ "type": "string",
+ "description": "edit, pause, and resume require a direct top-level human request. complete and blocked are also allowed during an automatic continuation of this goal; blocked is rejected before the configured minimum round count.",
+ "enum": [
+ "edit",
+ "pause",
+ "resume",
+ "complete",
+ "blocked"
+ ]
+ },
+ "objective": {
+ "type": "string",
+ "description": "Replacement objective; valid only with action edit."
+ },
+ "max_goal_rounds": {
+ "type": "number",
+ "description": "Replacement cap; valid only with action edit."
+ },
+ "blocked_reason": {
+ "type": "string",
+ "description": "Required only with action blocked: the concrete condition that persisted across rounds and blocks progress."
+ }
+ },
+ "required": [
+ "goal_id",
+ "revision",
+ "action"
+ ]
 }
 ```
 
@@ -1393,122 +1392,122 @@ create、edit、pause 和 resume 要求直接来自人类的根权限；complete
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "prompt": {
-      "type": "string",
-      "description": "Reminder content to present when the target becomes due."
-    },
-    "title": {
-      "type": "string",
-      "description": "Task name of at most 120 characters, shown on the task card and in task lists."
-    },
-    "after_seconds": {
-      "type": "number",
-      "description": "Delay in whole seconds."
-    },
-    "every_seconds": {
-      "type": "number",
-      "description": "Fixed-rate interval in whole seconds, at least 60, aligned to the creation time; changing it with schedule_update re-aligns it to the save time."
-    },
-    "daily": {
-      "type": "object",
-      "description": "Every day at a local time.",
-      "additionalProperties": false,
-      "properties": {
-        "time": {
-          "type": "string",
-          "description": "HH:mm:ss with optional 1-3 fractional digits, for example 23:00:00."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        }
-      },
-      "required": [
-        "time",
-        "time_zone"
-      ]
-    },
-    "weekly": {
-      "type": "object",
-      "description": "On the given weekdays at a local time.",
-      "additionalProperties": false,
-      "properties": {
-        "time": {
-          "type": "string",
-          "description": "HH:mm:ss with optional 1-3 fractional digits, for example 09:00:00."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        },
-        "weekdays": {
-          "type": "array",
-          "description": "ISO weekdays, Monday 1 through Sunday 7, without repetitions.",
-          "items": {
-            "type": "integer"
-          }
-        }
-      },
-      "required": [
-        "time",
-        "time_zone",
-        "weekdays"
-      ]
-    },
-    "cron": {
-      "type": "object",
-      "description": "Five-field Vixie cron expression in a time zone.",
-      "additionalProperties": false,
-      "properties": {
-        "expression": {
-          "type": "string",
-          "description": "minute hour day-of-month month day-of-week, for example \"*/15 9-17 * * 1-5\". When both day fields are restricted, a date matches if either one matches."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        }
-      },
-      "required": [
-        "expression",
-        "time_zone"
-      ]
-    },
-    "at": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "date": {
-              "type": "string"
-            },
-            "time": {
-              "type": "string"
-            },
-            "time_zone": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "date",
-            "time",
-            "time_zone"
-          ]
-        }
-      ],
-      "description": "Absolute target: an RFC 3339 date-time with offset, or a local date, time, and IANA time_zone."
-    }
-  },
-  "required": [
-    "prompt",
-    "title"
-  ]
+ "type": "object",
+ "properties": {
+ "prompt": {
+ "type": "string",
+ "description": "Reminder content to present when the target becomes due."
+ },
+ "title": {
+ "type": "string",
+ "description": "Task name of at most 120 characters, shown on the task card and in task lists."
+ },
+ "after_seconds": {
+ "type": "number",
+ "description": "Delay in whole seconds."
+ },
+ "every_seconds": {
+ "type": "number",
+ "description": "Fixed-rate interval in whole seconds, at least 60, aligned to the creation time; changing it with schedule_update re-aligns it to the save time."
+ },
+ "daily": {
+ "type": "object",
+ "description": "Every day at a local time.",
+ "additionalProperties": false,
+ "properties": {
+ "time": {
+ "type": "string",
+ "description": "HH:mm:ss with optional 1-3 fractional digits, for example 23:00:00."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ }
+ },
+ "required": [
+ "time",
+ "time_zone"
+ ]
+ },
+ "weekly": {
+ "type": "object",
+ "description": "On the given weekdays at a local time.",
+ "additionalProperties": false,
+ "properties": {
+ "time": {
+ "type": "string",
+ "description": "HH:mm:ss with optional 1-3 fractional digits, for example 09:00:00."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ },
+ "weekdays": {
+ "type": "array",
+ "description": "ISO weekdays, Monday 1 through Sunday 7, without repetitions.",
+ "items": {
+ "type": "integer"
+ }
+ }
+ },
+ "required": [
+ "time",
+ "time_zone",
+ "weekdays"
+ ]
+ },
+ "cron": {
+ "type": "object",
+ "description": "Five-field Vixie cron expression in a time zone.",
+ "additionalProperties": false,
+ "properties": {
+ "expression": {
+ "type": "string",
+ "description": "minute hour day-of-month month day-of-week, for example \"*/15 9-17 * * 1-5\". When both day fields are restricted, a date matches if either one matches."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ }
+ },
+ "required": [
+ "expression",
+ "time_zone"
+ ]
+ },
+ "at": {
+ "oneOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+ "date": {
+ "type": "string"
+ },
+ "time": {
+ "type": "string"
+ },
+ "time_zone": {
+ "type": "string"
+ }
+ },
+ "required": [
+ "date",
+ "time",
+ "time_zone"
+ ]
+ }
+ ],
+ "description": "Absolute target: an RFC 3339 date-time with offset, or a local date, time, and IANA time_zone."
+ }
+ },
+ "required": [
+ "prompt",
+ "title"
+ ]
 }
 ```
 
@@ -1520,16 +1519,16 @@ create、edit、pause 和 resume 要求直接来自人类的根权限；complete
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "description": "Schedule id returned by schedule_list."
-    }
-  },
-  "required": [
-    "id"
-  ]
+ "type": "object",
+ "properties": {
+ "id": {
+ "type": "string",
+ "description": "Schedule id returned by schedule_list."
+ }
+ },
+ "required": [
+ "id"
+ ]
 }
 ```
 
@@ -1541,8 +1540,8 @@ create、edit、pause 和 resume 要求直接来自人类的根权限；complete
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -1558,121 +1557,121 @@ create、edit、pause 和 resume 要求直接来自人类的根权限；complete
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "description": "Schedule id returned by schedule_list."
-    },
-    "title": {
-      "type": "string",
-      "description": "New task name of at most 120 characters."
-    },
-    "prompt": {
-      "type": "string",
-      "description": "New reminder content."
-    },
-    "every_seconds": {
-      "type": "number",
-      "description": "Fixed-rate interval in whole seconds, at least 60, aligned to the creation time; changing it with schedule_update re-aligns it to the save time."
-    },
-    "daily": {
-      "type": "object",
-      "description": "Every day at a local time.",
-      "additionalProperties": false,
-      "properties": {
-        "time": {
-          "type": "string",
-          "description": "HH:mm:ss with optional 1-3 fractional digits, for example 23:00:00."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        }
-      },
-      "required": [
-        "time",
-        "time_zone"
-      ]
-    },
-    "weekly": {
-      "type": "object",
-      "description": "On the given weekdays at a local time.",
-      "additionalProperties": false,
-      "properties": {
-        "time": {
-          "type": "string",
-          "description": "HH:mm:ss with optional 1-3 fractional digits, for example 09:00:00."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        },
-        "weekdays": {
-          "type": "array",
-          "description": "ISO weekdays, Monday 1 through Sunday 7, without repetitions.",
-          "items": {
-            "type": "integer"
-          }
-        }
-      },
-      "required": [
-        "time",
-        "time_zone",
-        "weekdays"
-      ]
-    },
-    "cron": {
-      "type": "object",
-      "description": "Five-field Vixie cron expression in a time zone.",
-      "additionalProperties": false,
-      "properties": {
-        "expression": {
-          "type": "string",
-          "description": "minute hour day-of-month month day-of-week, for example \"*/15 9-17 * * 1-5\". When both day fields are restricted, a date matches if either one matches."
-        },
-        "time_zone": {
-          "type": "string",
-          "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
-        }
-      },
-      "required": [
-        "expression",
-        "time_zone"
-      ]
-    },
-    "at": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "date": {
-              "type": "string"
-            },
-            "time": {
-              "type": "string"
-            },
-            "time_zone": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "date",
-            "time",
-            "time_zone"
-          ]
-        }
-      ],
-      "description": "Absolute target: an RFC 3339 date-time with offset, or a local date, time, and IANA time_zone."
-    }
-  },
-  "required": [
-    "id"
-  ]
+ "type": "object",
+ "properties": {
+ "id": {
+ "type": "string",
+ "description": "Schedule id returned by schedule_list."
+ },
+ "title": {
+ "type": "string",
+ "description": "New task name of at most 120 characters."
+ },
+ "prompt": {
+ "type": "string",
+ "description": "New reminder content."
+ },
+ "every_seconds": {
+ "type": "number",
+ "description": "Fixed-rate interval in whole seconds, at least 60, aligned to the creation time; changing it with schedule_update re-aligns it to the save time."
+ },
+ "daily": {
+ "type": "object",
+ "description": "Every day at a local time.",
+ "additionalProperties": false,
+ "properties": {
+ "time": {
+ "type": "string",
+ "description": "HH:mm:ss with optional 1-3 fractional digits, for example 23:00:00."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ }
+ },
+ "required": [
+ "time",
+ "time_zone"
+ ]
+ },
+ "weekly": {
+ "type": "object",
+ "description": "On the given weekdays at a local time.",
+ "additionalProperties": false,
+ "properties": {
+ "time": {
+ "type": "string",
+ "description": "HH:mm:ss with optional 1-3 fractional digits, for example 09:00:00."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ },
+ "weekdays": {
+ "type": "array",
+ "description": "ISO weekdays, Monday 1 through Sunday 7, without repetitions.",
+ "items": {
+ "type": "integer"
+ }
+ }
+ },
+ "required": [
+ "time",
+ "time_zone",
+ "weekdays"
+ ]
+ },
+ "cron": {
+ "type": "object",
+ "description": "Five-field Vixie cron expression in a time zone.",
+ "additionalProperties": false,
+ "properties": {
+ "expression": {
+ "type": "string",
+ "description": "minute hour day-of-month month day-of-week, for example \"*/15 9-17 * * 1-5\". When both day fields are restricted, a date matches if either one matches."
+ },
+ "time_zone": {
+ "type": "string",
+ "description": "UTC or IANA Area/Location, for example Asia/Shanghai."
+ }
+ },
+ "required": [
+ "expression",
+ "time_zone"
+ ]
+ },
+ "at": {
+ "oneOf": [
+ {
+ "type": "string"
+ },
+ {
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+ "date": {
+ "type": "string"
+ },
+ "time": {
+ "type": "string"
+ },
+ "time_zone": {
+ "type": "string"
+ }
+ },
+ "required": [
+ "date",
+ "time",
+ "time_zone"
+ ]
+ }
+ ],
+ "description": "Absolute target: an RFC 3339 date-time with offset, or a local date, time, and IANA time_zone."
+ }
+ },
+ "required": [
+ "id"
+ ]
 }
 ```
 
@@ -1690,37 +1689,37 @@ Schedule 服务加载期间，在 live 根 Agent scope 内注册。接受 after_
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "operation": {
-      "type": "string",
-      "description": "goToDefinition, findReferences, goToImplementation, or hover.",
-      "enum": [
-        "goToDefinition",
-        "findReferences",
-        "goToImplementation",
-        "hover"
-      ]
-    },
-    "file_path": {
-      "type": "string",
-      "description": "The source file to query, relative to the workspace or absolute."
-    },
-    "line": {
-      "type": "number",
-      "description": "One-based line of the cursor."
-    },
-    "character": {
-      "type": "number",
-      "description": "One-based UTF-16 column of the cursor."
-    }
-  },
-  "required": [
-    "operation",
-    "file_path",
-    "line",
-    "character"
-  ]
+ "type": "object",
+ "properties": {
+ "operation": {
+ "type": "string",
+ "description": "goToDefinition, findReferences, goToImplementation, or hover.",
+ "enum": [
+ "goToDefinition",
+ "findReferences",
+ "goToImplementation",
+ "hover"
+ ]
+ },
+ "file_path": {
+ "type": "string",
+ "description": "The source file to query, relative to the workspace or absolute."
+ },
+ "line": {
+ "type": "number",
+ "description": "One-based line of the cursor."
+ },
+ "character": {
+ "type": "number",
+ "description": "One-based UTF-16 column of the cursor."
+ }
+ },
+ "required": [
+ "operation",
+ "file_path",
+ "line",
+ "character"
+ ]
 }
 ```
 
@@ -1738,20 +1737,20 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "objective": {
-      "type": "string",
-      "description": "The immutable completion objective for every fresh Ralph round."
-    },
-    "maxRounds": {
-      "type": "number",
-      "description": "Optional positive safe-integer round cap, bounded by the deployment ceiling."
-    }
-  },
-  "required": [
-    "objective"
-  ]
+ "type": "object",
+ "properties": {
+ "objective": {
+ "type": "string",
+ "description": "The immutable completion objective for every fresh Ralph round."
+ },
+ "maxRounds": {
+ "type": "number",
+ "description": "Optional positive safe-integer round cap, bounded by the deployment ceiling."
+ }
+ },
+ "required": [
+ "objective"
+ ]
 }
 ```
 
@@ -1769,16 +1768,16 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string",
-      "description": "The exact skill name from the available skills list."
-    }
-  },
-  "required": [
-    "name"
-  ]
+ "type": "object",
+ "properties": {
+ "name": {
+ "type": "string",
+ "description": "The exact skill name from the available skills list."
+ }
+ },
+ "required": [
+ "name"
+ ]
 }
 ```
 
@@ -1794,28 +1793,28 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "session_id": {
-      "type": "string",
-      "description": "Target session id. Omit for the current session."
-    },
-    "seq": {
-      "type": "integer",
-      "description": "Target event sequence number."
-    },
-    "before": {
-      "type": "integer",
-      "description": "Number of preceding raw events to summarize. Omit for none."
-    },
-    "after": {
-      "type": "integer",
-      "description": "Number of following raw events to summarize. Omit for none."
-    }
-  },
-  "required": [
-    "seq"
-  ]
+ "type": "object",
+ "properties": {
+ "session_id": {
+ "type": "string",
+ "description": "Target session id. Omit for the current session."
+ },
+ "seq": {
+ "type": "integer",
+ "description": "Target event sequence number."
+ },
+ "before": {
+ "type": "integer",
+ "description": "Number of preceding raw events to summarize. Omit for none."
+ },
+ "after": {
+ "type": "integer",
+ "description": "Number of following raw events to summarize. Omit for none."
+ }
+ },
+ "required": [
+ "seq"
+ ]
 }
 ```
 
@@ -1827,55 +1826,55 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "session_id": {
-      "type": "string",
-      "description": "Target session id. Omit for the current session."
-    },
-    "query": {
-      "type": "string",
-      "description": "Literal full-text query over the target session."
-    },
-    "seq_from": {
-      "type": "integer",
-      "description": "Inclusive event sequence lower bound."
-    },
-    "seq_to": {
-      "type": "integer",
-      "description": "Inclusive event sequence upper bound."
-    },
-    "time_from": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 event-time lower bound."
-    },
-    "time_to": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 event-time upper bound."
-    },
-    "event_types": {
-      "type": "array",
-      "description": "Event types to include.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "surfaces": {
-      "type": "array",
-      "description": "Event surfaces to include.",
-      "items": {
-        "type": "string",
-        "enum": [
-          "current",
-          "shadowed",
-          "log-only"
-        ]
-      }
-    }
-  },
-  "required": [
-    "query"
-  ]
+ "type": "object",
+ "properties": {
+ "session_id": {
+ "type": "string",
+ "description": "Target session id. Omit for the current session."
+ },
+ "query": {
+ "type": "string",
+ "description": "Literal full-text query over the target session."
+ },
+ "seq_from": {
+ "type": "integer",
+ "description": "Inclusive event sequence lower bound."
+ },
+ "seq_to": {
+ "type": "integer",
+ "description": "Inclusive event sequence upper bound."
+ },
+ "time_from": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 event-time lower bound."
+ },
+ "time_to": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 event-time upper bound."
+ },
+ "event_types": {
+ "type": "array",
+ "description": "Event types to include.",
+ "items": {
+ "type": "string"
+ }
+ },
+ "surfaces": {
+ "type": "array",
+ "description": "Event surfaces to include.",
+ "items": {
+ "type": "string",
+ "enum": [
+ "current",
+ "shadowed",
+ "log-only"
+ ]
+ }
+ }
+ },
+ "required": [
+ "query"
+ ]
 }
 ```
 
@@ -1887,20 +1886,20 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "session_id": {
-      "type": "string",
-      "description": "Target session id. Omit for the current session."
-    },
-    "seq": {
-      "type": "integer",
-      "description": "Target event sequence number."
-    }
-  },
-  "required": [
-    "seq"
-  ]
+ "type": "object",
+ "properties": {
+ "session_id": {
+ "type": "string",
+ "description": "Target session id. Omit for the current session."
+ },
+ "seq": {
+ "type": "integer",
+ "description": "Target event sequence number."
+ }
+ },
+ "required": [
+ "seq"
+ ]
 }
 ```
 
@@ -1912,88 +1911,88 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "query": {
-      "type": "string",
-      "description": "Literal full-text query over prior session history."
-    },
-    "session_ids": {
-      "type": "array",
-      "description": "Optional session ids to include.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "created_at_from": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 creation-time lower bound."
-    },
-    "created_at_to": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 creation-time upper bound."
-    },
-    "parent_session_ids": {
-      "type": "array",
-      "description": "Optional direct parent session ids.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "include_root_sessions": {
-      "type": "boolean",
-      "description": "Include sessions with no parent in the parent filter."
-    },
-    "availability": {
-      "type": "array",
-      "description": "Require at least one selected source availability.",
-      "items": {
-        "type": "string",
-        "enum": [
-          "live",
-          "persisted"
-        ]
-      }
-    },
-    "event_seq_from": {
-      "type": "integer",
-      "description": "Inclusive event sequence lower bound."
-    },
-    "event_seq_to": {
-      "type": "integer",
-      "description": "Inclusive event sequence upper bound."
-    },
-    "event_time_from": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 event-time lower bound."
-    },
-    "event_time_to": {
-      "type": "string",
-      "description": "Inclusive timezone-qualified ISO 8601 event-time upper bound."
-    },
-    "event_types": {
-      "type": "array",
-      "description": "Event types to include.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "event_surfaces": {
-      "type": "array",
-      "description": "Event surfaces to include.",
-      "items": {
-        "type": "string",
-        "enum": [
-          "current",
-          "shadowed",
-          "log-only"
-        ]
-      }
-    }
-  },
-  "required": [
-    "query"
-  ]
+ "type": "object",
+ "properties": {
+ "query": {
+ "type": "string",
+ "description": "Literal full-text query over prior session history."
+ },
+ "session_ids": {
+ "type": "array",
+ "description": "Optional session ids to include.",
+ "items": {
+ "type": "string"
+ }
+ },
+ "created_at_from": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 creation-time lower bound."
+ },
+ "created_at_to": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 creation-time upper bound."
+ },
+ "parent_session_ids": {
+ "type": "array",
+ "description": "Optional direct parent session ids.",
+ "items": {
+ "type": "string"
+ }
+ },
+ "include_root_sessions": {
+ "type": "boolean",
+ "description": "Include sessions with no parent in the parent filter."
+ },
+ "availability": {
+ "type": "array",
+ "description": "Require at least one selected source availability.",
+ "items": {
+ "type": "string",
+ "enum": [
+ "live",
+ "persisted"
+ ]
+ }
+ },
+ "event_seq_from": {
+ "type": "integer",
+ "description": "Inclusive event sequence lower bound."
+ },
+ "event_seq_to": {
+ "type": "integer",
+ "description": "Inclusive event sequence upper bound."
+ },
+ "event_time_from": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 event-time lower bound."
+ },
+ "event_time_to": {
+ "type": "string",
+ "description": "Inclusive timezone-qualified ISO 8601 event-time upper bound."
+ },
+ "event_types": {
+ "type": "array",
+ "description": "Event types to include.",
+ "items": {
+ "type": "string"
+ }
+ },
+ "event_surfaces": {
+ "type": "array",
+ "description": "Event surfaces to include.",
+ "items": {
+ "type": "string",
+ "enum": [
+ "current",
+ "shadowed",
+ "log-only"
+ ]
+ }
+ }
+ },
+ "required": [
+ "query"
+ ]
 }
 ```
 
@@ -2005,13 +2004,13 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "session_id": {
-      "type": "string",
-      "description": "Target session id. Omit for the current session."
-    }
-  }
+ "type": "object",
+ "properties": {
+ "session_id": {
+ "type": "string",
+ "description": "Target session id. Omit for the current session."
+ }
+ }
 }
 ```
 
@@ -2029,17 +2028,17 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "provider": {
-      "type": "string",
-      "description": "Registered LLM provider id. Omit to list providers."
-    },
-    "model": {
-      "type": "string",
-      "description": "Exact model id to inspect. Requires provider; omit to list that provider's advertised models."
-    }
-  }
+ "type": "object",
+ "properties": {
+ "provider": {
+ "type": "string",
+ "description": "Registered LLM provider id. Omit to list providers."
+ },
+ "model": {
+ "type": "string",
+ "description": "Exact model id to inspect. Requires provider; omit to list that provider's advertised models."
+ }
+ }
 }
 ```
 
@@ -2051,25 +2050,25 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "description": {
-      "type": "string",
-      "description": "A short (3-5 word) description of the delegated task, for display."
-    },
-    "prompt": {
-      "type": "string",
-      "description": "The complete, self-contained task for the subagent. It does not share this conversation's context, so include everything it needs."
-    },
-    "run_in_background": {
-      "type": "boolean",
-      "description": "Run as a background job and return its id (collect with job_output, stop with job_kill). Defaults to false."
-    }
-  },
-  "required": [
-    "description",
-    "prompt"
-  ]
+ "type": "object",
+ "properties": {
+ "description": {
+ "type": "string",
+ "description": "A short (3-5 word) description of the delegated task, for display."
+ },
+ "prompt": {
+ "type": "string",
+ "description": "The complete, self-contained task for the subagent. It does not share this conversation's context, so include everything it needs."
+ },
+ "run_in_background": {
+ "type": "boolean",
+ "description": "Run as a background job and return its id (collect with job_output, stop with job_kill). Defaults to false."
+ }
+ },
+ "required": [
+ "description",
+ "prompt"
+ ]
 }
 ```
 
@@ -2087,16 +2086,16 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "agent_id": {
-      "type": "string",
-      "description": "The id of an agent created under you: your direct child or a deeper descendant."
-    }
-  },
-  "required": [
-    "agent_id"
-  ]
+ "type": "object",
+ "properties": {
+ "agent_id": {
+ "type": "string",
+ "description": "The id of an agent created under you: your direct child or a deeper descendant."
+ }
+ },
+ "required": [
+ "agent_id"
+ ]
 }
 ```
 
@@ -2108,17 +2107,17 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "scope": {
-      "type": "string",
-      "description": "children (default) lists direct children, which accept send_message in any status. descendants lists the whole tree below you with each entry's parent session id and depth; entries deeper than 1 accept only interrupt_agent.",
-      "enum": [
-        "children",
-        "descendants"
-      ]
-    }
-  }
+ "type": "object",
+ "properties": {
+ "scope": {
+ "type": "string",
+ "description": "children (default) lists direct children, which accept send_message in any status. descendants lists the whole tree below you with each entry's parent session id and depth; entries deeper than 1 accept only interrupt_agent.",
+ "enum": [
+ "children",
+ "descendants"
+ ]
+ }
+ }
 }
 ```
 
@@ -2130,21 +2129,21 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "agent_id": {
-      "type": "string",
-      "description": "The agent id of your direct continuable child, or your direct parent when you are a resident continuable child."
-    },
-    "message": {
-      "type": "string",
-      "description": "The message to deliver to the agent."
-    }
-  },
-  "required": [
-    "agent_id",
-    "message"
-  ]
+ "type": "object",
+ "properties": {
+ "agent_id": {
+ "type": "string",
+ "description": "The agent id of your direct continuable child, or your direct parent when you are a resident continuable child."
+ },
+ "message": {
+ "type": "string",
+ "description": "The message to deliver to the agent."
+ }
+ },
+ "required": [
+ "agent_id",
+ "message"
+ ]
 }
 ```
 
@@ -2162,20 +2161,20 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "job_id": {
-      "type": "string",
-      "description": "Job id returned by the tool that started the background work."
-    },
-    "reason": {
-      "type": "string",
-      "description": "Optional short reason, recorded in the log and forwarded to the job."
-    }
-  },
-  "required": [
-    "job_id"
-  ]
+ "type": "object",
+ "properties": {
+ "job_id": {
+ "type": "string",
+ "description": "Job id returned by the tool that started the background work."
+ },
+ "reason": {
+ "type": "string",
+ "description": "Optional short reason, recorded in the log and forwarded to the job."
+ }
+ },
+ "required": [
+ "job_id"
+ ]
 }
 ```
 
@@ -2187,8 +2186,8 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -2200,321 +2199,30 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "job_id": {
-      "type": "string",
-      "description": "Job id returned by the tool that started the background work."
-    },
-    "wait": {
-      "type": "boolean",
-      "description": "Block until the job finishes or the timeout expires; a timed-out wait leaves the job running. Defaults to false."
-    },
-    "timeout_ms": {
-      "type": "number",
-      "description": "Max wait in milliseconds with wait: true. Defaults to and is capped by configuration."
-    }
-  },
-  "required": [
-    "job_id"
-  ]
+ "type": "object",
+ "properties": {
+ "job_id": {
+ "type": "string",
+ "description": "Job id returned by the tool that started the background work."
+ },
+ "wait": {
+ "type": "boolean",
+ "description": "Block until the job finishes or the timeout expires; a timed-out wait leaves the job running. Defaults to false."
+ },
+ "timeout_ms": {
+ "type": "number",
+ "description": "Max wait in milliseconds with wait: true. Defaults to and is capped by configuration."
+ }
+ },
+ "required": [
+ "job_id"
+ ]
 }
 ```
 
 来源：[`packages/jobs/tool-jobs/src/index.ts`](../packages/jobs/tool-jobs/src/index.ts)
 
 与任务种类无关的后台任务控制器：后台 bash 命令、PTY 发送和 subagent 都通过相同的 3 个工具读取、列出和终止。加载该插件会挂接控制器，从而启用生产方的 `ctx.jobs.start()`。
-
-<a id="deepseek-aidsh-experimental-tool-agent-team"></a>
-
-## `@deepseek-ai/dsh-experimental-tool-agent-team`
-
-### `interrupt_agent`
-
-中断一名 teammate 的当前 turn，同时保留其待处理 inbox。仅 Team Lead 可用。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "target": {
-      "type": "string",
-      "description": "Teammate target returned by spawn_teammate or list_agents."
-    }
-  },
-  "required": [
-    "target"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `list_agents`
-
-列出 Lead 与所有持久 teammate，以及可用于寻址的 target 和当前可用状态。inactive 表示没有轮次在执行，不表示任务结果。provisioning 与 failed 描述成员创建状态。
-
-```json
-{
-  "type": "object",
-  "properties": {}
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `send_message`
-
-向另一名 Team member 发送一条持久消息。running target 会在最近的步骤边界收到消息；inactive target 会启动或恢复一个 turn。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "target": {
-      "type": "string",
-      "description": "Member target returned by spawn_teammate or list_agents, including lead."
-    },
-    "message": {
-      "type": "string",
-      "description": "Self-contained message for the target."
-    }
-  },
-  "required": [
-    "target",
-    "message"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `spawn_teammate`
-
-创建一名具名、持久的 teammate。只有 Team Lead 可以调用此工具。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string",
-      "description": "Unique lower-kebab-case teammate name."
-    },
-    "description": {
-      "type": "string",
-      "description": "Short description of the delegated responsibility."
-    },
-    "prompt": {
-      "type": "string",
-      "description": "Complete initial task for the teammate."
-    },
-    "context": {
-      "type": "string",
-      "description": "fresh starts without Lead history; fork inherits completed Lead turns. Defaults to fresh.",
-      "enum": [
-        "fresh",
-        "fork"
-      ]
-    }
-  },
-  "required": [
-    "name",
-    "description",
-    "prompt"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `team_task_create`
-
-在共享 Team 任务板上创建一个无 owner 的 pending task。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "subject": {
-      "type": "string",
-      "description": "Concise task title."
-    },
-    "description": {
-      "type": "string",
-      "description": "Complete task details and acceptance criteria."
-    },
-    "blocked_by": {
-      "type": "array",
-      "description": "Task ids that must complete first.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "write_scopes": {
-      "type": "array",
-      "description": "Advisory workspace-relative file or directory prefixes this task expects to modify.",
-      "items": {
-        "type": "string"
-      }
-    }
-  },
-  "required": [
-    "subject",
-    "description"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `team_task_get`
-
-在修改或执行共享任务前，读取其完整的最新值。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "task_id": {
-      "type": "string",
-      "description": "Shared task id."
-    }
-  },
-  "required": [
-    "task_id"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `team_task_list`
-
-列出共享任务，包括 readiness、owner、revision、blocker 与 write-scope warning。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "status": {
-      "type": "string",
-      "description": "Optional exact status filter.",
-      "enum": [
-        "pending",
-        "in_progress",
-        "completed"
-      ]
-    },
-    "owner": {
-      "type": "string",
-      "description": "Optional member target from spawn_teammate or list_agents, matching ownerName; use unowned for tasks without an owner."
-    },
-    "ready": {
-      "type": "boolean",
-      "description": "Optional readiness filter."
-    },
-    "cursor": {
-      "type": "integer",
-      "description": "Zero-based result offset. Defaults to 0."
-    },
-    "limit": {
-      "type": "integer",
-      "description": "Number of rows, 1 through 100. Defaults to 50."
-    }
-  }
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `team_task_update`
-
-使用 team_task_get 或 team_task_list 返回的最新 revision，对共享任务操作执行 compare-and-set。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "task_id": {
-      "type": "string",
-      "description": "Shared task id."
-    },
-    "expected_revision": {
-      "type": "integer",
-      "description": "Current task revision used as the CAS precondition."
-    },
-    "action": {
-      "type": "string",
-      "description": "Task transition to apply.",
-      "enum": [
-        "claim",
-        "release",
-        "edit",
-        "set_dependencies",
-        "complete",
-        "reopen",
-        "reassign",
-        "delete"
-      ]
-    },
-    "subject": {
-      "type": "string",
-      "description": "Replacement title for edit."
-    },
-    "description": {
-      "type": "string",
-      "description": "Replacement details for edit."
-    },
-    "blocked_by": {
-      "type": "array",
-      "description": "Complete blocker list for set_dependencies.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "write_scopes": {
-      "type": "array",
-      "description": "Replacement advisory write scopes for edit.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "owner": {
-      "type": "string",
-      "description": "Member target from spawn_teammate or list_agents for Lead-only reassign; omit to unassign."
-    }
-  },
-  "required": [
-    "task_id",
-    "expected_revision",
-    "action"
-  ]
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-### `wait_agent`
-
-等待本次调用开始后下一次 teammate 状态、mailbox 或共享任务变更。它绝不会唤醒 inactive member；若没有其他 member 正在 running 或 provisioning，则立即返回 noProgress。唤醒或超时后应重新列出状态，而不是轮询。
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "timeout_ms": {
-      "type": "integer",
-      "description": "Wait duration in milliseconds, from 10000 through 3600000. Defaults to 30000."
-    }
-  }
-}
-```
-
-来源：[`packages/experimental/tool-agent-team/src/index.ts`](../packages/experimental/tool-agent-team/src/index.ts)
-
-这 10 个工具限定于隐式 Team Lead 与持久 teammate 作用域。随产品发布的 dsh-base bundle 默认禁用该包；文档中的 Agent Teams profile patch 会启用它，并禁用旧 continuable child 的同名控制工具。
-
 
 <a id="deepseek-aidsh-tool-todo"></a>
 
@@ -2526,39 +2234,39 @@ lsp 工具将提供方选择和语言服务器子进程置于 ctx.lsp 之后，�
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "todos": {
-      "type": "array",
-      "description": "The COMPLETE task list, replacing any previous list.",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "content": {
-            "type": "string",
-            "description": "What the task is — a short imperative line."
-          },
-          "status": {
-            "type": "string",
-            "description": "pending (not started) | in_progress (now) | completed (done).",
-            "enum": [
-              "pending",
-              "in_progress",
-              "completed"
-            ]
-          }
-        },
-        "required": [
-          "content",
-          "status"
-        ]
-      }
-    }
-  },
-  "required": [
-    "todos"
-  ]
+ "type": "object",
+ "properties": {
+ "todos": {
+ "type": "array",
+ "description": "The COMPLETE task list, replacing any previous list.",
+ "items": {
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+ "content": {
+ "type": "string",
+ "description": "What the task is — a short imperative line."
+ },
+ "status": {
+ "type": "string",
+ "description": "pending (not started) | in_progress (now) | completed (done).",
+ "enum": [
+ "pending",
+ "in_progress",
+ "completed"
+ ]
+ }
+ },
+ "required": [
+ "content",
+ "status"
+ ]
+ }
+ }
+ },
+ "required": [
+ "todos"
+ ]
 }
 ```
 
@@ -2585,78 +2293,78 @@ todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "script": {
-      "type": "string",
-      "description": "The plain JavaScript body, not TypeScript and without an `export const meta` statement; top-level await is allowed. End with `return <value>`; the JSON-serializable value is this tool's result."
-    },
-    "meta": {
-      "type": "object",
-      "description": "The workflow identity as plain JSON, not code.",
-      "additionalProperties": true,
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Short kebab-case workflow name."
-        },
-        "description": {
-          "type": "string",
-          "description": "One-line description of what the workflow does."
-        },
-        "whenToUse": {
-          "type": "string",
-          "description": "Optional guidance on when this workflow applies."
-        },
-        "phases": {
-          "type": "array",
-          "description": "Optional phase declarations matched by phase() calls.",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "title": {
-                "type": "string",
-                "description": "The phase title phase() calls match by exact string."
-              },
-              "detail": {
-                "type": "string",
-                "description": "Optional one-line description of the phase."
-              },
-              "provider": {
-                "type": "string",
-                "description": "Optional provider override this phase is expected to use."
-              },
-              "model": {
-                "type": "string",
-                "description": "Optional model override this phase is expected to use."
-              }
-            },
-            "required": [
-              "title"
-            ]
-          }
-        }
-      },
-      "required": [
-        "name",
-        "description"
-      ]
-    },
-    "args": {
-      "type": "object",
-      "description": "Optional JSON input exposed to the script as the `args` global (wrap a bare list as a field, e.g. {\"files\": [...]}).",
-      "additionalProperties": true
-    },
-    "run_in_background": {
-      "type": "boolean",
-      "description": "Run as a background job: return a job id immediately instead of waiting; the return value arrives with the completion notice."
-    }
-  },
-  "required": [
-    "script",
-    "meta"
-  ]
+ "type": "object",
+ "properties": {
+ "script": {
+ "type": "string",
+ "description": "The plain JavaScript body, not TypeScript and without an `export const meta` statement; top-level await is allowed. End with `return <value>`; the JSON-serializable value is this tool's result."
+ },
+ "meta": {
+ "type": "object",
+ "description": "The workflow identity as plain JSON, not code.",
+ "additionalProperties": true,
+ "properties": {
+ "name": {
+ "type": "string",
+ "description": "Short kebab-case workflow name."
+ },
+ "description": {
+ "type": "string",
+ "description": "One-line description of what the workflow does."
+ },
+ "whenToUse": {
+ "type": "string",
+ "description": "Optional guidance on when this workflow applies."
+ },
+ "phases": {
+ "type": "array",
+ "description": "Optional phase declarations matched by phase() calls.",
+ "items": {
+ "type": "object",
+ "additionalProperties": true,
+ "properties": {
+ "title": {
+ "type": "string",
+ "description": "The phase title phase() calls match by exact string."
+ },
+ "detail": {
+ "type": "string",
+ "description": "Optional one-line description of the phase."
+ },
+ "provider": {
+ "type": "string",
+ "description": "Optional provider override this phase is expected to use."
+ },
+ "model": {
+ "type": "string",
+ "description": "Optional model override this phase is expected to use."
+ }
+ },
+ "required": [
+ "title"
+ ]
+ }
+ }
+ },
+ "required": [
+ "name",
+ "description"
+ ]
+ },
+ "args": {
+ "type": "object",
+ "description": "Optional JSON input exposed to the script as the `args` global (wrap a bare list as a field, e.g. {\"files\": [...]}).",
+ "additionalProperties": true
+ },
+ "run_in_background": {
+ "type": "boolean",
+ "description": "Run as a background job: return a job id immediately instead of waiting; the return value arrives with the completion notice."
+ }
+ },
+ "required": [
+ "script",
+ "meta"
+ ]
 }
 ```
 
@@ -2672,8 +2380,8 @@ todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为
 
 ```json
 {
-  "type": "object",
-  "properties": {}
+ "type": "object",
+ "properties": {}
 }
 ```
 
@@ -2689,16 +2397,16 @@ todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "url": {
-      "type": "string",
-      "description": "The HTTP(S) URL to fetch."
-    }
-  },
-  "required": [
-    "url"
-  ]
+ "type": "object",
+ "properties": {
+ "url": {
+ "type": "string",
+ "description": "The HTTP(S) URL to fetch."
+ }
+ },
+ "required": [
+ "url"
+ ]
 }
 ```
 
@@ -2710,19 +2418,19 @@ todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "queries": {
-      "type": "array",
-      "description": "1–4 search queries; their results are merged.",
-      "items": {
-        "type": "string"
-      }
-    }
-  },
-  "required": [
-    "queries"
-  ]
+ "type": "object",
+ "properties": {
+ "queries": {
+ "type": "array",
+ "description": "1–4 search queries; their results are merged.",
+ "items": {
+ "type": "string"
+ }
+ }
+ },
+ "required": [
+ "queries"
+ ]
 }
 ```
 

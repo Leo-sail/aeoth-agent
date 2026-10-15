@@ -81,14 +81,13 @@ tsdown --env.DSH_BUILD_FACE host
 pnpm --filter @deepseek-ai/dsh-desktop run bundle
 tsc -b tsconfig.client.json
 tsdown --env.DSH_BUILD_FACE client
-pnpm run build:web
 ```
 
 两次 tsdown 都匹配 `vendor/*`、`packages/*/*` 与 `packages/desktop/runtime`，Host 阶段另外匹配 `apps/desktop-host`；两者都不扫描构建产物来发现 Client 包，也不维护 Host/Client 包过滤表。包内 tsdown 配置根据 `DSH_BUILD_FACE` 决定当前阶段的入口：普通 Client 插件在 Client 阶段同时生成 Node loader 与 browser bundle；`api-remotes` 通过 `hostPhase: true` 提前生成 Host 入口，再在 Client 阶段只生成 browser bundle。tsdown 只消费 `lib/types` 中由前置 tsc 发射的 JavaScript。tsdown 并发构建匹配到的 workspace 成员；`apps/desktop` 的主进程 bundle 需要从工作区 devDependencies 的 `lib/` 产物内联这些包，因此在 Host 阶段之后单独一步打 bundle（[Desktop README](../apps/desktop/README.zh.md#bundled-workspace-dependencies)）。
 
 Typert 只在 Host tsdown 中以 `tsconfig.host.json` 为种子运行。它分析 Host 类型并生成 Host 反射产物及 Host-for-Client Remote 投影；Client tsdown 不启动 Typert。`pnpm run typecheck` 因此先执行完整 Host lib 阶段，再运行 Client tsc；`pnpm run build` 继续执行 Client tsdown 和 Web 构建。
 
-`pnpm run build` 会内联根包版本、七位源码 commit，并在 Git 报告本地变化时内联 dirty 标记；调用方提供的其他 `DSH_CLIENT_*` 值也会被继承。`pnpm run build:official` 是与 CI 和 release 产物构建等价的跨平台本地命令，并省略本地 dirty 标记。每次完整构建成功后都会写入一份被 gitignore 的记录，把精确公开值与 Vite 输出及动态 client bundle 绑定；release 打包和 built Web 测试会拒绝缺少记录或被后续局部构建改动的产物。`pnpm run dev:web` 会先执行这次完整构建（`--skip-build` 则复用现有产物树），再读取一次当前版本和 Git 状态，并在本次会话的所有 watcher stage 之间共享该环境；它不会校验完整构建记录，因为 watcher stage 会重写记录覆盖的产物。
+`pnpm run build` 会内联根包版本、七位源码 commit，并在 Git 报告本地变化时内联 dirty 标记；调用方提供的其他 `DSH_CLIENT_*` 值也会被继承。`pnpm run build` 是与 CI 和 release 产物构建等价的跨平台本地命令，并省略本地 dirty 标记。每次完整构建成功后都会写入一份被 gitignore 的记录，把精确公开值与 Vite 输出及动态 client bundle 绑定；release 打包和 built Web 测试会拒绝缺少记录或被后续局部构建改动的产物。Web 应用开发脚本 会先执行这次完整构建（`--skip-build` 则复用现有产物树），再读取一次当前版本和 Git 状态，并在本次会话的所有 watcher stage 之间共享该环境；它不会校验完整构建记录，因为 watcher stage 会重写记录覆盖的产物。
 
 静态分析和测试通过 base 的 `paths` 映射把工作区 import 解析到 `src`，且必须在干净树上通过；消费构建产物 `lib/` 的门禁显式声明该依赖。生成的 Host-for-Client Remote 声明是有意设置的例外：公共 `typecheck`、`lint` 和 `doc-typecheck` 命令会先生成这些声明，而内部 `*:contracts-ready` 脚本假定调用它的公共命令或调度器门禁已经依赖 Typert 约定生成阶段或完整构建。tsc-first 发射职责见 ts-build-config Note，门禁准备约定见 Typert Remote Agent Note。
 
@@ -100,7 +99,7 @@ Typert 只在 Host tsdown 中以 `tsconfig.host.json` 为种子运行。它分�
 pnpm run build
 ```
 
-`pnpm run hygiene` 包含 `publint`（用构建出的 `lib/*.js` 文件校验包入口点）和 `verify-node-next-types`（用一个临时的 NodeNext 消费方校验构建出的声明文件）。新 worktree 在 `pnpm run build` 运行之前没有打包的 JS 和声明文件；普通提交和推送无需构建，除非所选检查会使用这些产物。
+仓库卫生门禁 包含 `publint`（用构建出的 `lib/*.js` 文件校验包入口点）和 `verify-node-next-types`（用一个临时的 NodeNext 消费方校验构建出的声明文件）。新 worktree 在 `pnpm run build` 运行之前没有打包的 JS 和声明文件；普通提交和推送无需构建，除非所选检查会使用这些产物。
 
 ### 环境变量
 
@@ -125,19 +124,19 @@ lefthook 在 `lefthook.yml` 中配置，作为快速的本地检查点：
 
 vendor manifest 守卫检查 `vendor/*/src` 下的改动是否连同对应的 `vendor/README.md` manifest 更新一起暂存。请在编辑 vendor 代码前先阅读 `vendor/README.md`。
 
-除限定范围的暂存记录校验外，这些钩子有意不运行测试、快照、文档检查、构建或 `hygiene`。贡献者只运行一次[与改动行为相关的检查](../AGENTS.md#run-relevant-checks-locally)；CI 负责全量覆盖率门禁、构建产物冒烟测试，以及 Node 22.19、24 和 26 兼容性矩阵。
+除限定范围的暂存记录校验外，这些钩子有意不运行测试、快照、文档检查、构建或 `hygiene`。贡献者只运行一次与改动行为相关的检查；CI 负责全量覆盖率门禁、构建产物冒烟测试，以及 Node 22.19、24 和 26 兼容性矩阵。
 
-贡献者可以选择运行 `pnpm run check:all`，执行全面的本地门禁集。该命令独立于 Git 钩子，也不是对 agent 的指令。
+贡献者可以选择运行 全套门禁，执行全面的本地门禁集。该命令独立于 Git 钩子，也不是对 agent 的指令。
 
 ### CI 门禁
 
-keyless [CI 工作流](../.github/workflows/ci.yml) 将独立门禁分组到若干宽粒度 lane，并在受支持的 Node 版本上运行一组较小的兼容性检查。产物消费方在各自 lane 内等待一次 build。必需 benchmark 在标准 GitHub 托管 Linux 上独立运行；benchmark 运行器决策拥有路由及 job 超时。单独的真实 API 工作流按其配置的 worker 上限运行 `pnpm run test:e2e`。当前门禁和 job 清单以 [scripts/run-gates.ts](../scripts/run-gates.ts) 和工作流文件为准。
+keyless CI 工作流 将独立门禁分组到若干宽粒度 lane，并在受支持的 Node 版本上运行一组较小的兼容性检查。产物消费方在各自 lane 内等待一次 build。必需 benchmark 在标准 GitHub 托管 Linux 上独立运行；benchmark 运行器决策拥有路由及 job 超时。单独的真实 API 工作流按其配置的 worker 上限运行 端到端测试。当前门禁和 job 清单以 scripts/run-gates.ts 和工作流文件为准。
 
 不带凭据的 dsh 依赖布局检查与 dsh/vendor 打包演练仅在 `DSH_CI_FAILOVER_LINUX=selfhosted`，且事件为受信任的 master 推送或同仓库、非 fork、非 Dependabot 拉取请求时使用现有 Linux 自托管池。其余情况（包括手动触发）均使用 `ubuntu-24.04`；手动发布仍使用托管运行器。持久化存储隔离与回退限制见发布演练运行器决策。
 
 ### 日常命令
 
-根目录的[贡献者说明](../AGENTS.md#commands)概述常用命令，[`package.json`](../package.json) 与 [scripts/run-gates.ts](../scripts/run-gates.ts) 则负责当前脚本和门禁清单。请选择覆盖变更表面的最小检查集。文档变更使用 `pnpm run doc-sync`；包公开行为变更还需更新所属 README 或 JSDoc，而基于构建产物的检查需要先运行 `pnpm run build`。
+根目录的贡献者说明概述常用命令，[`package.json`](../package.json) 与 scripts/run-gates.ts 则负责当前脚本和门禁清单。请选择覆盖变更表面的最小检查集。文档变更使用 文档门禁；包公开行为变更还需更新所属 README 或 JSDoc，而基于构建产物的检查需要先运行 `pnpm run build`。
 
 ### Profile 运行
 
@@ -164,13 +163,13 @@ pnpm run demo:ptc -- "summarize this workspace"
 Web 与 Desktop 共用同一对命令。`start:*` 启动上一次 `pnpm run build` 的产物；`dev:*` 先执行该构建再启动。Web 还会在源码修改时持续重建 client bundle，因为它的 Host 从源码运行，而浏览器加载的是构建产物：
 
 ```sh
-pnpm run start:web       # serve built Web artifacts through the source launcher (the same launch as pnpm dsh web)
-pnpm run dev:web         # build, serve, and rebuild Web client bundles on source edits
-pnpm run start:desktop   # launch built Desktop artifacts
-pnpm run dev:desktop     # build, then launch Desktop
+# start:web (upstream tooling; not included in this distribution) # serve built Web artifacts through the source launcher (the same launch as pnpm dsh web)
+# dev:web (upstream tooling; not included in this distribution) # build, serve, and rebuild Web client bundles on source edits
+pnpm run start:desktop # launch built Desktop artifacts
+pnpm run dev:desktop # build, then launch Desktop
 ```
 
-Web 命令后面的参数会传给 `dsh web`，例如 `pnpm run dev:web --no-open --port 3081`；`dev:web` 还接受 `--skip-build` 复用现有产物树，以及 `--no-serve` 只运行重建 watcher、配合别处启动的服务器。两个 Web 命令使用正常的 Harness home，而 Desktop 命令使用 [Desktop README](../apps/desktop/README.zh.md) 描述的隔离开发 home。根目录 `Makefile` 以 `make web`、`make dev-web`、`make desktop`、`make dev-desktop` 和 `make build` 命名同一套命令；`ARGS='--no-open'` 用于转发参数。
+Web 命令后面的参数会传给 `dsh web`，例如上游 Web 开发脚本的 `--no-open --port 3081`；该脚本还接受 `--skip-build` 复用现有产物树，以及 `--no-serve` 只运行重建 watcher、配合别处启动的服务器。两个 Web 命令使用正常的 Harness home，而 Desktop 命令使用 [Desktop README](../apps/desktop/README.zh.md) 描述的隔离开发 home。根目录 `Makefile` 以 `make web`、`make dev-web`、`make desktop`、`make dev-desktop` 和 `make build` 命名同一套命令；`ARGS='--no-open'` 用于转发参数。
 
 ### TODO 标记
 
@@ -192,4 +191,4 @@ Web 命令后面的参数会传给 `dsh web`，例如 `pnpm run dev:web --no-ope
 { "doc": "docs/subsystems/session.md", "symbol": "SessionEvent", "source": "packages/core/session/src/types.ts" }
 ```
 
-`pnpm run verify-type-equiv`（`doc-sync` 的一环）随后通过 TypeScript 解析器从源码提取该符号的声明及其附带的 JSDoc，并断言代码块同时匹配两者。对于不应把实现体写进目录的类，请使用 ` ```ts public-api ` 并设置 `"projection": "public-api"`；门禁检查的投影会保留公共字段、构造函数、访问器、方法以及类和成员的原始 JSDoc，同时省略实现体和私有或受保护成员。比对会忽略空白和非 JSDoc 注释，但要求保留每条原始 JSDoc（包括成员文档），让读者同时看到源码约定和确切类型定义。该门禁按文档、符号和投影，在主块与 manifest 条目之间强制 1:1 对应；只有当配对 `.zh.md` 块的完整受跟踪围栏序列与其无后缀兄弟文件按字节一致且顺序相同时，才会复用后者的条目。`doc-typecheck` 对可编译围栏应用同一派生规则，同时跳过两种源码等价围栏的编译，并将其排除在 opt-out 比例的计算之外。当你改动一个已记录的类型声明或其 JSDoc 时，门禁会失败直到你更新粘贴内容；当你增删一个主块时，请在同一个变更里更新 manifest。
+类型等价校验（`doc-sync` 的一环）随后通过 TypeScript 解析器从源码提取该符号的声明及其附带的 JSDoc，并断言代码块同时匹配两者。对于不应把实现体写进目录的类，请使用 ` ```ts public-api ` 并设置 `"projection": "public-api"`；门禁检查的投影会保留公共字段、构造函数、访问器、方法以及类和成员的原始 JSDoc，同时省略实现体和私有或受保护成员。比对会忽略空白和非 JSDoc 注释，但要求保留每条原始 JSDoc（包括成员文档），让读者同时看到源码约定和确切类型定义。该门禁按文档、符号和投影，在主块与 manifest 条目之间强制 1:1 对应；只有当配对 `.zh.md` 块的完整受跟踪围栏序列与其无后缀兄弟文件按字节一致且顺序相同时，才会复用后者的条目。`doc-typecheck` 对可编译围栏应用同一派生规则，同时跳过两种源码等价围栏的编译，并将其排除在 opt-out 比例的计算之外。当你改动一个已记录的类型声明或其 JSDoc 时，门禁会失败直到你更新粘贴内容；当你增删一个主块时，请在同一个变更里更新 manifest。

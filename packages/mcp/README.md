@@ -18,4 +18,4 @@ Connections to Model Context Protocol tools and resources. This page indexes the
 
 ## Development
 
-Build the full composition with `pnpm run build:official`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).
+Build the full composition with `pnpm run build`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).

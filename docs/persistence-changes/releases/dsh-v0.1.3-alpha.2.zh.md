@@ -49,12 +49,12 @@ tag: dsh-v0.1.3-alpha.2
 previous: dsh-v0.1.3-alpha.1
 sessionFormatVersion: 2
 changes:
-  - root: event:feedback/message-delete
-    before: null
-    after: 3ee93b06f3a125850337602bcdf155d2538c43a5c944ec55b1b3c365152d6796
-  - root: event:feedback/message-put
-    before: null
-    after: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
+ - root: event:feedback/message-delete
+ before: null
+ after: 3ee93b06f3a125850337602bcdf155d2538c43a5c944ec55b1b3c365152d6796
+ - root: event:feedback/message-put
+ before: null
+ after: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
 ```
 
 <a id="changes"></a>
@@ -76,9 +76,6 @@ changes:
 
 提取结果已通过规范图、根摘要和全部可达类型摘要校验；仅对历史 surface 事件允许源码原有的可选 `surfaceOp`。仓库内检查从前驱重建每个 tag，核对 before/after、快照覆盖和双语机器声明。
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## 开发备注

@@ -20,36 +20,36 @@ import { TypertRemoteService, Remote, RemoteScope } from '@deepseek-ai/dsh-typer
 import type { Context } from '@deepseek-ai/cordis'
 
 export interface CreateGoalRequest {
-  objective: string
+ objective: string
 }
 
 export interface CreateGoalResult {
-  accepted: boolean
+ accepted: boolean
 }
 
 export class GoalService extends TypertRemoteService {
-  constructor(ctx: Context) {
-    super(ctx, 'goals')
-  }
+ constructor(ctx: Context) {
+ super(ctx, 'goals')
+ }
 
-  @Remote('create')
-  createForClient(
-    agent: Agent,
-    request: CreateGoalRequest,
-    signal: AbortSignal,
-  ): CreateGoalResult {
-    signal.throwIfAborted()
-    return this.create(agent, request)
-  }
+ @Remote('create')
+ createForClient(
+ agent: Agent,
+ request: CreateGoalRequest,
+ signal: AbortSignal,
+ ): CreateGoalResult {
+ signal.throwIfAborted()
+ return this.create(agent, request)
+ }
 
-  @RemoteScope('agent', 'current')
-  currentForClient(): CreateGoalResult {
-    return { accepted: true }
-  }
+ @RemoteScope('agent', 'current')
+ currentForClient(): CreateGoalResult {
+ return { accepted: true }
+ }
 
-  private create(_agent: Agent, request: CreateGoalRequest): CreateGoalResult {
-    return { accepted: request.objective.length > 0 }
-  }
+ private create(_agent: Agent, request: CreateGoalRequest): CreateGoalResult {
+ return { accepted: request.objective.length > 0 }
+ }
 }
 ```
 
@@ -142,9 +142,6 @@ SRC solves only dispatch for a Host process running from source. The Client does
 
 Web development runs one command, which builds current Host, Client, and Web artifacts, starts the source Host, and keeps Client bundles rebuilt:
 
-```sh
-pnpm run dev:web
-```
 
 `dsh` starts the Host source through tsx, so the Host can use the SRC fallback; the `dev:web` watchers rebuild the client-face type emit, Client plugin and library bundles, and the Web shell on source edits. They do not analyze Host decorators or generate Remote Client DTS; only the complete build that `dev:web` runs first (or `pnpm run build`) does.
 

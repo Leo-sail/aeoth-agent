@@ -6,7 +6,7 @@ Aeoth Desktop is the product entry point. Electron owns the windows, private Hos
 
 ## Developer preview
 
-The product version is **0.1.0-preview.3**. Model endpoints and API keys are configured in the application. A local preview does not require a product account.
+The product version is **0.1.0-preview.4**. Model endpoints and API keys are configured in the application. A local preview does not require a product account.
 
 ## Development
 
@@ -14,7 +14,7 @@ Run these commands from the repository root:
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm run build:official
+pnpm run build
 pnpm run start:desktop
 ```
 
@@ -30,7 +30,7 @@ pnpm run package:desktop:mac:arm64:unsigned
 
 The package command builds the application, prepares the production dependency set and verifies the final ASAR inventory. Node, CPython and Python wheels are pinned by `scripts/primary-runtime/lock.json`; Electron is checked against its locked npm package checksums. Cached files must pass the same checks as downloaded files.
 
-Build outputs go to `.desktop-build/targets/mac-arm64/unsigned-artifacts/` inside this directory. After archive and isolated-startup validation, stage the DMG, ZIP and checksum list under `release/0.1.0-preview.3/mac-arm64/` at the repository root. Runtime execution checks use temporary directories and are not retained as a test suite.
+Build outputs go to `.desktop-build/targets/mac-arm64/unsigned-artifacts/` inside this directory. After archive and isolated-startup validation, stage the DMG, ZIP and checksum list under `dist/<version>/mac-arm64/` at the repository root. Runtime execution checks use temporary directories and are not retained as a test suite.
 
 ## Runtime
 

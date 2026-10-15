@@ -19,4 +19,4 @@ Hook 协议与既有集成的适配器。 本页索引太易桌面运行时保�
 
 ## 开发
 
-使用 `pnpm run build:official` 构建完整组合；打包由 [apps/desktop](../../apps/desktop/README.zh.md) 负责。
+使用 `pnpm run build` 构建完整组合；打包由 [apps/desktop](../../apps/desktop/README.zh.md) 负责。

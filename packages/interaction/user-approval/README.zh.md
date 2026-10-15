@@ -27,7 +27,7 @@ User-approval seam (ctx.approval) for the Aeoth Agent: one-shot permission decis
 
 - [`src/`](src/) — 实现代码和公共源码契约。
 - [`package.json`](package.json) — 导出、依赖和发布元数据。
-- 使用 `pnpm run build:official` 构建完整组合。
+- 使用 `pnpm run build` 构建完整组合。
 
 ## Desktop 交付
 

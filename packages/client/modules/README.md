@@ -108,7 +108,7 @@ Read these when the module contract is not enough: the subsystem reference, the 
 - [Client modules subsystem](../../../docs/subsystems/client-modules.md) — the web plugin table, `WebBootGraph` wire, and the bundle route.
 - Web boot kernel — the shell that creates the module system and boots the plugin tree.
 - [Client HMR driver](../hmr/README.md) — the reload chain that drives `invalidate`/`prefetch` on rebuilt bundles.
-- [Client authoring rules](../AGENTS.md#shared-modules-and-the-module-graph) — the shared-module baseline and `dsh.client.external` semantics.
+- Client authoring rules — the shared-module baseline and `dsh.client.external` semantics.
 - [Client group map](../README.md) — the Desktop renderer this package belongs to.
 
 -----

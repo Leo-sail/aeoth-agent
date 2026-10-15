@@ -83,12 +83,8 @@ Digests describe normalized reconstructed types, not verbatim source text or rep
 
 All 26 snapshots passed canonical-graph, root-digest, and reachable-type-digest validation. The release-archive check reads only the manifest, records, and snapshots in this tree, without Git, network access, or old-version checkouts; it validates manifest coverage, predecessors, before/after values, snapshot type completeness, and bilingual machine declarations.
 
-```sh
-pnpm run verify-persistence-releases
-pnpm run doc-sync
-```
 
-The marker-delimited index, inventory cells, and structural-change facts are generated from the snapshots. Default verification rejects stale facts. Run `pnpm run verify-persistence-releases --write` to refresh those regions and pairing records after validating all machine data; authored summaries, source evidence, machine declarations, and schema files are preserved.
+The marker-delimited index, inventory cells, and structural-change facts are generated from the snapshots. Default verification rejects stale facts; those regions and their pairing records are refreshed after all machine data validates, while authored summaries, source evidence, machine declarations, and schema files are preserved.
 
 Tag completeness is relative to the manifest’s captured scope; offline checks do not discover later tags automatically. Standard documentation checks validate pairing records and Markdown links. The format template defines each record’s fields.
 

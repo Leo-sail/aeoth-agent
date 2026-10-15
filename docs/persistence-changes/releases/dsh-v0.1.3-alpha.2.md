@@ -49,12 +49,12 @@ tag: dsh-v0.1.3-alpha.2
 previous: dsh-v0.1.3-alpha.1
 sessionFormatVersion: 2
 changes:
-  - root: event:feedback/message-delete
-    before: null
-    after: 3ee93b06f3a125850337602bcdf155d2538c43a5c944ec55b1b3c365152d6796
-  - root: event:feedback/message-put
-    before: null
-    after: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
+ - root: event:feedback/message-delete
+ before: null
+ after: 3ee93b06f3a125850337602bcdf155d2538c43a5c944ec55b1b3c365152d6796
+ - root: event:feedback/message-put
+ before: null
+ after: 3b04fde0dc763cf84fbde7b6611b3194dd56d95d0c0bf0204311640468d586e1
 ```
 
 <a id="changes"></a>
@@ -76,9 +76,6 @@ Detected 2 changed roots and 2 structural differences. The minimum below is calc
 
 Extraction passed canonical-graph, root-digest, and reachable-type-digest validation, permitting the original optional `surfaceOp` only for historical surface events. The in-tree check reconstructs each tag from its predecessor and verifies before/after values, snapshot coverage, and bilingual machine declarations.
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## Dev Note

@@ -77,14 +77,13 @@ tsdown --env.DSH_BUILD_FACE host
 pnpm --filter @deepseek-ai/dsh-desktop run bundle
 tsc -b tsconfig.client.json
 tsdown --env.DSH_BUILD_FACE client
-pnpm run build:web
 ```
 
 Both tsdown passes match `vendor/*`, `packages/*/*`, and `packages/desktop/runtime`; the Host pass also matches `apps/desktop-host`. They neither scan build artifacts to discover Client packages nor maintain a Host/Client package filter list. Package-local tsdown configs select entries for the current phase through `DSH_BUILD_FACE`: an ordinary Client plugin produces both its Node loader and browser bundle during the Client phase; `api-remotes` uses `hostPhase: true` to produce its Host entry early and only its browser bundle during the Client phase. Tsdown consumes only the JavaScript emitted to `lib/types` by the preceding tsc phase. Tsdown builds the matched workspace members concurrently, so `apps/desktop`, whose main bundle inlines workspace devDependencies from their `lib/` output, bundles in its own step after the Host pass ([Desktop README](../apps/desktop/README.md#bundled-workspace-dependencies)).
 
 Typert runs only during Host tsdown, seeded by `tsconfig.host.json`. It analyzes Host types and generates both Host reflection artifacts and the Host-for-Client Remote projection; Client tsdown does not start Typert. Consequently, `pnpm run typecheck` runs the complete Host lib phase before Client tsc, while `pnpm run build` continues through Client tsdown and the Web build.
 
-`pnpm run build` embeds the root package version, the seven-character source commit, and a dirty marker when Git reports local changes; it also inherits other caller-supplied `DSH_CLIENT_*` values. `pnpm run build:official` is the cross-platform local equivalent of the CI and release artifact build and omits the local dirty marker. Each successful complete build writes a gitignored record that binds the exact public values to the Vite output and dynamic client bundles; release packing and built Web tests reject a missing record or artifacts changed by a later partial build. `pnpm run dev:web` runs that complete build first (`--skip-build` reuses an existing artifact tree instead), then samples the current version and Git state once and shares that environment across every watcher stage for the session; it does not validate the complete-build record because the watcher stages rewrite its recorded artifacts.
+`pnpm run build` embeds the root package version, the seven-character source commit, and a dirty marker when Git reports local changes; it also inherits other caller-supplied `DSH_CLIENT_*` values. `pnpm run build` is the cross-platform local equivalent of the CI and release artifact build and omits the local dirty marker. Each successful complete build writes a gitignored record that binds the exact public values to the Vite output and dynamic client bundles; release packing and built Web tests reject a missing record or artifacts changed by a later partial build. the web app dev script runs that complete build first (`--skip-build` reuses an existing artifact tree instead), then samples the current version and Git state once and shares that environment across every watcher stage for the session; it does not validate the complete-build record because the watcher stages rewrite its recorded artifacts.
 
 Static analysis and tests resolve workspace imports through the base `paths` map to `src` and must pass on a clean tree; gates that consume built `lib/` output declare that dependency explicitly. Generated Host-for-Client Remote declarations are the deliberate exception: the public `typecheck`, `lint`, and `doc-typecheck` commands generate them first, while internal `*:contracts-ready` scripts assume that an invoking public command or scheduler gate already depends on the Typert contract-generation pass or the complete build. See the ts-build-config note for tsc-first emit ownership and the Typert Remote note for the gate-preparation contract.
 
@@ -96,7 +95,7 @@ If a relevant local check consumes built package output, build once first:
 pnpm run build
 ```
 
-`pnpm run hygiene` includes `publint`, which validates package entrypoints against the built `lib/*.js` files, and `verify-node-next-types`, which validates built declarations against a temporary NodeNext consumer. A fresh worktree has no bundled JS or declarations until `pnpm run build` runs; ordinary commits and pushes do not require that build unless their selected checks consume it.
+the repository hygiene gates includes `publint`, which validates package entrypoints against the built `lib/*.js` files, and `verify-node-next-types`, which validates built declarations against a temporary NodeNext consumer. A fresh worktree has no bundled JS or declarations until `pnpm run build` runs; ordinary commits and pushes do not require that build unless their selected checks consume it.
 
 ### Environment variables
 
@@ -121,19 +120,19 @@ lefthook is configured in `lefthook.yml` as a fast local checkpoint:
 
 The vendor manifest guard checks that changes under `vendor/*/src` are staged with the matching `vendor/README.md` manifest update. See `vendor/README.md` before editing vendored code.
 
-Apart from the scoped staged-record verification, the hooks intentionally do not run tests, snapshots, documentation checks, builds, or hygiene. Contributors run the [checks relevant to the changed behavior](../AGENTS.md#run-relevant-checks-locally) once; CI owns exhaustive coverage, built-artifact smokes, and the Node 22.19, 24, and 26 compatibility matrix.
+Apart from the scoped staged-record verification, the hooks intentionally do not run tests, snapshots, documentation checks, builds, or hygiene. Contributors run the checks relevant to the changed behavior once; CI owns exhaustive coverage, built-artifact smokes, and the Node 22.19, 24, and 26 compatibility matrix.
 
-Contributors can opt into the comprehensive local gate set with `pnpm run check:all`. The command is independent of the Git hooks and is not an agent instruction.
+Contributors can opt into the comprehensive local gate set with the full gate set. The command is independent of the Git hooks and is not an agent instruction.
 
 ### CI gates
 
-The keyless [CI workflow](../.github/workflows/ci.yml) groups independent gates into broad lanes and runs a smaller compatibility signal across supported Node versions. Artifact consumers wait for one build within their lane. Required benchmarks run separately on standard GitHub-hosted Linux; the benchmark runner decision owns routing and the job timeout. The separate real-API workflow runs `pnpm run test:e2e` with its configured worker bound. See [scripts/run-gates.ts](../scripts/run-gates.ts) and the workflow files for the current gate and job inventory.
+The keyless CI workflow groups independent gates into broad lanes and runs a smaller compatibility signal across supported Node versions. Artifact consumers wait for one build within their lane. Required benchmarks run separately on standard GitHub-hosted Linux; the benchmark runner decision owns routing and the job timeout. The separate real-API workflow runs the end-to-end test suite with its configured worker bound. See scripts/run-gates.ts and the workflow files for the current gate and job inventory.
 
 The credential-free dsh dependency-layout and dsh/vendor pack rehearsals use the existing Linux self-hosted pool only when `DSH_CI_FAILOVER_LINUX=selfhosted` and the event is a trusted master push or same-repository, non-fork, non-Dependabot pull request. All other cases, including manual dispatch, use `ubuntu-24.04`; manual publication stays hosted. See the release rehearsal runner decision for persistent-store isolation and fallback limits.
 
 ### Daily commands
 
-The root [contributor instructions](../AGENTS.md#commands) summarize common commands, while [`package.json`](../package.json) and [scripts/run-gates.ts](../scripts/run-gates.ts) own the current script and gate inventories. Select the smallest checks that cover the changed surface. Documentation changes use `pnpm run doc-sync`; package-public behavior changes also update the owning README or JSDoc, and built-artifact checks require `pnpm run build` first.
+The root contributor instructions summarize common commands, while [`package.json`](../package.json) and scripts/run-gates.ts own the current script and gate inventories. Select the smallest checks that cover the changed surface. Documentation changes use the documentation gates; package-public behavior changes also update the owning README or JSDoc, and built-artifact checks require `pnpm run build` first.
 
 ### Profile runs
 
@@ -160,13 +159,13 @@ pnpm run demo:ptc -- "summarize this workspace"
 Web and Desktop share one command pair. `start:*` launches the artifacts of a prior `pnpm run build`; `dev:*` runs that build first and then launches. Web additionally keeps client bundles rebuilt on source edits, because its Host runs from source while the browser loads built bundles:
 
 ```sh
-pnpm run start:web       # serve built Web artifacts through the source launcher (the same launch as pnpm dsh web)
-pnpm run dev:web         # build, serve, and rebuild Web client bundles on source edits
-pnpm run start:desktop   # launch built Desktop artifacts
-pnpm run dev:desktop     # build, then launch Desktop
+# start:web (upstream tooling; not included in this distribution) # serve built Web artifacts through the source launcher (the same launch as pnpm dsh web)
+# dev:web (upstream tooling; not included in this distribution) # build, serve, and rebuild Web client bundles on source edits
+pnpm run start:desktop # launch built Desktop artifacts
+pnpm run dev:desktop # build, then launch Desktop
 ```
 
-Arguments after a Web command reach `dsh web`, for example `pnpm run dev:web --no-open --port 3081`; `dev:web` also accepts `--skip-build` to reuse the existing artifact tree and `--no-serve` to run only the rebuild watchers beside a server started elsewhere. Both Web commands use the normal Harness home, while the Desktop commands use the isolated development home described in the [Desktop README](../apps/desktop/README.md). The root `Makefile` names the same commands as `make web`, `make dev-web`, `make desktop`, `make dev-desktop`, and `make build`; `ARGS='--no-open'` forwards options.
+Arguments after a Web command reach `dsh web`, for example `--no-open --port 3081` for the upstream web dev script; that script also accepts `--skip-build` to reuse the existing artifact tree and `--no-serve` to run only the rebuild watchers beside a server started elsewhere. Both Web commands use the normal Harness home, while the Desktop commands use the isolated development home described in the [Desktop README](../apps/desktop/README.md). The root `Makefile` names the same commands as `make web`, `make dev-web`, `make desktop`, `make dev-desktop`, and `make build`; `ARGS='--no-open'` forwards options.
 
 ### TODO markers
 
@@ -186,4 +185,4 @@ The [subsystems](subsystems/README.md) pages paste source-equivalent declaration
 { "doc": "docs/subsystems/session.md", "symbol": "SessionEvent", "source": "packages/core/session/src/types.ts" }
 ```
 
-`pnpm run verify-type-equiv` (part of `doc-sync`) then extracts that symbol's declaration and attached JSDoc from source via the TypeScript parser and asserts the block matches both. For a class whose implementation bodies do not belong in the catalog, use ` ```ts public-api ` and set `"projection": "public-api"`; the checked projection retains the public fields, constructor, accessors, methods, and original class/member JSDoc while omitting bodies and private or protected members. Comparison ignores whitespace and non-JSDoc comments but requires every original JSDoc comment, including member documentation, so readers see the source contract beside the exact type definition. The gate enforces a 1:1 correspondence by document, symbol, and projection between primary blocks and manifest entries; a paired `.zh.md` block reuses its unsuffixed sibling's entry only when the whole tracked fence sequence is byte-identical and ordered identically. `doc-typecheck` applies the same derivative rule to compilable fences, while skipping both source-equivalence fence kinds from compilation and its opt-out ratio. When you change a documented declaration or its JSDoc, the gate fails until you update the paste; when you add or remove a primary block, update the manifest in the same change.
+the type-equivalence verification (part of `doc-sync`) then extracts that symbol's declaration and attached JSDoc from source via the TypeScript parser and asserts the block matches both. For a class whose implementation bodies do not belong in the catalog, use ` ```ts public-api ` and set `"projection": "public-api"`; the checked projection retains the public fields, constructor, accessors, methods, and original class/member JSDoc while omitting bodies and private or protected members. Comparison ignores whitespace and non-JSDoc comments but requires every original JSDoc comment, including member documentation, so readers see the source contract beside the exact type definition. The gate enforces a 1:1 correspondence by document, symbol, and projection between primary blocks and manifest entries; a paired `.zh.md` block reuses its unsuffixed sibling's entry only when the whole tracked fence sequence is byte-identical and ordered identically. `doc-typecheck` applies the same derivative rule to compilable fences, while skipping both source-equivalence fence kinds from compilation and its opt-out ratio. When you change a documented declaration or its JSDoc, the gate fails until you update the paste; when you add or remove a primary block, update the manifest in the same change.

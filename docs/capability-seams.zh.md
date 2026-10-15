@@ -1,5 +1,5 @@
 <!-- 英文源文件由 scripts/gen-doc-graphs.ts 生成；本中文文件是通过双语配对维护的经评审对侧。
-     更新时先运行 `pnpm run gen-doc-graphs` 更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/capability-seams.md` 重新记录配对。 -->
+ 更新时先运行图生成器更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/capability-seams.md` 重新记录配对。 -->
 
 # 能力 Seams 与核心服务
 
@@ -9,572 +9,567 @@
 
 ```mermaid
 flowchart LR
-  pkg_hmr["hmr"]
-  svc_hmr["ctx.hmr<br/>Serialized module and configuration reloads"]
-  pkg_app_boot["app-boot"]
-  pkg_client_ui_plugin_manager["client-ui-plugin-manager"]
-  svc_pluginRegistryProbe["ctx.pluginRegistryProbe<br/>Host registry response comparison"]
-  pkg_plugin_manager["plugin-manager"]
-  svc_pluginManager["ctx.pluginManager<br/>Current-profile plugin and bundle management"]
-  pkg_ui_settings_plugin_inventory["ui-settings-plugin-inventory"]
-  svc_profileContext["ctx.profileContext<br/>Launcher-owned profile data"]
-  pkg_client_connection["client-connection"]
-  svc_connection["ctx.connection<br/>Authenticated browser transport"]
-  pkg_api_gateway["api-gateway"]
-  pkg_host_frontend_static["host-frontend-static"]
-  pkg_mcp_resources["mcp-resources"]
-  svc_mcpResources["ctx.mcpResources<br/>Scoped MCP resource access"]
-  pkg_mcp_client["mcp-client"]
-  pkg_browser_use["browser-use"]
-  svc_browserUse["ctx.browserUse<br/>Browser-use provider registration"]
-  pkg_experimental_browser_use_playwright_mcp["experimental-browser-use-playwright-mcp"]
-  pkg_experimental_browser_use_chrome_devtools_mcp["experimental-browser-use-chrome-devtools-mcp"]
-  pkg_experimental_browser_use_stagehand_native["experimental-browser-use-stagehand-native"]
-  pkg_computer_use["computer-use"]
-  svc_computerUse["ctx.computerUse<br/>Computer-use provider registration"]
-  pkg_experimental_computer_use_cua_driver_mcp["experimental-computer-use-cua-driver-mcp"]
-  pkg_experimental_computer_use_cua_driver_native["experimental-computer-use-cua-driver-native"]
-  pkg_office_to_pdf["office-to-pdf"]
-  svc_officeToPdf["ctx.officeToPdf<br/>Office to PDF conversion"]
-  pkg_client_ui_sidebar_documentpreview["client-ui-sidebar-documentpreview"]
-  pkg_attachment["attachment"]
-  svc_attachments["ctx.attachments<br/>Durable binary attachment storage"]
-  pkg_attachment_local["attachment-local"]
-  pkg_api_session_controller["api-session-controller"]
-  pkg_tool_fs["tool-fs"]
-  pkg_llm_pi_ai["llm-pi-ai"]
-  pkg_llm_deepseek["llm-deepseek"]
-  pkg_client_file_upload["client-file-upload"]
-  svc_fileUploads["ctx.fileUploads<br/>Agent-scoped staged file uploads"]
-  pkg_llm["llm"]
-  svc_llm["ctx.llm<br/>LLM adapter registry"]
-  pkg_llm_replay["llm-replay"]
-  pkg_agent_loop["agent-loop"]
-  pkg_compaction_basic["compaction-basic"]
-  pkg_deepseek_llm_api_extensions["deepseek-llm-api-extensions"]
-  svc_deepseekLlmApiExtensions["ctx.deepseekLlmApiExtensions<br/>Official DeepSeek request extensions"]
-  pkg_session_log_deepseek["session-log-deepseek"]
-  pkg_plugin_package_inventory_deepseek["plugin-package-inventory-deepseek"]
-  pkg_token_meter["token-meter"]
-  svc_tokenMeter["ctx.tokenMeter<br/>Replay token measurement"]
-  pkg_compaction_tool_result_pruner["compaction-tool-result-pruner"]
-  svc_toolResultPruner["ctx.toolResultPruner<br/>Model-free tool-result pruning"]
-  pkg_session["session"]
-  svc_sessions["ctx.sessions<br/>In-memory session store"]
-  pkg_agent["agent"]
-  pkg_session_persistence["session-persistence"]
-  pkg_session_query["session-query"]
-  pkg_session_query_sqlite["session-query-sqlite"]
-  pkg_subagent_in_process_driver["subagent-in-process-driver"]
-  pkg_invariants["invariants"]
-  pkg_message_feedback["message-feedback"]
-  pkg_experimental_api_speech_to_text["experimental-api-speech-to-text"]
-  svc_speechController["ctx.speechController<br/>Experimental transcription Remote"]
-  svc_sessionController["ctx.sessionController<br/>Host Session Remote controller"]
-  svc_sessionFileReferences["ctx.sessionFileReferences<br/>Session-addressed file-reference Remote adapter"]
-  svc_sessionSkillCatalog["ctx.sessionSkillCatalog<br/>Session-addressed skill Remote adapter"]
-  pkg_api_job_controller["api-job-controller"]
-  svc_jobController["ctx.jobController<br/>Host job Remote controller"]
-  pkg_api_settings_controller["api-settings-controller"]
-  svc_credentialsController["ctx.credentialsController<br/>Host credential-surface Remote controller"]
-  svc_settingsController["ctx.settingsController<br/>Host settings-surface Remote controller"]
-  pkg_api_workspace_files["api-workspace-files"]
-  svc_workspaceFiles["ctx.workspaceFiles<br/>Host workspace file Remote service"]
-  pkg_workspace_changes["workspace-changes"]
-  svc_workspaceChanges["ctx.workspaceChanges<br/>Host per-turn changed-file summaries"]
-  pkg_api_terminal_controller["api-terminal-controller"]
-  svc_terminalController["ctx.terminalController<br/>Session interactive terminal Remote controller"]
-  pkg_api_workspace_controller["api-workspace-controller"]
-  svc_workspaceController["ctx.workspaceController<br/>Host Workspace Remote controller"]
-  svc_directoryPickerController["ctx.directoryPickerController<br/>Host directory-picking Remote controller"]
-  svc_invariants["ctx.invariants<br/>Package-owned invariant registry"]
-  pkg_scope["scope"]
-  pkg_typert_registry["typert-registry"]
-  svc_typert["ctx.typert<br/>Runtime type registry"]
-  pkg_typert_loader["typert-loader"]
-  svc_typertGateway["ctx.typertGateway<br/>Typert Host invocation gateway"]
-  svc_sessionPersistence["ctx.sessionPersistence<br/>Durable session persistence seam"]
-  pkg_session_persistence_jsonl["session-persistence-jsonl"]
-  pkg_tool_bash["tool-bash"]
-  pkg_hooks_claude_code["hooks-claude-code"]
-  pkg_hooks_codex["hooks-codex"]
-  pkg_config_editor["config-editor"]
-  svc_configEditor["ctx.configEditor<br/>Profile configuration edits"]
-  pkg_settings["settings"]
-  pkg_agent_default_model["agent-default-model"]
-  svc_settings["ctx.settings<br/>Plugin configuration forms"]
-  pkg_tool_subagent["tool-subagent"]
-  svc_subagentModelSelection["ctx.subagentModelSelection<br/>Subagent model-selection preference"]
-  pkg_credentials["credentials"]
-  svc_credentials["ctx.credentials<br/>Credential seam"]
-  pkg_credentials_local["credentials-local"]
-  pkg_deepseek_account["deepseek-account"]
-  svc_deepseekAccount["ctx.deepseekAccount<br/>DeepSeek account"]
-  pkg_deepseek_account_platform["deepseek-account-platform"]
-  pkg_api_account_controller["api-account-controller"]
-  pkg_authorization["authorization"]
-  svc_authorization["ctx.authorization<br/>Authorization flow registry"]
-  pkg_client_product_analytics["client-product-analytics"]
-  svc_productAnalytics["ctx.productAnalytics<br/>Desktop interaction collection"]
-  pkg_otel["otel"]
-  svc_otel["ctx.otel<br/>Shared OTel reporting channels"]
-  pkg_host_product_telemetry_otel["host-product-telemetry-otel"]
-  pkg_session_telemetry_otel["session-telemetry-otel"]
-  svc_productTelemetry["ctx.productTelemetry<br/>Product usage event sender"]
-  pkg_session_telemetry["session-telemetry"]
-  svc_sessionTelemetry["ctx.sessionTelemetry<br/>Session telemetry seam"]
-  pkg_storage["storage"]
-  svc_storage["ctx.storage<br/>Non-session storage hub"]
-  pkg_storage_json["storage-json"]
-  pkg_storage_sqlite["storage-sqlite"]
-  pkg_storage_domain["storage-domain"]
-  svc_storageDomain["ctx.storageDomain<br/>Domain data facility"]
-  pkg_workspace["workspace"]
-  svc_messageFeedback["ctx.messageFeedback<br/>Lifecycle-bound message feedback"]
-  pkg_command_feedback["command-feedback"]
-  svc_sessionFeedback["ctx.sessionFeedback<br/>Session-level feedback recorder"]
-  svc_workspaceRegistry["ctx.workspaceRegistry<br/>Workspace entity registry"]
-  svc_sessionQuery["ctx.sessionQuery<br/>Session reads, traces, filters, and search"]
-  pkg_session_reference["session-reference"]
-  pkg_tool_session_query["tool-session-query"]
-  pkg_file_reference["file-reference"]
-  svc_fileReferences["ctx.fileReferences<br/>File reference discovery"]
-  pkg_file_reference_local["file-reference-local"]
-  svc_sessionReferenceResolver["ctx.sessionReferenceResolver<br/>Cross-session snapshot preparation"]
-  pkg_session_title["session-title"]
-  svc_sessionTitle["ctx.sessionTitle<br/>Log-backed session titles"]
-  pkg_session_title_first_prompt_llm["session-title-first-prompt-llm"]
-  pkg_session_title_all_prompts_llm["session-title-all-prompts-llm"]
-  pkg_system_prompt["system-prompt"]
-  svc_systemPrompt["ctx.systemPrompt<br/>System prompt assembly registry"]
-  pkg_tools["tools"]
-  pkg_tool_terminal["tool-terminal"]
-  pkg_tool_web["tool-web"]
-  svc_tools["ctx.tools<br/>Tool registry and guarded execution pipeline"]
-  pkg_tool_ask_user["tool-ask-user"]
-  pkg_tool_cordis["tool-cordis"]
-  pkg_tool_skill["tool-skill"]
-  pkg_tool_todo["tool-todo"]
-  pkg_user_questions["user-questions"]
-  svc_userQuestions["ctx.userQuestions<br/>Human question/answer seam"]
-  pkg_plan_mode["plan-mode"]
-  svc_planMode["ctx.planMode<br/>Plan collaboration state"]
-  pkg_agent_preset_registry["agent-preset-registry"]
-  svc_agentPresets["ctx.agentPresets<br/>Per-session agent composition"]
-  pkg_commands["commands"]
-  svc_commands["ctx.commands<br/>Human command registry"]
-  pkg_session_projection["session-projection"]
-  svc_sessionProjections["ctx.sessionProjections<br/>Session projection units"]
-  pkg_session_projection_cache["session-projection-cache"]
-  svc_sessionProjectionCache["ctx.sessionProjectionCache<br/>Persisted projection cache"]
-  pkg_skill["skill"]
-  svc_skills["ctx.skills<br/>Skill provider registry"]
-  pkg_sandbox_windows_acl["sandbox-windows-acl"]
-  pkg_skill_badge["skill-badge"]
-  pkg_skill_filesystem["skill-filesystem"]
-  pkg_skill_office["skill-office"]
-  svc_agents["ctx.agents<br/>Agent service"]
-  pkg_acp["acp"]
-  svc_agentDefaultModel["ctx.agentDefaultModel<br/>Default Agent model selection"]
-  pkg_headless["headless"]
-  svc_agentLoop["ctx.agentLoop<br/>Concrete loop driver"]
-  pkg_base["base"]
-  pkg_sdk_minimal["sdk-minimal"]
-  pkg_schedule["schedule"]
-  svc_schedule["ctx.schedule<br/>Host scheduled messages"]
-  pkg_goal["goal"]
-  svc_goals["ctx.goals<br/>Same-session goal domain"]
-  pkg_ssh["ssh"]
-  svc_ssh["ctx.ssh<br/>POSIX SSH connection owner"]
-  pkg_fs_ssh["fs-ssh"]
-  pkg_subprocess_ssh["subprocess-ssh"]
-  pkg_sandbox_ssh["sandbox-ssh"]
-  pkg_subprocess["subprocess"]
-  svc_subprocess["ctx.subprocess<br/>Subprocess seam"]
-  pkg_subprocess_local["subprocess-local"]
-  pkg_bash_local["bash-local"]
-  pkg_bash_sandbox["bash-sandbox"]
-  pkg_terminal_bash["terminal-bash"]
-  pkg_lsp_stdio["lsp-stdio"]
-  pkg_subagent_acp["subagent-acp"]
-  pkg_subagent_codex["subagent-codex"]
-  pkg_subagent_claude_code["subagent-claude-code"]
-  pkg_shell["shell"]
-  svc_shell["ctx.shell<br/>Bash executor seam"]
-  pkg_pwsh_local["pwsh-local"]
-  pkg_tool_pwsh["tool-pwsh"]
-  pkg_shell_env["shell-env"]
-  svc_shellEnv["ctx.shellEnv<br/>Managed bash environment registry"]
-  pkg_terminal["terminal"]
-  svc_terminals["ctx.terminals<br/>Persistent PTY session registry"]
-  pkg_sandbox["sandbox"]
-  svc_sandbox["ctx.sandbox<br/>Process-sandbox seam"]
-  pkg_sandbox_local["sandbox-local"]
-  pkg_sandbox_policy["sandbox-policy"]
-  svc_sandboxPolicy["ctx.sandboxPolicy<br/>Sandbox policy home"]
-  pkg_fs_sandbox["fs-sandbox"]
-  pkg_user_approval["user-approval"]
-  svc_approval["ctx.approval<br/>Approval seam"]
-  pkg_permission_presets["permission-presets"]
-  svc_permissionPresets["ctx.permissionPresets<br/>Permission presets"]
-  pkg_ptc_runtime["ptc-runtime"]
-  svc_ptcRuntime["ctx.ptcRuntime<br/>PTC execution seam"]
-  pkg_ptc_runtime_node["ptc-runtime-node"]
-  pkg_experimental_ptc_runtime_python["experimental-ptc-runtime-python"]
-  pkg_workflow_ptc["workflow-ptc"]
-  pkg_fs["fs"]
-  svc_fs["ctx.fs<br/>Filesystem provider seam"]
-  pkg_fs_local["fs-local"]
-  pkg_fs_observation_policy["fs-observation-policy"]
-  pkg_compaction["compaction"]
-  svc_compaction["ctx.compaction<br/>Compaction seam"]
-  pkg_subagent["subagent"]
-  svc_subagents["ctx.subagents<br/>Subagent provider and continuation service"]
-  pkg_subagent_spawn_in_process["subagent-spawn-in-process"]
-  pkg_subagent_fork_in_process["subagent-fork-in-process"]
-  pkg_subagent_dsh_sdk["subagent-dsh-sdk"]
-  pkg_tool_subagent_control["tool-subagent-control"]
-  pkg_tool_ralph["tool-ralph"]
-  pkg_experimental_speech_to_text["experimental-speech-to-text"]
-  svc_speechToText["ctx.speechToText<br/>Experimental speech recognition providers"]
-  pkg_experimental_speech_to_text_sensevoice["experimental-speech-to-text-sensevoice"]
-  pkg_experimental_agent_team["experimental-agent-team"]
-  svc_agentTeams["ctx.agentTeams<br/>Agent Teams coordination domain"]
-  pkg_experimental_tool_agent_team["experimental-tool-agent-team"]
-  pkg_inspector["inspector"]
-  svc_inspector["ctx.inspector<br/>Cross-realm runtime inspection"]
-  pkg_jobs["jobs"]
-  svc_jobs["ctx.jobs<br/>Background job registry"]
-  pkg_jobs_local["jobs-local"]
-  pkg_tool_jobs["tool-jobs"]
-  pkg_web["web"]
-  svc_web["ctx.web<br/>Web access provider registry"]
-  pkg_web_search_exa["web-search-exa"]
-  pkg_web_search_perplexity["web-search-perplexity"]
-  pkg_web_search_deepseek["web-search-deepseek"]
-  pkg_web_fetch_http["web-fetch-http"]
-  pkg_spill["spill"]
-  svc_spillStore["ctx.spillStore<br/>Spill storage seam"]
-  pkg_spill_local["spill-local"]
-  pkg_spill_policy["spill-policy"]
-  pkg_host_directory_picker["host-directory-picker"]
-  svc_directoryPicker["ctx.directoryPicker<br/>Workspace-directory picking seam"]
-  pkg_host_directory_picker_native["host-directory-picker-native"]
-  pkg_host_directory_picker_browse["host-directory-picker-browse"]
-  pkg_host_webserver["host-webserver"]
-  svc_webServer["ctx.webServer<br/>HTTP route registration"]
-  pkg_client_modules["client-modules"]
-  pkg_client_hmr["client-hmr"]
-  svc_clientModules["ctx.clientModules<br/>Client plugin graph host"]
-  pkg_workflow["workflow"]
-  svc_workflowEngine["ctx.workflowEngine<br/>Workflow script engine"]
-  pkg_tool_workflow["tool-workflow"]
-  pkg_webhook["webhook"]
-  svc_webhookRuntime["ctx.webhookRuntime<br/>Webhook rule runtime"]
-  pkg_webhook_github["webhook-github"]
-  pkg_lsp["lsp"]
-  svc_lsp["ctx.lsp<br/>Language-server navigation seam"]
-  pkg_tool_lsp["tool-lsp"]
-  pkg_cordis_host_runner["cordis-host-runner"]
-  svc_dynamicCordisRunner["ctx.dynamicCordisRunner<br/>Dynamic Cordis package host runner"]
-  svc_cordisInspect["ctx.cordisInspect<br/>Dynamic Cordis inspect registry"]
-  pkg_agent --> svc_agents
-  pkg_agent_default_model --> svc_agentDefaultModel
-  pkg_agent_loop --> svc_agentLoop
-  pkg_agent_preset_registry --> svc_agentPresets
-  pkg_api_gateway --> svc_typertGateway
-  pkg_api_job_controller --> svc_jobController
-  pkg_api_session_controller --> svc_sessionController
-  pkg_api_session_controller --> svc_sessionFileReferences
-  pkg_api_session_controller --> svc_sessionSkillCatalog
-  pkg_api_settings_controller --> svc_credentialsController
-  pkg_api_settings_controller --> svc_settingsController
-  pkg_api_terminal_controller --> svc_terminalController
-  pkg_api_workspace_controller --> svc_directoryPickerController
-  pkg_api_workspace_controller --> svc_workspaceController
-  pkg_api_workspace_files --> svc_workspaceFiles
-  pkg_app_boot --> svc_profileContext
-  pkg_attachment --> svc_attachments
-  pkg_attachment_local --> svc_attachments
-  pkg_authorization --> svc_authorization
-  pkg_bash_local --> svc_shell
-  pkg_bash_sandbox --> svc_shell
-  pkg_browser_use --> svc_browserUse
-  pkg_client_connection --> svc_connection
-  pkg_client_file_upload --> svc_fileUploads
-  pkg_client_modules --> svc_clientModules
-  pkg_client_product_analytics --> svc_productAnalytics
-  pkg_client_ui_plugin_manager --> svc_pluginRegistryProbe
-  pkg_command_feedback --> svc_sessionFeedback
-  pkg_commands --> svc_commands
-  pkg_compaction --> svc_compaction
-  pkg_compaction_basic --> svc_compaction
-  pkg_compaction_tool_result_pruner --> svc_toolResultPruner
-  pkg_computer_use --> svc_computerUse
-  pkg_config_editor --> svc_configEditor
-  pkg_cordis_host_runner --> svc_cordisInspect
-  pkg_cordis_host_runner --> svc_dynamicCordisRunner
-  pkg_credentials --> svc_credentials
-  pkg_credentials_local --> svc_credentials
-  pkg_deepseek_account --> svc_deepseekAccount
-  pkg_deepseek_account_platform --> svc_deepseekAccount
-  pkg_deepseek_llm_api_extensions --> svc_deepseekLlmApiExtensions
-  pkg_experimental_agent_team --> svc_agentTeams
-  pkg_experimental_api_speech_to_text --> svc_speechController
-  pkg_experimental_browser_use_chrome_devtools_mcp --> svc_browserUse
-  pkg_experimental_browser_use_playwright_mcp --> svc_browserUse
-  pkg_experimental_browser_use_stagehand_native --> svc_browserUse
-  pkg_experimental_computer_use_cua_driver_mcp --> svc_computerUse
-  pkg_experimental_computer_use_cua_driver_native --> svc_computerUse
-  pkg_experimental_ptc_runtime_python --> svc_ptcRuntime
-  pkg_experimental_speech_to_text --> svc_speechToText
-  pkg_experimental_speech_to_text_sensevoice --> svc_speechToText
-  pkg_file_reference --> svc_fileReferences
-  pkg_file_reference_local --> svc_fileReferences
-  pkg_fs --> svc_fs
-  pkg_fs_local --> svc_fs
-  pkg_fs_sandbox --> svc_fs
-  pkg_fs_ssh --> svc_fs
-  pkg_goal --> svc_goals
-  pkg_hmr --> svc_hmr
-  pkg_host_directory_picker --> svc_directoryPicker
-  pkg_host_directory_picker_browse --> svc_directoryPicker
-  pkg_host_directory_picker_native --> svc_directoryPicker
-  pkg_host_product_telemetry_otel --> svc_productTelemetry
-  pkg_host_webserver --> svc_webServer
-  pkg_inspector --> svc_inspector
-  pkg_invariants --> svc_invariants
-  pkg_jobs --> svc_jobs
-  pkg_jobs_local --> svc_jobs
-  pkg_llm --> svc_llm
-  pkg_llm_deepseek --> svc_llm
-  pkg_llm_pi_ai --> svc_llm
-  pkg_llm_replay --> svc_llm
-  pkg_lsp --> svc_lsp
-  pkg_lsp_stdio --> svc_lsp
-  pkg_mcp_client --> svc_mcpResources
-  pkg_mcp_resources --> svc_mcpResources
-  pkg_message_feedback --> svc_messageFeedback
-  pkg_office_to_pdf --> svc_officeToPdf
-  pkg_otel --> svc_otel
-  pkg_permission_presets --> svc_permissionPresets
-  pkg_plan_mode --> svc_planMode
-  pkg_plugin_manager --> svc_pluginManager
-  pkg_plugin_package_inventory_deepseek --> svc_deepseekLlmApiExtensions
-  pkg_ptc_runtime --> svc_ptcRuntime
-  pkg_ptc_runtime_node --> svc_ptcRuntime
-  pkg_pwsh_local --> svc_shell
-  pkg_sandbox --> svc_sandbox
-  pkg_sandbox_local --> svc_sandbox
-  pkg_sandbox_policy --> svc_sandboxPolicy
-  pkg_sandbox_ssh --> svc_sandbox
-  pkg_sandbox_windows_acl --> svc_skills
-  pkg_schedule --> svc_schedule
-  pkg_session --> svc_sessions
-  pkg_session_log_deepseek --> svc_deepseekLlmApiExtensions
-  pkg_session_persistence --> svc_sessionPersistence
-  pkg_session_persistence_jsonl --> svc_sessionPersistence
-  pkg_session_projection --> svc_sessionProjections
-  pkg_session_projection_cache --> svc_sessionProjectionCache
-  pkg_session_query --> svc_sessionQuery
-  pkg_session_query_sqlite --> svc_sessionQuery
-  pkg_session_reference --> svc_sessionReferenceResolver
-  pkg_session_telemetry --> svc_sessionTelemetry
-  pkg_session_telemetry_otel --> svc_sessionTelemetry
-  pkg_session_title --> svc_sessionTitle
-  pkg_session_title_all_prompts_llm --> svc_sessionTitle
-  pkg_session_title_first_prompt_llm --> svc_sessionTitle
-  pkg_settings --> svc_settings
-  pkg_shell --> svc_shell
-  pkg_shell_env --> svc_shellEnv
-  pkg_skill --> svc_skills
-  pkg_skill_badge --> svc_skills
-  pkg_skill_filesystem --> svc_skills
-  pkg_skill_office --> svc_skills
-  pkg_spill --> svc_spillStore
-  pkg_spill_local --> svc_spillStore
-  pkg_ssh --> svc_ssh
-  pkg_storage --> svc_storage
-  pkg_storage_domain --> svc_storageDomain
-  pkg_storage_json --> svc_storage
-  pkg_storage_sqlite --> svc_storage
-  pkg_subagent --> svc_subagents
-  pkg_subagent_acp --> svc_subagents
-  pkg_subagent_claude_code --> svc_subagents
-  pkg_subagent_codex --> svc_subagents
-  pkg_subagent_dsh_sdk --> svc_subagents
-  pkg_subagent_fork_in_process --> svc_subagents
-  pkg_subagent_spawn_in_process --> svc_subagents
-  pkg_subprocess --> svc_subprocess
-  pkg_subprocess_local --> svc_subprocess
-  pkg_subprocess_ssh --> svc_subprocess
-  pkg_system_prompt --> svc_systemPrompt
-  pkg_terminal --> svc_terminals
-  pkg_terminal_bash --> svc_terminals
-  pkg_token_meter --> svc_tokenMeter
-  pkg_tool_subagent --> svc_subagentModelSelection
-  pkg_tools --> svc_tools
-  pkg_typert_registry --> svc_typert
-  pkg_user_approval --> svc_approval
-  pkg_user_questions --> svc_userQuestions
-  pkg_web --> svc_web
-  pkg_web_fetch_http --> svc_web
-  pkg_web_search_deepseek --> svc_web
-  pkg_web_search_exa --> svc_web
-  pkg_web_search_perplexity --> svc_web
-  pkg_webhook --> svc_webhookRuntime
-  pkg_workflow --> svc_workflowEngine
-  pkg_workflow_ptc --> svc_workflowEngine
-  pkg_workspace --> svc_workspaceRegistry
-  pkg_workspace_changes --> svc_workspaceChanges
-  svc_agentDefaultModel --> pkg_api_session_controller
-  svc_agentDefaultModel --> pkg_headless
-  svc_agentLoop --> pkg_base
-  svc_agentLoop --> pkg_sdk_minimal
-  svc_agentTeams --> pkg_experimental_tool_agent_team
-  svc_agents --> pkg_acp
-  svc_agents --> pkg_agent_loop
-  svc_agents --> pkg_subagent_in_process_driver
-  svc_approval --> pkg_acp
-  svc_approval --> pkg_tool_bash
-  svc_approval --> pkg_tools
-  svc_attachments --> pkg_api_session_controller
-  svc_attachments --> pkg_llm_deepseek
-  svc_attachments --> pkg_llm_pi_ai
-  svc_attachments --> pkg_tool_fs
-  svc_authorization --> pkg_llm_pi_ai
-  svc_browserUse --> pkg_experimental_browser_use_chrome_devtools_mcp
-  svc_browserUse --> pkg_experimental_browser_use_playwright_mcp
-  svc_browserUse --> pkg_experimental_browser_use_stagehand_native
-  svc_clientModules --> pkg_client_hmr
-  svc_compaction --> pkg_compaction_basic
-  svc_computerUse --> pkg_experimental_computer_use_cua_driver_mcp
-  svc_computerUse --> pkg_experimental_computer_use_cua_driver_native
-  svc_configEditor --> pkg_agent_default_model
-  svc_configEditor --> pkg_settings
-  svc_connection --> pkg_api_gateway
-  svc_connection --> pkg_host_frontend_static
-  svc_cordisInspect --> pkg_tool_cordis
-  svc_credentials --> pkg_api_settings_controller
-  svc_credentials --> pkg_llm_deepseek
-  svc_credentials --> pkg_llm_pi_ai
-  svc_deepseekAccount --> pkg_api_account_controller
-  svc_deepseekAccount --> pkg_llm_deepseek
-  svc_deepseekLlmApiExtensions --> pkg_llm_deepseek
-  svc_directoryPicker --> pkg_api_workspace_controller
-  svc_dynamicCordisRunner --> pkg_tool_cordis
-  svc_fileReferences --> pkg_api_session_controller
-  svc_fileUploads --> pkg_api_session_controller
-  svc_fs --> pkg_tool_fs
-  svc_hmr --> pkg_app_boot
-  svc_invariants --> pkg_agent
-  svc_invariants --> pkg_agent_loop
-  svc_invariants --> pkg_scope
-  svc_invariants --> pkg_session
-  svc_jobs --> pkg_api_job_controller
-  svc_jobs --> pkg_tool_bash
-  svc_jobs --> pkg_tool_jobs
-  svc_jobs --> pkg_tool_pwsh
-  svc_jobs --> pkg_tool_subagent
-  svc_jobs --> pkg_tool_terminal
-  svc_llm --> pkg_agent_loop
-  svc_llm --> pkg_compaction_basic
-  svc_lsp --> pkg_tool_lsp
-  svc_mcpResources --> pkg_mcp_resources
-  svc_officeToPdf --> pkg_client_ui_sidebar_documentpreview
-  svc_otel --> pkg_host_product_telemetry_otel
-  svc_otel --> pkg_session_telemetry_otel
-  svc_pluginManager --> pkg_plugin_manager
-  svc_pluginManager --> pkg_ui_settings_plugin_inventory
-  svc_pluginRegistryProbe --> pkg_client_ui_plugin_manager
-  svc_profileContext --> pkg_plugin_manager
-  svc_ptcRuntime --> pkg_tools
-  svc_ptcRuntime --> pkg_workflow_ptc
-  svc_sandbox --> pkg_bash_sandbox
-  svc_sandbox --> pkg_terminal_bash
-  svc_sandboxPolicy --> pkg_bash_sandbox
-  svc_sandboxPolicy --> pkg_fs_sandbox
-  svc_sandboxPolicy --> pkg_terminal_bash
-  svc_sessionPersistence --> pkg_agent_loop
-  svc_sessionPersistence --> pkg_hooks_claude_code
-  svc_sessionPersistence --> pkg_hooks_codex
-  svc_sessionPersistence --> pkg_message_feedback
-  svc_sessionPersistence --> pkg_session_query
-  svc_sessionPersistence --> pkg_session_query_sqlite
-  svc_sessionPersistence --> pkg_tool_bash
-  svc_sessionProjectionCache --> pkg_api_session_controller
-  svc_sessionProjectionCache --> pkg_session_query
-  svc_sessionProjectionCache --> pkg_session_reference
-  svc_sessionProjections --> pkg_api_session_controller
-  svc_sessionProjections --> pkg_session_title
-  svc_sessionProjections --> pkg_tool_todo
-  svc_sessionQuery --> pkg_session_reference
-  svc_sessionQuery --> pkg_tool_session_query
-  svc_sessions --> pkg_agent
-  svc_sessions --> pkg_agent_loop
-  svc_sessions --> pkg_invariants
-  svc_sessions --> pkg_message_feedback
-  svc_sessions --> pkg_session_persistence
-  svc_sessions --> pkg_session_query
-  svc_sessions --> pkg_session_query_sqlite
-  svc_sessions --> pkg_subagent_in_process_driver
-  svc_settings --> pkg_api_settings_controller
-  svc_shell --> pkg_hooks_claude_code
-  svc_shell --> pkg_hooks_codex
-  svc_shell --> pkg_tool_bash
-  svc_shell --> pkg_tool_pwsh
-  svc_shellEnv --> pkg_tool_bash
-  svc_shellEnv --> pkg_tool_pwsh
-  svc_skills --> pkg_tool_skill
-  svc_speechToText --> pkg_experimental_api_speech_to_text
-  svc_spillStore --> pkg_spill_policy
-  svc_ssh --> pkg_fs_ssh
-  svc_ssh --> pkg_sandbox_ssh
-  svc_ssh --> pkg_subprocess_ssh
-  svc_storage --> pkg_storage_domain
-  svc_storageDomain --> pkg_workspace
-  svc_subagentModelSelection --> pkg_tool_subagent
-  svc_subagents --> pkg_tool_ralph
-  svc_subagents --> pkg_tool_subagent
-  svc_subagents --> pkg_tool_subagent_control
-  svc_subprocess --> pkg_bash_local
-  svc_subprocess --> pkg_bash_sandbox
-  svc_subprocess --> pkg_lsp_stdio
-  svc_subprocess --> pkg_subagent_acp
-  svc_subprocess --> pkg_subagent_claude_code
-  svc_subprocess --> pkg_subagent_codex
-  svc_subprocess --> pkg_terminal_bash
-  svc_systemPrompt --> pkg_agent_loop
-  svc_systemPrompt --> pkg_tool_fs
-  svc_systemPrompt --> pkg_tool_terminal
-  svc_systemPrompt --> pkg_tool_web
-  svc_systemPrompt --> pkg_tools
-  svc_terminals --> pkg_tool_terminal
-  svc_tokenMeter --> pkg_compaction_basic
-  svc_toolResultPruner --> pkg_compaction_basic
-  svc_tools --> pkg_agent_loop
-  svc_tools --> pkg_tool_ask_user
-  svc_tools --> pkg_tool_bash
-  svc_tools --> pkg_tool_cordis
-  svc_tools --> pkg_tool_fs
-  svc_tools --> pkg_tool_skill
-  svc_tools --> pkg_tool_subagent
-  svc_tools --> pkg_tool_terminal
-  svc_tools --> pkg_tool_todo
-  svc_tools --> pkg_tool_web
-  svc_typert --> pkg_api_gateway
-  svc_typert --> pkg_typert_loader
-  svc_userQuestions --> pkg_tool_ask_user
-  svc_web --> pkg_tool_web
-  svc_webServer --> pkg_client_connection
-  svc_webServer --> pkg_client_hmr
-  svc_webServer --> pkg_client_modules
-  svc_webhookRuntime --> pkg_webhook_github
-  svc_workflowEngine --> pkg_tool_ralph
-  svc_workflowEngine --> pkg_tool_workflow
-  svc_workspaceRegistry --> pkg_api_session_controller
-  svc_workspaceRegistry --> pkg_api_workspace_controller
-  svc_fs -. event gate .-> pkg_fs_observation_policy
+ pkg_hmr["hmr"]
+ svc_hmr["ctx.hmr<br/>Serialized module and configuration reloads"]
+ pkg_app_boot["app-boot"]
+ pkg_client_ui_plugin_manager["client-ui-plugin-manager"]
+ svc_pluginRegistryProbe["ctx.pluginRegistryProbe<br/>Host registry response comparison"]
+ pkg_plugin_manager["plugin-manager"]
+ svc_pluginManager["ctx.pluginManager<br/>Current-profile plugin and bundle management"]
+ pkg_ui_settings_plugin_inventory["ui-settings-plugin-inventory"]
+ svc_profileContext["ctx.profileContext<br/>Launcher-owned profile data"]
+ pkg_client_connection["client-connection"]
+ svc_connection["ctx.connection<br/>Authenticated browser transport"]
+ pkg_api_gateway["api-gateway"]
+ pkg_host_frontend_static["host-frontend-static"]
+ pkg_mcp_resources["mcp-resources"]
+ svc_mcpResources["ctx.mcpResources<br/>Scoped MCP resource access"]
+ pkg_mcp_client["mcp-client"]
+ pkg_browser_use["browser-use"]
+ svc_browserUse["ctx.browserUse<br/>Browser-use provider registration"]
+ pkg_experimental_browser_use_playwright_mcp["experimental-browser-use-playwright-mcp"]
+ pkg_experimental_browser_use_chrome_devtools_mcp["experimental-browser-use-chrome-devtools-mcp"]
+ pkg_experimental_browser_use_stagehand_native["experimental-browser-use-stagehand-native"]
+ pkg_computer_use["computer-use"]
+ svc_computerUse["ctx.computerUse<br/>Computer-use provider registration"]
+ pkg_experimental_computer_use_cua_driver_mcp["experimental-computer-use-cua-driver-mcp"]
+ pkg_experimental_computer_use_cua_driver_native["experimental-computer-use-cua-driver-native"]
+ pkg_office_to_pdf["office-to-pdf"]
+ svc_officeToPdf["ctx.officeToPdf<br/>Office to PDF conversion"]
+ pkg_client_ui_sidebar_documentpreview["client-ui-sidebar-documentpreview"]
+ pkg_attachment["attachment"]
+ svc_attachments["ctx.attachments<br/>Durable binary attachment storage"]
+ pkg_attachment_local["attachment-local"]
+ pkg_api_session_controller["api-session-controller"]
+ pkg_tool_fs["tool-fs"]
+ pkg_llm_pi_ai["llm-pi-ai"]
+ pkg_llm_deepseek["llm-deepseek"]
+ pkg_client_file_upload["client-file-upload"]
+ svc_fileUploads["ctx.fileUploads<br/>Agent-scoped staged file uploads"]
+ pkg_llm["llm"]
+ svc_llm["ctx.llm<br/>LLM adapter registry"]
+ pkg_llm_replay["llm-replay"]
+ pkg_agent_loop["agent-loop"]
+ pkg_compaction_basic["compaction-basic"]
+ pkg_deepseek_llm_api_extensions["deepseek-llm-api-extensions"]
+ svc_deepseekLlmApiExtensions["ctx.deepseekLlmApiExtensions<br/>Official DeepSeek request extensions"]
+ pkg_session_log_deepseek["session-log-deepseek"]
+ pkg_plugin_package_inventory_deepseek["plugin-package-inventory-deepseek"]
+ pkg_token_meter["token-meter"]
+ svc_tokenMeter["ctx.tokenMeter<br/>Replay token measurement"]
+ pkg_compaction_tool_result_pruner["compaction-tool-result-pruner"]
+ svc_toolResultPruner["ctx.toolResultPruner<br/>Model-free tool-result pruning"]
+ pkg_session["session"]
+ svc_sessions["ctx.sessions<br/>In-memory session store"]
+ pkg_agent["agent"]
+ pkg_session_persistence["session-persistence"]
+ pkg_session_query["session-query"]
+ pkg_session_query_sqlite["session-query-sqlite"]
+ pkg_subagent_in_process_driver["subagent-in-process-driver"]
+ pkg_invariants["invariants"]
+ pkg_message_feedback["message-feedback"]
+ pkg_experimental_api_speech_to_text["experimental-api-speech-to-text"]
+ svc_speechController["ctx.speechController<br/>Experimental transcription Remote"]
+ svc_sessionController["ctx.sessionController<br/>Host Session Remote controller"]
+ svc_sessionFileReferences["ctx.sessionFileReferences<br/>Session-addressed file-reference Remote adapter"]
+ svc_sessionSkillCatalog["ctx.sessionSkillCatalog<br/>Session-addressed skill Remote adapter"]
+ pkg_api_job_controller["api-job-controller"]
+ svc_jobController["ctx.jobController<br/>Host job Remote controller"]
+ pkg_api_settings_controller["api-settings-controller"]
+ svc_credentialsController["ctx.credentialsController<br/>Host credential-surface Remote controller"]
+ svc_settingsController["ctx.settingsController<br/>Host settings-surface Remote controller"]
+ pkg_api_workspace_files["api-workspace-files"]
+ svc_workspaceFiles["ctx.workspaceFiles<br/>Host workspace file Remote service"]
+ pkg_workspace_changes["workspace-changes"]
+ svc_workspaceChanges["ctx.workspaceChanges<br/>Host per-turn changed-file summaries"]
+ pkg_api_terminal_controller["api-terminal-controller"]
+ svc_terminalController["ctx.terminalController<br/>Session interactive terminal Remote controller"]
+ pkg_api_workspace_controller["api-workspace-controller"]
+ svc_workspaceController["ctx.workspaceController<br/>Host Workspace Remote controller"]
+ svc_directoryPickerController["ctx.directoryPickerController<br/>Host directory-picking Remote controller"]
+ svc_invariants["ctx.invariants<br/>Package-owned invariant registry"]
+ pkg_scope["scope"]
+ pkg_typert_registry["typert-registry"]
+ svc_typert["ctx.typert<br/>Runtime type registry"]
+ pkg_typert_loader["typert-loader"]
+ svc_typertGateway["ctx.typertGateway<br/>Typert Host invocation gateway"]
+ svc_sessionPersistence["ctx.sessionPersistence<br/>Durable session persistence seam"]
+ pkg_session_persistence_jsonl["session-persistence-jsonl"]
+ pkg_tool_bash["tool-bash"]
+ pkg_hooks_claude_code["hooks-claude-code"]
+ pkg_hooks_codex["hooks-codex"]
+ pkg_config_editor["config-editor"]
+ svc_configEditor["ctx.configEditor<br/>Profile configuration edits"]
+ pkg_settings["settings"]
+ pkg_agent_default_model["agent-default-model"]
+ svc_settings["ctx.settings<br/>Plugin configuration forms"]
+ pkg_tool_subagent["tool-subagent"]
+ svc_subagentModelSelection["ctx.subagentModelSelection<br/>Subagent model-selection preference"]
+ pkg_credentials["credentials"]
+ svc_credentials["ctx.credentials<br/>Credential seam"]
+ pkg_credentials_local["credentials-local"]
+ pkg_deepseek_account["deepseek-account"]
+ svc_deepseekAccount["ctx.deepseekAccount<br/>DeepSeek account"]
+ pkg_deepseek_account_platform["deepseek-account-platform"]
+ pkg_api_account_controller["api-account-controller"]
+ pkg_authorization["authorization"]
+ svc_authorization["ctx.authorization<br/>Authorization flow registry"]
+ pkg_client_product_analytics["client-product-analytics"]
+ svc_productAnalytics["ctx.productAnalytics<br/>Desktop interaction collection"]
+ pkg_otel["otel"]
+ svc_otel["ctx.otel<br/>Shared OTel reporting channels"]
+ pkg_host_product_telemetry_otel["host-product-telemetry-otel"]
+ pkg_session_telemetry_otel["session-telemetry-otel"]
+ svc_productTelemetry["ctx.productTelemetry<br/>Product usage event sender"]
+ pkg_session_telemetry["session-telemetry"]
+ svc_sessionTelemetry["ctx.sessionTelemetry<br/>Session telemetry seam"]
+ pkg_storage["storage"]
+ svc_storage["ctx.storage<br/>Non-session storage hub"]
+ pkg_storage_json["storage-json"]
+ pkg_storage_sqlite["storage-sqlite"]
+ pkg_storage_domain["storage-domain"]
+ svc_storageDomain["ctx.storageDomain<br/>Domain data facility"]
+ pkg_workspace["workspace"]
+ svc_messageFeedback["ctx.messageFeedback<br/>Lifecycle-bound message feedback"]
+ pkg_command_feedback["command-feedback"]
+ svc_sessionFeedback["ctx.sessionFeedback<br/>Session-level feedback recorder"]
+ svc_workspaceRegistry["ctx.workspaceRegistry<br/>Workspace entity registry"]
+ svc_sessionQuery["ctx.sessionQuery<br/>Session reads, traces, filters, and search"]
+ pkg_session_reference["session-reference"]
+ pkg_tool_session_query["tool-session-query"]
+ pkg_file_reference["file-reference"]
+ svc_fileReferences["ctx.fileReferences<br/>File reference discovery"]
+ pkg_file_reference_local["file-reference-local"]
+ svc_sessionReferenceResolver["ctx.sessionReferenceResolver<br/>Cross-session snapshot preparation"]
+ pkg_session_title["session-title"]
+ svc_sessionTitle["ctx.sessionTitle<br/>Log-backed session titles"]
+ pkg_session_title_first_prompt_llm["session-title-first-prompt-llm"]
+ pkg_session_title_all_prompts_llm["session-title-all-prompts-llm"]
+ pkg_system_prompt["system-prompt"]
+ svc_systemPrompt["ctx.systemPrompt<br/>System prompt assembly registry"]
+ pkg_tools["tools"]
+ pkg_tool_terminal["tool-terminal"]
+ pkg_tool_web["tool-web"]
+ svc_tools["ctx.tools<br/>Tool registry and guarded execution pipeline"]
+ pkg_tool_ask_user["tool-ask-user"]
+ pkg_tool_cordis["tool-cordis"]
+ pkg_tool_skill["tool-skill"]
+ pkg_tool_todo["tool-todo"]
+ pkg_user_questions["user-questions"]
+ svc_userQuestions["ctx.userQuestions<br/>Human question/answer seam"]
+ pkg_plan_mode["plan-mode"]
+ svc_planMode["ctx.planMode<br/>Plan collaboration state"]
+ pkg_agent_preset_registry["agent-preset-registry"]
+ svc_agentPresets["ctx.agentPresets<br/>Per-session agent composition"]
+ pkg_commands["commands"]
+ svc_commands["ctx.commands<br/>Human command registry"]
+ pkg_session_projection["session-projection"]
+ svc_sessionProjections["ctx.sessionProjections<br/>Session projection units"]
+ pkg_session_projection_cache["session-projection-cache"]
+ svc_sessionProjectionCache["ctx.sessionProjectionCache<br/>Persisted projection cache"]
+ pkg_skill["skill"]
+ svc_skills["ctx.skills<br/>Skill provider registry"]
+ pkg_sandbox_windows_acl["sandbox-windows-acl"]
+ pkg_skill_badge["skill-badge"]
+ pkg_skill_filesystem["skill-filesystem"]
+ pkg_skill_office["skill-office"]
+ svc_agents["ctx.agents<br/>Agent service"]
+ pkg_acp["acp"]
+ svc_agentDefaultModel["ctx.agentDefaultModel<br/>Default Agent model selection"]
+ pkg_headless["headless"]
+ svc_agentLoop["ctx.agentLoop<br/>Concrete loop driver"]
+ pkg_base["base"]
+ pkg_sdk_minimal["sdk-minimal"]
+ pkg_schedule["schedule"]
+ svc_schedule["ctx.schedule<br/>Host scheduled messages"]
+ pkg_goal["goal"]
+ svc_goals["ctx.goals<br/>Same-session goal domain"]
+ pkg_ssh["ssh"]
+ svc_ssh["ctx.ssh<br/>POSIX SSH connection owner"]
+ pkg_fs_ssh["fs-ssh"]
+ pkg_subprocess_ssh["subprocess-ssh"]
+ pkg_sandbox_ssh["sandbox-ssh"]
+ pkg_subprocess["subprocess"]
+ svc_subprocess["ctx.subprocess<br/>Subprocess seam"]
+ pkg_subprocess_local["subprocess-local"]
+ pkg_bash_local["bash-local"]
+ pkg_bash_sandbox["bash-sandbox"]
+ pkg_terminal_bash["terminal-bash"]
+ pkg_lsp_stdio["lsp-stdio"]
+ pkg_subagent_acp["subagent-acp"]
+ pkg_subagent_codex["subagent-codex"]
+ pkg_subagent_claude_code["subagent-claude-code"]
+ pkg_shell["shell"]
+ svc_shell["ctx.shell<br/>Bash executor seam"]
+ pkg_pwsh_local["pwsh-local"]
+ pkg_tool_pwsh["tool-pwsh"]
+ pkg_shell_env["shell-env"]
+ svc_shellEnv["ctx.shellEnv<br/>Managed bash environment registry"]
+ pkg_terminal["terminal"]
+ svc_terminals["ctx.terminals<br/>Persistent PTY session registry"]
+ pkg_sandbox["sandbox"]
+ svc_sandbox["ctx.sandbox<br/>Process-sandbox seam"]
+ pkg_sandbox_local["sandbox-local"]
+ pkg_sandbox_policy["sandbox-policy"]
+ svc_sandboxPolicy["ctx.sandboxPolicy<br/>Sandbox policy home"]
+ pkg_fs_sandbox["fs-sandbox"]
+ pkg_user_approval["user-approval"]
+ svc_approval["ctx.approval<br/>Approval seam"]
+ pkg_permission_presets["permission-presets"]
+ svc_permissionPresets["ctx.permissionPresets<br/>Permission presets"]
+ pkg_ptc_runtime["ptc-runtime"]
+ svc_ptcRuntime["ctx.ptcRuntime<br/>PTC execution seam"]
+ pkg_ptc_runtime_node["ptc-runtime-node"]
+ pkg_experimental_ptc_runtime_python["experimental-ptc-runtime-python"]
+ pkg_workflow_ptc["workflow-ptc"]
+ pkg_fs["fs"]
+ svc_fs["ctx.fs<br/>Filesystem provider seam"]
+ pkg_fs_local["fs-local"]
+ pkg_fs_observation_policy["fs-observation-policy"]
+ pkg_compaction["compaction"]
+ svc_compaction["ctx.compaction<br/>Compaction seam"]
+ pkg_subagent["subagent"]
+ svc_subagents["ctx.subagents<br/>Subagent provider and continuation service"]
+ pkg_subagent_spawn_in_process["subagent-spawn-in-process"]
+ pkg_subagent_fork_in_process["subagent-fork-in-process"]
+ pkg_subagent_dsh_sdk["subagent-dsh-sdk"]
+ pkg_tool_subagent_control["tool-subagent-control"]
+ pkg_tool_ralph["tool-ralph"]
+ pkg_experimental_speech_to_text["experimental-speech-to-text"]
+ svc_speechToText["ctx.speechToText<br/>Experimental speech recognition providers"]
+ pkg_experimental_speech_to_text_sensevoice["experimental-speech-to-text-sensevoice"]
+ pkg_inspector["inspector"]
+ svc_inspector["ctx.inspector<br/>Cross-realm runtime inspection"]
+ pkg_jobs["jobs"]
+ svc_jobs["ctx.jobs<br/>Background job registry"]
+ pkg_jobs_local["jobs-local"]
+ pkg_tool_jobs["tool-jobs"]
+ pkg_web["web"]
+ svc_web["ctx.web<br/>Web access provider registry"]
+ pkg_web_search_exa["web-search-exa"]
+ pkg_web_search_perplexity["web-search-perplexity"]
+ pkg_web_search_deepseek["web-search-deepseek"]
+ pkg_web_fetch_http["web-fetch-http"]
+ pkg_spill["spill"]
+ svc_spillStore["ctx.spillStore<br/>Spill storage seam"]
+ pkg_spill_local["spill-local"]
+ pkg_spill_policy["spill-policy"]
+ pkg_host_directory_picker["host-directory-picker"]
+ svc_directoryPicker["ctx.directoryPicker<br/>Workspace-directory picking seam"]
+ pkg_host_directory_picker_native["host-directory-picker-native"]
+ pkg_host_directory_picker_browse["host-directory-picker-browse"]
+ pkg_host_webserver["host-webserver"]
+ svc_webServer["ctx.webServer<br/>HTTP route registration"]
+ pkg_client_modules["client-modules"]
+ pkg_client_hmr["client-hmr"]
+ svc_clientModules["ctx.clientModules<br/>Client plugin graph host"]
+ pkg_workflow["workflow"]
+ svc_workflowEngine["ctx.workflowEngine<br/>Workflow script engine"]
+ pkg_tool_workflow["tool-workflow"]
+ pkg_webhook["webhook"]
+ svc_webhookRuntime["ctx.webhookRuntime<br/>Webhook rule runtime"]
+ pkg_webhook_github["webhook-github"]
+ pkg_lsp["lsp"]
+ svc_lsp["ctx.lsp<br/>Language-server navigation seam"]
+ pkg_tool_lsp["tool-lsp"]
+ pkg_cordis_host_runner["cordis-host-runner"]
+ svc_dynamicCordisRunner["ctx.dynamicCordisRunner<br/>Dynamic Cordis package host runner"]
+ svc_cordisInspect["ctx.cordisInspect<br/>Dynamic Cordis inspect registry"]
+ pkg_agent --> svc_agents
+ pkg_agent_default_model --> svc_agentDefaultModel
+ pkg_agent_loop --> svc_agentLoop
+ pkg_agent_preset_registry --> svc_agentPresets
+ pkg_api_gateway --> svc_typertGateway
+ pkg_api_job_controller --> svc_jobController
+ pkg_api_session_controller --> svc_sessionController
+ pkg_api_session_controller --> svc_sessionFileReferences
+ pkg_api_session_controller --> svc_sessionSkillCatalog
+ pkg_api_settings_controller --> svc_credentialsController
+ pkg_api_settings_controller --> svc_settingsController
+ pkg_api_terminal_controller --> svc_terminalController
+ pkg_api_workspace_controller --> svc_directoryPickerController
+ pkg_api_workspace_controller --> svc_workspaceController
+ pkg_api_workspace_files --> svc_workspaceFiles
+ pkg_app_boot --> svc_profileContext
+ pkg_attachment --> svc_attachments
+ pkg_attachment_local --> svc_attachments
+ pkg_authorization --> svc_authorization
+ pkg_bash_local --> svc_shell
+ pkg_bash_sandbox --> svc_shell
+ pkg_browser_use --> svc_browserUse
+ pkg_client_connection --> svc_connection
+ pkg_client_file_upload --> svc_fileUploads
+ pkg_client_modules --> svc_clientModules
+ pkg_client_product_analytics --> svc_productAnalytics
+ pkg_client_ui_plugin_manager --> svc_pluginRegistryProbe
+ pkg_command_feedback --> svc_sessionFeedback
+ pkg_commands --> svc_commands
+ pkg_compaction --> svc_compaction
+ pkg_compaction_basic --> svc_compaction
+ pkg_compaction_tool_result_pruner --> svc_toolResultPruner
+ pkg_computer_use --> svc_computerUse
+ pkg_config_editor --> svc_configEditor
+ pkg_cordis_host_runner --> svc_cordisInspect
+ pkg_cordis_host_runner --> svc_dynamicCordisRunner
+ pkg_credentials --> svc_credentials
+ pkg_credentials_local --> svc_credentials
+ pkg_deepseek_account --> svc_deepseekAccount
+ pkg_deepseek_account_platform --> svc_deepseekAccount
+ pkg_deepseek_llm_api_extensions --> svc_deepseekLlmApiExtensions
+ pkg_experimental_api_speech_to_text --> svc_speechController
+ pkg_experimental_browser_use_chrome_devtools_mcp --> svc_browserUse
+ pkg_experimental_browser_use_playwright_mcp --> svc_browserUse
+ pkg_experimental_browser_use_stagehand_native --> svc_browserUse
+ pkg_experimental_computer_use_cua_driver_mcp --> svc_computerUse
+ pkg_experimental_computer_use_cua_driver_native --> svc_computerUse
+ pkg_experimental_ptc_runtime_python --> svc_ptcRuntime
+ pkg_experimental_speech_to_text --> svc_speechToText
+ pkg_experimental_speech_to_text_sensevoice --> svc_speechToText
+ pkg_file_reference --> svc_fileReferences
+ pkg_file_reference_local --> svc_fileReferences
+ pkg_fs --> svc_fs
+ pkg_fs_local --> svc_fs
+ pkg_fs_sandbox --> svc_fs
+ pkg_fs_ssh --> svc_fs
+ pkg_goal --> svc_goals
+ pkg_hmr --> svc_hmr
+ pkg_host_directory_picker --> svc_directoryPicker
+ pkg_host_directory_picker_browse --> svc_directoryPicker
+ pkg_host_directory_picker_native --> svc_directoryPicker
+ pkg_host_product_telemetry_otel --> svc_productTelemetry
+ pkg_host_webserver --> svc_webServer
+ pkg_inspector --> svc_inspector
+ pkg_invariants --> svc_invariants
+ pkg_jobs --> svc_jobs
+ pkg_jobs_local --> svc_jobs
+ pkg_llm --> svc_llm
+ pkg_llm_deepseek --> svc_llm
+ pkg_llm_pi_ai --> svc_llm
+ pkg_llm_replay --> svc_llm
+ pkg_lsp --> svc_lsp
+ pkg_lsp_stdio --> svc_lsp
+ pkg_mcp_client --> svc_mcpResources
+ pkg_mcp_resources --> svc_mcpResources
+ pkg_message_feedback --> svc_messageFeedback
+ pkg_office_to_pdf --> svc_officeToPdf
+ pkg_otel --> svc_otel
+ pkg_permission_presets --> svc_permissionPresets
+ pkg_plan_mode --> svc_planMode
+ pkg_plugin_manager --> svc_pluginManager
+ pkg_plugin_package_inventory_deepseek --> svc_deepseekLlmApiExtensions
+ pkg_ptc_runtime --> svc_ptcRuntime
+ pkg_ptc_runtime_node --> svc_ptcRuntime
+ pkg_pwsh_local --> svc_shell
+ pkg_sandbox --> svc_sandbox
+ pkg_sandbox_local --> svc_sandbox
+ pkg_sandbox_policy --> svc_sandboxPolicy
+ pkg_sandbox_ssh --> svc_sandbox
+ pkg_sandbox_windows_acl --> svc_skills
+ pkg_schedule --> svc_schedule
+ pkg_session --> svc_sessions
+ pkg_session_log_deepseek --> svc_deepseekLlmApiExtensions
+ pkg_session_persistence --> svc_sessionPersistence
+ pkg_session_persistence_jsonl --> svc_sessionPersistence
+ pkg_session_projection --> svc_sessionProjections
+ pkg_session_projection_cache --> svc_sessionProjectionCache
+ pkg_session_query --> svc_sessionQuery
+ pkg_session_query_sqlite --> svc_sessionQuery
+ pkg_session_reference --> svc_sessionReferenceResolver
+ pkg_session_telemetry --> svc_sessionTelemetry
+ pkg_session_telemetry_otel --> svc_sessionTelemetry
+ pkg_session_title --> svc_sessionTitle
+ pkg_session_title_all_prompts_llm --> svc_sessionTitle
+ pkg_session_title_first_prompt_llm --> svc_sessionTitle
+ pkg_settings --> svc_settings
+ pkg_shell --> svc_shell
+ pkg_shell_env --> svc_shellEnv
+ pkg_skill --> svc_skills
+ pkg_skill_badge --> svc_skills
+ pkg_skill_filesystem --> svc_skills
+ pkg_skill_office --> svc_skills
+ pkg_spill --> svc_spillStore
+ pkg_spill_local --> svc_spillStore
+ pkg_ssh --> svc_ssh
+ pkg_storage --> svc_storage
+ pkg_storage_domain --> svc_storageDomain
+ pkg_storage_json --> svc_storage
+ pkg_storage_sqlite --> svc_storage
+ pkg_subagent --> svc_subagents
+ pkg_subagent_acp --> svc_subagents
+ pkg_subagent_claude_code --> svc_subagents
+ pkg_subagent_codex --> svc_subagents
+ pkg_subagent_dsh_sdk --> svc_subagents
+ pkg_subagent_fork_in_process --> svc_subagents
+ pkg_subagent_spawn_in_process --> svc_subagents
+ pkg_subprocess --> svc_subprocess
+ pkg_subprocess_local --> svc_subprocess
+ pkg_subprocess_ssh --> svc_subprocess
+ pkg_system_prompt --> svc_systemPrompt
+ pkg_terminal --> svc_terminals
+ pkg_terminal_bash --> svc_terminals
+ pkg_token_meter --> svc_tokenMeter
+ pkg_tool_subagent --> svc_subagentModelSelection
+ pkg_tools --> svc_tools
+ pkg_typert_registry --> svc_typert
+ pkg_user_approval --> svc_approval
+ pkg_user_questions --> svc_userQuestions
+ pkg_web --> svc_web
+ pkg_web_fetch_http --> svc_web
+ pkg_web_search_deepseek --> svc_web
+ pkg_web_search_exa --> svc_web
+ pkg_web_search_perplexity --> svc_web
+ pkg_webhook --> svc_webhookRuntime
+ pkg_workflow --> svc_workflowEngine
+ pkg_workflow_ptc --> svc_workflowEngine
+ pkg_workspace --> svc_workspaceRegistry
+ pkg_workspace_changes --> svc_workspaceChanges
+ svc_agentDefaultModel --> pkg_api_session_controller
+ svc_agentDefaultModel --> pkg_headless
+ svc_agentLoop --> pkg_base
+ svc_agentLoop --> pkg_sdk_minimal
+ svc_agents --> pkg_acp
+ svc_agents --> pkg_agent_loop
+ svc_agents --> pkg_subagent_in_process_driver
+ svc_approval --> pkg_acp
+ svc_approval --> pkg_tool_bash
+ svc_approval --> pkg_tools
+ svc_attachments --> pkg_api_session_controller
+ svc_attachments --> pkg_llm_deepseek
+ svc_attachments --> pkg_llm_pi_ai
+ svc_attachments --> pkg_tool_fs
+ svc_authorization --> pkg_llm_pi_ai
+ svc_browserUse --> pkg_experimental_browser_use_chrome_devtools_mcp
+ svc_browserUse --> pkg_experimental_browser_use_playwright_mcp
+ svc_browserUse --> pkg_experimental_browser_use_stagehand_native
+ svc_clientModules --> pkg_client_hmr
+ svc_compaction --> pkg_compaction_basic
+ svc_computerUse --> pkg_experimental_computer_use_cua_driver_mcp
+ svc_computerUse --> pkg_experimental_computer_use_cua_driver_native
+ svc_configEditor --> pkg_agent_default_model
+ svc_configEditor --> pkg_settings
+ svc_connection --> pkg_api_gateway
+ svc_connection --> pkg_host_frontend_static
+ svc_cordisInspect --> pkg_tool_cordis
+ svc_credentials --> pkg_api_settings_controller
+ svc_credentials --> pkg_llm_deepseek
+ svc_credentials --> pkg_llm_pi_ai
+ svc_deepseekAccount --> pkg_api_account_controller
+ svc_deepseekAccount --> pkg_llm_deepseek
+ svc_deepseekLlmApiExtensions --> pkg_llm_deepseek
+ svc_directoryPicker --> pkg_api_workspace_controller
+ svc_dynamicCordisRunner --> pkg_tool_cordis
+ svc_fileReferences --> pkg_api_session_controller
+ svc_fileUploads --> pkg_api_session_controller
+ svc_fs --> pkg_tool_fs
+ svc_hmr --> pkg_app_boot
+ svc_invariants --> pkg_agent
+ svc_invariants --> pkg_agent_loop
+ svc_invariants --> pkg_scope
+ svc_invariants --> pkg_session
+ svc_jobs --> pkg_api_job_controller
+ svc_jobs --> pkg_tool_bash
+ svc_jobs --> pkg_tool_jobs
+ svc_jobs --> pkg_tool_pwsh
+ svc_jobs --> pkg_tool_subagent
+ svc_jobs --> pkg_tool_terminal
+ svc_llm --> pkg_agent_loop
+ svc_llm --> pkg_compaction_basic
+ svc_lsp --> pkg_tool_lsp
+ svc_mcpResources --> pkg_mcp_resources
+ svc_officeToPdf --> pkg_client_ui_sidebar_documentpreview
+ svc_otel --> pkg_host_product_telemetry_otel
+ svc_otel --> pkg_session_telemetry_otel
+ svc_pluginManager --> pkg_plugin_manager
+ svc_pluginManager --> pkg_ui_settings_plugin_inventory
+ svc_pluginRegistryProbe --> pkg_client_ui_plugin_manager
+ svc_profileContext --> pkg_plugin_manager
+ svc_ptcRuntime --> pkg_tools
+ svc_ptcRuntime --> pkg_workflow_ptc
+ svc_sandbox --> pkg_bash_sandbox
+ svc_sandbox --> pkg_terminal_bash
+ svc_sandboxPolicy --> pkg_bash_sandbox
+ svc_sandboxPolicy --> pkg_fs_sandbox
+ svc_sandboxPolicy --> pkg_terminal_bash
+ svc_sessionPersistence --> pkg_agent_loop
+ svc_sessionPersistence --> pkg_hooks_claude_code
+ svc_sessionPersistence --> pkg_hooks_codex
+ svc_sessionPersistence --> pkg_message_feedback
+ svc_sessionPersistence --> pkg_session_query
+ svc_sessionPersistence --> pkg_session_query_sqlite
+ svc_sessionPersistence --> pkg_tool_bash
+ svc_sessionProjectionCache --> pkg_api_session_controller
+ svc_sessionProjectionCache --> pkg_session_query
+ svc_sessionProjectionCache --> pkg_session_reference
+ svc_sessionProjections --> pkg_api_session_controller
+ svc_sessionProjections --> pkg_session_title
+ svc_sessionProjections --> pkg_tool_todo
+ svc_sessionQuery --> pkg_session_reference
+ svc_sessionQuery --> pkg_tool_session_query
+ svc_sessions --> pkg_agent
+ svc_sessions --> pkg_agent_loop
+ svc_sessions --> pkg_invariants
+ svc_sessions --> pkg_message_feedback
+ svc_sessions --> pkg_session_persistence
+ svc_sessions --> pkg_session_query
+ svc_sessions --> pkg_session_query_sqlite
+ svc_sessions --> pkg_subagent_in_process_driver
+ svc_settings --> pkg_api_settings_controller
+ svc_shell --> pkg_hooks_claude_code
+ svc_shell --> pkg_hooks_codex
+ svc_shell --> pkg_tool_bash
+ svc_shell --> pkg_tool_pwsh
+ svc_shellEnv --> pkg_tool_bash
+ svc_shellEnv --> pkg_tool_pwsh
+ svc_skills --> pkg_tool_skill
+ svc_speechToText --> pkg_experimental_api_speech_to_text
+ svc_spillStore --> pkg_spill_policy
+ svc_ssh --> pkg_fs_ssh
+ svc_ssh --> pkg_sandbox_ssh
+ svc_ssh --> pkg_subprocess_ssh
+ svc_storage --> pkg_storage_domain
+ svc_storageDomain --> pkg_workspace
+ svc_subagentModelSelection --> pkg_tool_subagent
+ svc_subagents --> pkg_tool_ralph
+ svc_subagents --> pkg_tool_subagent
+ svc_subagents --> pkg_tool_subagent_control
+ svc_subprocess --> pkg_bash_local
+ svc_subprocess --> pkg_bash_sandbox
+ svc_subprocess --> pkg_lsp_stdio
+ svc_subprocess --> pkg_subagent_acp
+ svc_subprocess --> pkg_subagent_claude_code
+ svc_subprocess --> pkg_subagent_codex
+ svc_subprocess --> pkg_terminal_bash
+ svc_systemPrompt --> pkg_agent_loop
+ svc_systemPrompt --> pkg_tool_fs
+ svc_systemPrompt --> pkg_tool_terminal
+ svc_systemPrompt --> pkg_tool_web
+ svc_systemPrompt --> pkg_tools
+ svc_terminals --> pkg_tool_terminal
+ svc_tokenMeter --> pkg_compaction_basic
+ svc_toolResultPruner --> pkg_compaction_basic
+ svc_tools --> pkg_agent_loop
+ svc_tools --> pkg_tool_ask_user
+ svc_tools --> pkg_tool_bash
+ svc_tools --> pkg_tool_cordis
+ svc_tools --> pkg_tool_fs
+ svc_tools --> pkg_tool_skill
+ svc_tools --> pkg_tool_subagent
+ svc_tools --> pkg_tool_terminal
+ svc_tools --> pkg_tool_todo
+ svc_tools --> pkg_tool_web
+ svc_typert --> pkg_api_gateway
+ svc_typert --> pkg_typert_loader
+ svc_userQuestions --> pkg_tool_ask_user
+ svc_web --> pkg_tool_web
+ svc_webServer --> pkg_client_connection
+ svc_webServer --> pkg_client_hmr
+ svc_webServer --> pkg_client_modules
+ svc_webhookRuntime --> pkg_webhook_github
+ svc_workflowEngine --> pkg_tool_ralph
+ svc_workflowEngine --> pkg_tool_workflow
+ svc_workspaceRegistry --> pkg_api_session_controller
+ svc_workspaceRegistry --> pkg_api_workspace_controller
+ svc_fs -. event gate .-> pkg_fs_observation_policy
 ```
 
 | ctx 键 | 角色 | 所属包 | 实现 | 直接消费方 | 配套插件 | 说明 |
@@ -657,7 +652,6 @@ flowchart LR
 | `ctx.compaction` | `seam` | [`compaction`](../packages/compaction/compaction) | [`compaction-basic`](../packages/compaction/compaction-basic) | [`compaction-basic`](../packages/compaction/compaction-basic) | - | 基础后端消费步骤后的压力事件和请求错误恢复事件；不存在面向模型的压缩工具。 |
 | `ctx.subagents` | `seam` | [`subagent`](../packages/subagent/subagent) | [`subagent-spawn-in-process`](../packages/subagent/subagent-spawn-in-process), [`subagent-fork-in-process`](../packages/subagent/subagent-fork-in-process), [`subagent-acp`](../packages/subagent/subagent-acp), [`subagent-codex`](../packages/subagent/subagent-codex), [`subagent-claude-code`](../packages/subagent/subagent-claude-code), [`subagent-dsh-sdk`](../packages/subagent/subagent-dsh-sdk) | [`tool-subagent`](../packages/subagent/tool-subagent), [`tool-subagent-control`](../packages/subagent/tool-subagent-control), [`tool-ralph`](../packages/workflow/tool-ralph) | - | 提供方实现传输；该服务还负责可选的、基于 Activation 的延续编排，tool-subagent 选择一次性或可延续委派，tool-subagent-control 传递后续消息，而 tool-ralph 要求一条全新的结构化输出路由。 |
 | `ctx.speechToText` | `seam` | [`experimental-speech-to-text`](../packages/experimental/speech-to-text) | [`experimental-speech-to-text-sensevoice`](../packages/experimental/speech-to-text-sensevoice) | [`experimental-api-speech-to-text`](../packages/experimental/api-speech-to-text) | - | 路由显式选择的识别器；浏览器使用带认证的 Remote，并在提交前将转写保留在草稿中。 |
-| `ctx.agentTeams` | `core` | [`experimental-agent-team`](../packages/experimental/agent-team) | - | [`experimental-tool-agent-team`](../packages/experimental/tool-agent-team) | - | 负责隐式 Root roster、持久 peer mailbox、共享任务 DAG 与 continuable child 生命周期；tool-agent-team 提供模型控制工具。 |
 | `ctx.inspector` | `core` | `inspector` | - | - | - | 负责 Worker 托管的 CDP target，以及独立于传输的 Host 和 Client observation 与 Cordis tree query API。 |
 | `ctx.jobs` | `seam` | [`jobs`](../packages/jobs/jobs) | [`jobs-local`](../packages/jobs/jobs-local) | [`tool-bash`](../packages/shell/tool-bash), [`tool-pwsh`](../packages/shell/tool-pwsh), [`tool-terminal`](../packages/terminal/tool-terminal), [`tool-subagent`](../packages/subagent/tool-subagent), [`tool-jobs`](../packages/jobs/tool-jobs), [`api-job-controller`](../packages/api/job-controller) | - | 生产方（后台 bash/pwsh、PTY 发送和 subagent 委派）登记正在运行的工作；声明 record 的 job 还为非消费观察者流式提供原始输出；tool-jobs 是面向模型的控制器，用于读取、列出和终止这些工作；jobs-local 是进程本地注册表。 |
 | `ctx.web` | `seam` | [`web`](../packages/web/web) | [`web-search-exa`](../packages/web/web-search-exa), [`web-search-perplexity`](../packages/web/web-search-perplexity), [`web-search-deepseek`](../packages/web/web-search-deepseek), [`web-fetch-http`](../packages/web/web-fetch-http) | [`tool-web`](../packages/web/tool-web) | - | 搜索和抓取提供方注册到同一个 ctx.web seam；tool-web 负责稳定的面向模型名称。 |

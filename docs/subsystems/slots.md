@@ -27,19 +27,19 @@ import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 type HeaderActionProps = PropsRuntime<'conversation.session.header.actions'>
 
 function HeaderAction({ useSession }: HeaderActionProps) {
-  const running = useSession(snapshot => snapshot.running)
-  return <button disabled={running}>Review</button>
+ const running = useSession(snapshot => snapshot.running)
+ return <button disabled={running}>Review</button>
 }
 
 export const inject = ['slots']
 
 export function apply(ctx: Context): void {
-  ctx.slots.inject('conversation.session.header.actions', () =>
-    ctx.slots.register({
-      name: 'conversation.session.header.actions',
-      id: 'review',
-      order: 100,
-    }, HeaderAction))
+ ctx.slots.inject('conversation.session.header.actions', () =>
+ ctx.slots.register({
+ name: 'conversation.session.header.actions',
+ id: 'review',
+ order: 100,
+ }, HeaderAction))
 }
 ```
 
@@ -113,81 +113,81 @@ The hierarchy below is the shipped declaration tree. A child exists only while t
 ```text
 root
 ├─ sidebar
-│  ├─ sidebar.brand.mark
-│  ├─ sidebar.brand.name
-│  ├─ sidebar.panellist
-│  ├─ sidebar.footer.action
-│  ├─ sidebar.workspaces
-│  │  ├─ sidebar.workspaces.directoryFlow
-│  │  ├─ sidebar.workspaces.session.menu.item
-│  │  └─ sidebar.workspaces.session.row.action
-│  └─ sidebar.settings
-│     ├─ settings.trigger
-│     ├─ settings.header
-│     ├─ settings.action
-│     ├─ settings.close
-│     ├─ settings.onboarding
-│     └─ settings.section
-│        ├─ settings.general.item
-│        ├─ settings.models.provider-card
-│        ├─ settings.models.footer
-│        └─ settings.plugins.tab
+│ ├─ sidebar.brand.mark
+│ ├─ sidebar.brand.name
+│ ├─ sidebar.panellist
+│ ├─ sidebar.footer.action
+│ ├─ sidebar.workspaces
+│ │ ├─ sidebar.workspaces.directoryFlow
+│ │ ├─ sidebar.workspaces.session.menu.item
+│ │ └─ sidebar.workspaces.session.row.action
+│ └─ sidebar.settings
+│ ├─ settings.trigger
+│ ├─ settings.header
+│ ├─ settings.action
+│ ├─ settings.close
+│ ├─ settings.onboarding
+│ └─ settings.section
+│ ├─ settings.general.item
+│ ├─ settings.models.provider-card
+│ ├─ settings.models.footer
+│ └─ settings.plugins.tab
 ├─ main
-│  ├─ plugins.item
-│  ├─ plugins.bundle.config
-│  ├─ plugins.row.config
-│  ├─ plugins.detail.actions
-│  ├─ plugins.detail.badge
-│  ├─ plugins.detail.section
-│  └─ main.conversation
-│     ├─ conversation.session
-│     │  └─ conversation.view
-│     │     ├─ conversation.chat.node
-│     │     │  ├─ conversation.chat.assistant-actions
-│     │     │  ├─ conversation.chat.commandview
-│     │     │  ├─ conversation.chat.turnTail
-│     │     │  └─ tool.call.toolview
-│     │     │     ├─ tool.call.images
-│     │     │     └─ tool.view.cordis
-│     │     ├─ conversation.message.images
-│     │     └─ conversation.trajectory.images
-│     ├─ conversation.header
-│     │  ├─ conversation.header.leading
-│     │  └─ conversation.session.header
-│     │     ├─ conversation.session.header.lineage
-│     │     ├─ conversation.session.header.actions
-│     │     ├─ conversation.session.header.utilities
-│     │     └─ conversation.session.header.corner
-│     ├─ conversation.composer
-│     │  ├─ conversation.approval.detail
-│     │  └─ conversation.plan-review.actions
-│     ├─ conversation.composer.bar
-│     │  ├─ conversation.input.attachments
-│     │  ├─ conversation.input.permission
-│     │  ├─ conversation.input.plan
-│     │  └─ conversation.input.model
-│     ├─ conversation.input.overlay
-│     ├─ conversation.input.dock
-│     ├─ conversation.composer.dock
-│     ├─ conversation.input.left
-│     ├─ conversation.input.right
-│     ├─ conversation.hero.brand.mark
-│     ├─ conversation.hero.workspace
-│     │  └─ conversation.hero.workspace.directoryFlow
-│     └─ conversation.hero.agentPreset
+│ ├─ plugins.item
+│ ├─ plugins.bundle.config
+│ ├─ plugins.row.config
+│ ├─ plugins.detail.actions
+│ ├─ plugins.detail.badge
+│ ├─ plugins.detail.section
+│ └─ main.conversation
+│ ├─ conversation.session
+│ │ └─ conversation.view
+│ │ ├─ conversation.chat.node
+│ │ │ ├─ conversation.chat.assistant-actions
+│ │ │ ├─ conversation.chat.commandview
+│ │ │ ├─ conversation.chat.turnTail
+│ │ │ └─ tool.call.toolview
+│ │ │ ├─ tool.call.images
+│ │ │ └─ tool.view.cordis
+│ │ ├─ conversation.message.images
+│ │ └─ conversation.trajectory.images
+│ ├─ conversation.header
+│ │ ├─ conversation.header.leading
+│ │ └─ conversation.session.header
+│ │ ├─ conversation.session.header.lineage
+│ │ ├─ conversation.session.header.actions
+│ │ ├─ conversation.session.header.utilities
+│ │ └─ conversation.session.header.corner
+│ ├─ conversation.composer
+│ │ ├─ conversation.approval.detail
+│ │ └─ conversation.plan-review.actions
+│ ├─ conversation.composer.bar
+│ │ ├─ conversation.input.attachments
+│ │ ├─ conversation.input.permission
+│ │ ├─ conversation.input.plan
+│ │ └─ conversation.input.model
+│ ├─ conversation.input.overlay
+│ ├─ conversation.input.dock
+│ ├─ conversation.composer.dock
+│ ├─ conversation.input.left
+│ ├─ conversation.input.right
+│ ├─ conversation.hero.brand.mark
+│ ├─ conversation.hero.workspace
+│ │ └─ conversation.hero.workspace.directoryFlow
+│ └─ conversation.hero.agentPreset
 ├─ rightbar
-│  └─ rightbar.session
-│     ├─ sidebar.right.pane.tab
-│     │  ├─ sidebar.right.tab.guide
-│     │  └─ sidebar.right.tab.guide.entry
-│     ├─ sidebar.right.pane.tab.title
-│     └─ sidebar.right.tab.menu.item
+│ └─ rightbar.session
+│ ├─ sidebar.right.pane.tab
+│ │ ├─ sidebar.right.tab.guide
+│ │ └─ sidebar.right.tab.guide.entry
+│ ├─ sidebar.right.pane.tab.title
+│ └─ sidebar.right.tab.menu.item
 ├─ shell.leading
 └─ shell.overlay
-   └─ shell.quota-notice
+ └─ shell.quota-notice
 ```
 
-The generated Client inspect catalog is the exhaustive contract for each key: cardinality, scope, owner props, standard props, current occupants, declaration owner, and replacement risk. A running dynamic package can query the live tree and an exact key with `cordis_inspect what:"client"`; the source catalog is generated from `SlotMap` declarations and `slots.register()` call sites by `pnpm run gen-client-catalog`.
+The generated Client inspect catalog is the exhaustive contract for each key: cardinality, scope, owner props, standard props, current occupants, declaration owner, and replacement risk. A running dynamic package can query the live tree and an exact key with `cordis_inspect what:"client"`; the source catalog is generated from `SlotMap` declarations and `slots.register()` call sites by the client catalog generator.
 
 ## Extension rules
 

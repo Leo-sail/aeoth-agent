@@ -19,4 +19,4 @@ Managed subprocesses, output and process-tree cleanup. This page indexes the pac
 
 ## Development
 
-Build the full composition with `pnpm run build:official`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).
+Build the full composition with `pnpm run build`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).

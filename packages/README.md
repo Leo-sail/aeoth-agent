@@ -70,4 +70,4 @@ These packages form the Aeoth Desktop runtime. The application README is the pro
 
 ## Development
 
-Run `pnpm install --frozen-lockfile` and `pnpm run build:official`. The repository retains inherited `@deepseek-ai/dsh-*` identifiers for compatibility.
+Run `pnpm install --frozen-lockfile` and `pnpm run build`. The repository retains inherited `@deepseek-ai/dsh-*` identifiers for compatibility.

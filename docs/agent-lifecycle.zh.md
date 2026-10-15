@@ -1,5 +1,5 @@
 <!-- 英文源文件由 scripts/gen-doc-graphs.ts 生成；本中文文件是通过双语配对维护的经评审对侧。
-     更新时先运行 `pnpm run gen-doc-graphs` 更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/agent-lifecycle.md` 重新记录配对。 -->
+ 更新时先运行图生成器更新英文，再更新本文件并运行 `pnpm run verify-translation-pairing --write docs/agent-lifecycle.md` 重新记录配对。 -->
 
 # Agent 轮次与步骤生命周期
 
@@ -9,77 +9,77 @@
 
 ```mermaid
 sequenceDiagram
-  participant User
-  participant Agent
-  participant Driver
-  participant Hooks as hook listeners
-  participant Prompt as ctx.systemPrompt
-  participant LLM as ctx.llm
-  participant Tools as ctx.tools
-  participant Session
-  participant SDK as UI or SDK listener
-  User->>Agent: followup(content)
-  Agent-->>SDK: <code>agent/inbox/spliced</code>
-  Agent-->>SDK: <code>agent/inbox/inserted</code> { message }
-  Agent->>Driver: queued work wakes driver
-  Driver-->>SDK: <code>agent/status</code> running
-  Driver->>Session: <code>turn/start</code>
-  Note over Agent,Driver: claim pending next-step input plus one queued prompt
-  Driver-->>SDK: <code>agent/inbox/spliced</code> pure deletion
-  Driver-->>SDK: <code>agent/inbox/claimed</code> { message, turn } per message
-  Driver->>Prompt: <code>system-prompt/assemble</code> waterfall
-  Driver->>Hooks: <code>agent/pre-step</code> waterfall
-  Hooks-->>Driver: authoritative reject or enter(messages)
-  alt proposed step rejected, first batch empty, or pre-step failed
-    Driver-->>Driver: claimed batch stays removed, the open turn spends no step
-  else enter proposed step
-  Driver->>Session: <code>step/start</code>
-  Driver->>Hooks: <code>agent/request</code> waterfall
-  Driver->>LLM: prepareCall(config, signal)
-  Note over Driver,LLM: cancellation during either async phase commits neither system nor users
-  Note over Driver,Session: synchronous admission using the prepared call capability
-  Driver->>Session: <code>system/message</code> ordered per-node reconciliation
-  Driver->>Session: <code>user/message</code> per entered message
-  Driver->>Session: <code>request/header</code> and <code>request/context</code> as needed
-  Driver->>Driver: derive and freeze request from the log
-  Driver->>LLM: bound prepared call through <code>llm/stream</code> waterfall
-  LLM-->>Driver: StreamChunk*
-  Driver-->>SDK: <code>agent/assistant-stream</code> chunk*
-  alt final adapter or terminal in-band request failure
-    Driver->>Session: <code>assistant/attempt</code>
-    Driver-->>SDK: <code>agent/assistant-stream</code> committed end
-    Driver->>Hooks: <code>agent/request-error</code> waterfall
-    Hooks-->>Driver: return retry action or preserve the original error
-    Note over Driver,LLM: retry in the open step: prepare and reconcile the same rendered assembly without repeating pre-step or users
-  else model request succeeded
-  Driver->>Session: <code>assistant/message</code>
-  Driver-->>SDK: <code>agent/assistant-stream</code> committed end
-  Driver->>Tools: classify pending call by executionMode
-  loop barriers and bounded rolling pool, reclassify before start
-    opt call starts
-      Driver->>Session: <code>tool/call</code>
-      Driver->>Tools: ordered pre, concurrent execute
-      Tools-->>Session: tool-owned events when applicable
-    end
-    opt next model-order result ready
-      Driver->>Tools: ordered post
-      Driver->>Session: <code>tool/result</code>
-    end
-  end
-  Driver->>Session: <code>step/end</code>
-  opt natural stop and next-step inbox empty
-    Driver->>Hooks: <code>agent/turn-stopping</code> serial terminal checkpoint
-  end
-  opt next-step input is pending
-    Driver-->>Driver: claim pending next-step input
-    Driver-->>SDK: <code>agent/inbox/claimed</code> { message, turn } per message
-    Driver->>Hooks: <code>agent/pre-step</code> waterfall
-    Hooks-->>Driver: authoritative reject or enter(messages)
-  end
-  end
-  end
-  Driver->>Session: <code>turn/end</code>
-  Driver-->>SDK: <code>agent/status</code> idle
+ participant User
+ participant Agent
+ participant Driver
+ participant Hooks as hook listeners
+ participant Prompt as ctx.systemPrompt
+ participant LLM as ctx.llm
+ participant Tools as ctx.tools
+ participant Session
+ participant SDK as UI or SDK listener
+ User->>Agent: followup(content)
+ Agent-->>SDK: <code>agent/inbox/spliced</code>
+ Agent-->>SDK: <code>agent/inbox/inserted</code> { message }
+ Agent->>Driver: queued work wakes driver
+ Driver-->>SDK: <code>agent/status</code> running
+ Driver->>Session: <code>turn/start</code>
+ Note over Agent,Driver: claim pending next-step input plus one queued prompt
+ Driver-->>SDK: <code>agent/inbox/spliced</code> pure deletion
+ Driver-->>SDK: <code>agent/inbox/claimed</code> { message, turn } per message
+ Driver->>Prompt: <code>system-prompt/assemble</code> waterfall
+ Driver->>Hooks: <code>agent/pre-step</code> waterfall
+ Hooks-->>Driver: authoritative reject or enter(messages)
+ alt proposed step rejected, first batch empty, or pre-step failed
+ Driver-->>Driver: claimed batch stays removed, the open turn spends no step
+ else enter proposed step
+ Driver->>Session: <code>step/start</code>
+ Driver->>Hooks: <code>agent/request</code> waterfall
+ Driver->>LLM: prepareCall(config, signal)
+ Note over Driver,LLM: cancellation during either async phase commits neither system nor users
+ Note over Driver,Session: synchronous admission using the prepared call capability
+ Driver->>Session: <code>system/message</code> ordered per-node reconciliation
+ Driver->>Session: <code>user/message</code> per entered message
+ Driver->>Session: <code>request/header</code> and <code>request/context</code> as needed
+ Driver->>Driver: derive and freeze request from the log
+ Driver->>LLM: bound prepared call through <code>llm/stream</code> waterfall
+ LLM-->>Driver: StreamChunk*
+ Driver-->>SDK: <code>agent/assistant-stream</code> chunk*
+ alt final adapter or terminal in-band request failure
+ Driver->>Session: <code>assistant/attempt</code>
+ Driver-->>SDK: <code>agent/assistant-stream</code> committed end
+ Driver->>Hooks: <code>agent/request-error</code> waterfall
+ Hooks-->>Driver: return retry action or preserve the original error
+ Note over Driver,LLM: retry in the open step: prepare and reconcile the same rendered assembly without repeating pre-step or users
+ else model request succeeded
+ Driver->>Session: <code>assistant/message</code>
+ Driver-->>SDK: <code>agent/assistant-stream</code> committed end
+ Driver->>Tools: classify pending call by executionMode
+ loop barriers and bounded rolling pool, reclassify before start
+ opt call starts
+ Driver->>Session: <code>tool/call</code>
+ Driver->>Tools: ordered pre, concurrent execute
+ Tools-->>Session: tool-owned events when applicable
+ end
+ opt next model-order result ready
+ Driver->>Tools: ordered post
+ Driver->>Session: <code>tool/result</code>
+ end
+ end
+ Driver->>Session: <code>step/end</code>
+ opt natural stop and next-step inbox empty
+ Driver->>Hooks: <code>agent/turn-stopping</code> serial terminal checkpoint
+ end
+ opt next-step input is pending
+ Driver-->>Driver: claim pending next-step input
+ Driver-->>SDK: <code>agent/inbox/claimed</code> { message, turn } per message
+ Driver->>Hooks: <code>agent/pre-step</code> waterfall
+ Hooks-->>Driver: authoritative reject or enter(messages)
+ end
+ end
+ end
+ Driver->>Session: <code>turn/end</code>
+ Driver-->>SDK: <code>agent/status</code> idle
 ```
 
 `assistant/message` 事件会记录每次成功的提供方调用，包括返回空内容或以 `max-tokens` 结束的调用，并嵌入精确的紧凑带时间 stream。空内容不会进入派生历史。失败、重试、取消或 stream error attempt 到达 settlement 时，如果没有 surface message，就会把 stream 记录为 `assistant/attempt`。实时 `agent/assistant-stream` chunk frame 是瞬态数据；回放读取任一种持久 settlement，如果进程在 settlement 前硬中断，则不会留下持久 attempt stream。

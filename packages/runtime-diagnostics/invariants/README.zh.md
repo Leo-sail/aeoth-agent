@@ -38,10 +38,10 @@ kind: "package-reference"
 
 ```yaml
 - name: '@deepseek-ai/dsh-invariants'
-  config:
-    enabled: true
-    package_allowlist:
-      - '^@deepseek-ai/dsh-'
+ config:
+ enabled: true
+ package_allowlist:
+ - '^@deepseek-ai/dsh-'
 ```
 
 | 字段 | 默认值 | 含义 |
@@ -105,7 +105,7 @@ ctx.plugin(SessionInvariant)
 - **与产品无关的注册表。** 服务不导入任何 session、agent、scope 或 agent-loop 包，也不包含它们的检查；配套入口把检查放在其归属者旁边。
 - **真实关系，而非人为断言。** 配套入口只检查其包拥有的事件流或可变数据关系；确认方法、插件名、注入或固定纯函数结果是类型、加载或单元测试关注点，绝不是运行时不变量。
 - **注册保留归属。** 即使过滤器让 installer 保持非活动，包名也会被保留，因此两个插件永远不会静默认领同一个名字。
-- **配套入口接线由机械规则强制。** `pnpm run verify-package-invariants` 拒绝空 installer、省略或忽略 reporter 的 installer、错误注册名、不完整的发布接线，以及省略配套入口后残留的接线（省略配套入口笔记）。
+- **配套入口接线由机械规则强制。** 包不变量校验 拒绝空 installer、省略或忽略 reporter 的 installer、错误注册名、不完整的发布接线，以及省略配套入口后残留的接线（省略配套入口笔记）。
 
 ### 源码地图
 

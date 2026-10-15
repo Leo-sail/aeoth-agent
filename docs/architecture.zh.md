@@ -2,7 +2,7 @@
 
 [English](architecture.md) | 中文
 
-改动 `packages/` 下的任何内容之前，请先阅读本文。本文假定你已了解 Cordis；如果尚未了解，请先阅读[入门](cordis-primer.zh.md)或[教程](cordis-tutorial/index.zh.md)。
+改动 `packages/` 下的任何内容之前，请先阅读本文。本文假定你已了解 Cordis；如果尚未了解，请先阅读[入门](cordis-primer.zh.md)或教程。
 
 建议使用 agent（智能体）探索代码库并理解其架构。
 
@@ -22,7 +22,7 @@
 
 两者都在各自的 `package.json` 中通过 `dsh` 字段声明自己：`dsh.profile` 列出一个 profile 的组合包，`dsh.bundle` 指向一个组合包的 patch 文件。
 
-[`dsh-base`](../packages/bundle/base/README.zh.md) 是 `web`、`headless`、`sdk` 与 `acp` profile 的共享第一层：模型适配器、工具、持久化、沙箱与审批策略、设置、凭据、遥测。[`dsh-web-app`](../packages/bundle/desktop-app/README.zh.md) 增加浏览器应用，[`dsh-headless`](../packages/bundle/headless/README.zh.md) 增加不带服务器的一次性运行器，[`dsh-sdk-app`](../packages/bundle/sdk-app/README.zh.md) 增加 SDK JSON-RPC 服务器，[`dsh-acp-app`](../packages/bundle/acp-app/README.zh.md) 增加仅用于自动化的 ACP 服务器。[`dsh-sdk-minimal`](../packages/bundle/sdk-minimal/README.zh.md) 是刻意保留的例外：一个组合包拥有完整的显式 SDK 配置树，不应用 `dsh-base`。
+[`dsh-base`](../packages/bundle/base/README.zh.md) 是 `web`、`headless`、`sdk` 与 `acp` profile 的共享第一层：模型适配器、工具、持久化、沙箱与审批策略、设置、凭据、遥测。[`dsh-web-app`](../packages/bundle/desktop-app/README.zh.md) 增加浏览器应用，`dsh-headless` 增加不带服务器的一次性运行器，`dsh-sdk-app` 增加 SDK JSON-RPC 服务器，`dsh-acp-app` 增加仅用于自动化的 ACP 服务器。`dsh-sdk-minimal` 是刻意保留的例外：一个组合包拥有完整的显式 SDK 配置树，不应用 `dsh-base`。
 
 各层按此顺序应用在空条目列表之上：先按 profile 列出的顺序应用每个组合包，然后是 profile 的 `cordis.patch.yml`，然后是 home 级的那份，最后是任意 `--patch` overlay。一条 patch 按 id 定位某个条目并替换其整个 config，或插入新条目。
 
@@ -38,13 +38,13 @@ aeoth --profile web --dump-config
 
 它打印出的任何条目，都可以由你自己的 patch 替换。
 
-组装机制见 [app-boot](../packages/boot/app-boot/README.zh.md#profiles)；配置字段见生成的[配置目录](config-catalog.zh.md)。
+组装机制见 [app-boot](../packages/boot/app-boot/README.zh.md#profiles)；配置字段见生成的配置目录。
 
 ## 应用启动
 
 受支持的 Node 应用通过具名 `aeoth` profile 启动。随附 profile 为 `web`、`headless`、`sdk`、`sdk-minimal` 和 `acp`，可通过 `aeoth --profile <name>` 或 `dsh <name>` 选择。`plugin` 表示管理命令；同名 profile 必须用 `--profile plugin` 选择。TypeScript SDK 会解析其同版本 `dsh` 依赖并选择 `sdk`；自定义插件组合继续由 profile 与有序 patch 文件表达，而不是另一个可执行文件或内联应用树。`sdk-minimal` 是位于同一 launcher 后的仓库自有独立组合包，而不是由调用方提供的 Cordis 配置树。
 
-Vendored CLI、仅用于构建和测试的可执行文件、进程内直接挂载插件以及私有浏览器 WebWorker 预览都不属于 Harness 应用启动器。[`verify-application-entrypoints`](../scripts/verify-application-entrypoints.ts)将每个包 bin、可执行源码、根 demo 以及根脚本 `start:web` 与 `dev:web` 归入显式类别，并拒绝任何绕过 `dsh` 的 Node 应用路径。
+Vendored CLI、仅用于构建和测试的可执行文件、进程内直接挂载插件以及私有浏览器 WebWorker 预览都不属于 Harness 应用启动器。`verify-application-entrypoints`将每个包 bin、可执行源码、根 demo 以及根脚本 `start:web` 与 `dev:web` 归入显式类别，并拒绝任何绕过 `dsh` 的 Node 应用路径。
 
 Python SDK 遵循相同的应用架构。其运行时 wheel 把普通 `aeoth` CLI 打包为 `deepseek-harness-sdk-runtime-<platform>-<arch>`，客户端默认以显式 Aeoth home 启动 `aeoth --profile sdk`。极简示例选择随附的 `sdk-minimal` profile。Python 暴露 profile 选择与有序 patch 文件，而不是完整 Cordis 树；持久外部插件通过 `aeoth plugin` 安装。已删除的私有直读配置载体没有兼容 bin 或回退 parser。
 
@@ -136,7 +136,6 @@ Session 消费方只了解当前逻辑格式。仅 header 的 `stat` 与 `list` 
 
 seam 正是替换一个提供方就能改变整个产品的原因。文件系统与进程提供方共享同一个执行世界，因此把它们指向远程沙箱，也就把 Bash、PTY 和 LSP 一并搬了过去，无需提供方专用 fork。[subagent 提供方](subsystems/subagent.zh.md)在同一个接口之后同样千差万别，从新建一个子 agent，到把一个轮次委派给另一个产品。
 
-[实验性 Agent Teams](subsystems/agent-team.zh.md) 是 `ctx.agentTeams` 上公开发布、显式启用的协作 seam，在可继续 subagent 之上提供持久 roster、任务板和 mailbox。
 
 ## 新行为的归属位置
 

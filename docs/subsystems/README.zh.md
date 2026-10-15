@@ -47,7 +47,6 @@
 | [compaction.md](compaction.zh.md) | 压缩（compaction）seam：`compaction/*` 会话事件、`CompactionResult`、`CompactionEngine` 接口 |
 | [subagent.md](subagent.zh.md) | subagent seam：命名提供方注册表、`SubagentStartRequest`/`Result`/`Run`、启动时与运行时能力拆分 |
 | [voice-input.md](voice-input.zh.md) | 实验性具名语音识别、临时音频和受版本保护的草稿插入 |
-| [agent-team.md](agent-team.zh.md) | Agent Teams：隐式 Lead 身份、具名 continuable teammate、持久 peer mailbox 与共享任务 DAG |
 | [web.md](web.zh.md) | Web 访问 seam：`WebSearchRequest`/`Result`、`WebFetchRequest`/`Result`、`WebFetchBody`、提供方可用性、`WebError` |
 | [spill.md](spill.zh.md) | spill 存储 seam：`SaveTextSpill`、`SpillOwner`/`SpillSource`、`SpillRef`、品牌类型 `SpillLocator` |
 | [workflow.md](workflow.zh.md) | 工作流 seam：`WorkflowStartRequest`、`WorkflowMeta`、`WorkflowRun`/`Result`、`workflow/*` 事件载荷、`WorkflowError` 致命性 |
@@ -70,4 +69,4 @@
 | [otel.md](otel.zh.md) | 共享普通事件与 Session 日志 OTLP 通道 |
 | [product-telemetry.md](product-telemetry.zh.md) | 显式产品分析事件提交与 OTLP/HTTP 传输 |
 
-> 这些页面上的类型声明及其 JSDoc 与源码等价，并由 `pnpm run verify-type-equiv` 检查漂移（见 [development.md](../development.zh.md#documenting-types-verbatim-ts-type-equiv)）。普通块保留完整声明；`public-api` 块保留去除实现体的公开 class 声明。Cordis 服务与事件使用每页生成的 **Cordis API** 小节。
+> 这些页面上的类型声明及其 JSDoc 与源码等价，并由 类型等价校验 检查漂移（见 [development.md](../development.zh.md#documenting-types-verbatim-ts-type-equiv)）。普通块保留完整声明；`public-api` 块保留去除实现体的公开 class 声明。Cordis 服务与事件使用每页生成的 **Cordis API** 小节。

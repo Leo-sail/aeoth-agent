@@ -71,7 +71,7 @@ Alpha 转换器可以明确拒绝尚无已实现、有证据映射的历史场�
 <a id="current-version-consumers"></a>
 ## 4. 更新当前版本消费方
 
-追踪每个当前版本消费方，包括 Session 创建与恢复、JSONL 文件名选择与发布、catalog 的当前编码器与恢复器、投影缓存的代际身份、回放与快照归一化、[物理 fixture 布局校验](../../scripts/session-fixture-layout.ts)，以及 TypeScript/Python SDK 录制。当值表示当前版本时使用写入器常量；在已发布 codec 和历史 fixture 中保留字面历史版本。通过各自所有者更新当前文档与生成参考。
+追踪每个当前版本消费方，包括 Session 创建与恢复、JSONL 文件名选择与发布、catalog 的当前编码器与恢复器、投影缓存的代际身份、回放与快照归一化、物理 fixture 布局校验，以及 TypeScript/Python SDK 录制。当值表示当前版本时使用写入器常量；在已发布 codec 和历史 fixture 中保留字面历史版本。通过各自所有者更新当前文档与生成参考。
 
 不要自动提升无关版本。请求包装层的 `sessionFormatVersion` 标识嵌入的 Session 代际；外层 schema 版本有自己的含义。投影单元状态版本同样不能替代缓存的 Session 代际身份。
 
@@ -84,13 +84,13 @@ Alpha 转换器可以明确拒绝尚无已实现、有证据映射的历史场�
 如果回放输入不变，在所有者上执行无密钥 refresh，再执行不写回的 replay。以下 SDK 命令使用 `text-turn` 和工作区的写入器版本。先实现并接入 N+1，才能用它们生成该版本；功能变更应选择实际受影响的所有者：
 
 ```sh
-pnpm run test:snapshot:refresh snapshots/sdk/sdk.snapshot.ts -t text-turn
-pnpm run test:snapshot snapshots/sdk/sdk.snapshot.ts -t text-turn
+# test:snapshot:refresh (upstream tooling; not included in this distribution) snapshots/sdk/sdk.snapshot.ts -t text-turn
+# test:snapshot (upstream tooling; not included in this distribution) snapshots/sdk/sdk.snapshot.ts -t text-turn
 ```
 
-一起审查新代际、请求伴随文件与协议输出。验证每个前代的字节保持相同，且父子角色连续。选择规则采用数值最高的代际，因此应将共享引用更新为所有者选中的父代际。不要把 packed 布局迁移器当作版本升级器。如果模型 transcript（文本记录）必须变化，由场景所有者按照[测试策略](../testing.zh.md)使用所需提供方密钥进行实时录制。
+一起审查新代际、请求伴随文件与协议输出。验证每个前代的字节保持相同，且父子角色连续。选择规则采用数值最高的代际，因此应将共享引用更新为所有者选中的父代际。不要把 packed 布局迁移器当作版本升级器。如果模型 transcript（文本记录）必须变化，由场景所有者按照测试策略使用所需提供方密钥进行实时录制。
 
-通过 `snapshot.yml` 的 `sessionFormat.version` 与受支持的 `coverage` 名称显式保留早于 baseline 的案例；record 和 refresh 不改动已 pin 的 Session fixture。更新[语料策略](../../scripts/session-snapshot-corpus-policy.ts)以采用当前代际，同时保留聚焦的直接迁移边、多跳、packed row、重试/失败及交付 profile 覆盖。检查语料和两个 SDK 投影；不要仅为消除校验失败而批量 refresh 无关场景。
+通过 `snapshot.yml` 的 `sessionFormat.version` 与受支持的 `coverage` 名称显式保留早于 baseline 的案例；record 和 refresh 不改动已 pin 的 Session fixture。更新语料策略以采用当前代际，同时保留聚焦的直接迁移边、多跳、packed row、重试/失败及交付 profile 覆盖。检查语料和两个 SDK 投影；不要仅为消除校验失败而批量 refresh 无关场景。
 
 <a id="validate"></a>
 ## 6. 验证集成结果
@@ -100,7 +100,7 @@ pnpm run test:snapshot snapshots/sdk/sdk.snapshot.ts -t text-turn
 ```sh
 pnpm run verify-session-format-catalog
 pnpm exec vitest run scripts/gen-session-format-catalog.spec.ts packages/session/session-format/tests packages/session/session-format-v2-to-v3/tests packages/session/session-format-catalog/tests
-pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts
+# test:snapshot (upstream tooling; not included in this distribution) scripts/session-snapshot-corpus.corpus.ts
 ```
 
 实现新迁移边后，将其实际测试路径加入聚焦的 Vitest 命令。根据实际 diff 添加受影响的 JSONL、回放、投影与 SDK 测试；发布 Worker 路径变化时还需构建产物冒烟测试。要求严格迁移成功、骨架保持恒等、拒绝格式错误与未知必需事件、重复恢复确定、并发 Stage 状态独立、有种子的多跳截点正确、前代不变且无回退。报告确切命令与失败，不要推断整个测试套件的结果。
@@ -109,8 +109,6 @@ pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts
 
 ```sh
 pnpm run verify-translation-pairing --write docs/cookbook/adding-a-session-format-version.md
-pnpm run test:docs
-pnpm run doc-sync
 pnpm run lint
 git diff --check
 ```
@@ -137,7 +135,7 @@ pnpm run migrate:sessions-to-v4
 
 ```sh
 V3_SOURCE_REF="$(git rev-parse --verify 'origin/master^{commit}')"
-pnpm run verify-v3-event-vocabulary --source-ref "$V3_SOURCE_REF"
+# verify-v3-event-vocabulary (upstream tooling; not included in this distribution) --source-ref "$V3_SOURCE_REF"
 ```
 
 校验器只读取该本地提交，并要求事件名完全一致。它拒绝遗漏的 V3 名称、额外复制的名称，以及不写入 V3 的源提交。尤其不能把 V4 专有的 `developer/message` 放入冻结的 V3 集合。逐项核对 V3 payload、必要转换、目标接纳及消费方；只添加名称不能证明迁移完整。接受新源事件前要补上相应迁移回归。

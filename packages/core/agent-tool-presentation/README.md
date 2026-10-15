@@ -27,7 +27,7 @@ Agent-plane presentation selector: composes one agent's tools as PTC mode, nativ
 
 - [`src/`](src/) — implementation and public source contracts.
 - [`package.json`](package.json) — exports, dependencies and publication metadata.
-- The full composition is built with `pnpm run build:official`.
+- The full composition is built with `pnpm run build`.
 
 ## Desktop delivery
 

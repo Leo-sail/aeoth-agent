@@ -39,7 +39,7 @@ Each dated record has four sibling files:
 
 `finalized/vN.json` records the complete root classifications/digests of an accepted compatibility baseline and semantic hashes of its accepted records. The [finalization record](../session-format-status.md#finalization-record) requires its checkpoint. Current V4 schemas may evolve compatibly; the checkpoint protects accepted machine declarations and after schemas even after the writer advances, while excluding prose, aliases, and source locations from record hashes.
 
-A maintainer captures an agreed format with [`createPersistenceFinalizationCheckpoint`](../../scripts/persistence-finalization.ts), writes a new version-named checkpoint without replacing an earlier one, and advances the paired `latestFinalizedVersion`. The helper requires current schemas to match complete acknowledged history. Run the ordinary verifier before committing.
+A maintainer captures an agreed format with `createPersistenceFinalizationCheckpoint`, writes a new version-named checkpoint without replacing an earlier one, and advances the paired `latestFinalizedVersion`. The helper requires current schemas to match complete acknowledged history. Run the ordinary verifier before committing.
 
 The record template defines the authored format. Record creation accepts a bilingual prose input and generates the machine declaration, snapshots, catalog pair, and consistency records. The verifier reads the machine declaration once from the English file and checks the Chinese declaration for equality. A declaration names each affected root, its predecessor record, its after digest, and its compatibility decision. A new root has no predecessor; a deletion has no after schema and retains an explicit tombstone.
 

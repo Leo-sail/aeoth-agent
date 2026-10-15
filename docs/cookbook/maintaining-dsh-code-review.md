@@ -12,7 +12,7 @@ The operator invokes the wrapper manually, daily with a two-UTC-day overlap; a m
 2. It collects pre-merge human review feedback with commit anchors (inline comments and review submissions), then compares feedback-time and final landed PR patches. It does not acquire PR conversation comments because current GitHub state cannot give them a force-push-safe feedback-time baseline, and it excludes target-branch-only changes from adoption evidence.
 3. Two independently configured reviewer adapters classify who wrote each item and whether the change adopted it, then classify agreed-adopted items against the current skill.
 4. The primary adapter drafts a complete revised `SKILL.md`; both adapters review the same diff; blocking findings loop until both approve.
-5. `pnpm run doc-sync` and `pnpm run lint` run against the candidate before the tool declares success.
+5. the documentation gates and `pnpm run lint` run against the candidate before the tool declares success.
 
 Each run stores its artifacts on the operator's machine. The saved diff, candidate `SKILL.md`, and promotion manifest land under `~/dsh-code-review-outputs/` named by timestamp. The manifest records the source master commit and skill blob, source feedback IDs and URLs, landed evidence ranges, adapter verdicts, and gate results; raw per-adapter I/O stays in a private temp directory whose path is written to the notification and to the daily log under `~/Library/Logs/dsh-code-review-maintainer/`. The maintenance worktree itself is restored clean after every run so the operator is never tempted to edit the maintenance copy in place.
 
@@ -22,28 +22,28 @@ When a run produces a candidate, a macOS notification arrives with a `dsh-code-r
 
 1. **Read the diff on its own merits.** Do not defer to "the reviewers approved"; the maintainer contract is that the operator makes the final decision. Look for checklist bloat, historical prose, unsupported extrapolation from a single incident, and duplicated coverage with existing skill or authoritative-doc content.
 
-   ```sh
-   ls ~/dsh-code-review-outputs/                         # every candidate ever produced
-   less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.diff
-   less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.SKILL.md
-   less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.manifest.json
-   ```
+ ```sh
+ ls ~/dsh-code-review-outputs/ # every candidate ever produced
+ less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.diff
+ less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.SKILL.md
+ less ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.manifest.json
+ ```
 
 2. **Cross-check against the run artifacts.** The promotion manifest maps each proposed rule to source feedback and landed evidence; detailed per-adapter I/O, consensus, and adopted evidence live under the run's private temp directory (path shown in the log). Spot-check at least one candidate: does the linked human comment actually support the added rule? Does the linked PR actually adopt it?
 
 3. **Decide one of three:**
-   - **Discard.** Delete the saved candidate. The tool re-considers the same feedback on the next run under whatever the current skill then says.
+ - **Discard.** Delete the saved candidate. The tool re-considers the same feedback on the next run under whatever the current skill then says.
 
-     ```sh
-     rm ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.{diff,SKILL.md,manifest.json}
-     ```
-   - **Batch.** Keep the candidate aside if the update is small and could combine with a future one. The source-skill check still applies; rerun the analysis or manually rebase and re-review the diff if `master` changes first.
-   - **Promote.** From a clean `master` checkout of the repo, run the promote helper. It refreshes `master`, verifies that the current skill matches the recorded source blob, applies the saved diff, and opens a draft PR whose body lists the source feedback URLs or IDs, landed commit range, originating run, checks, and operator edits. It stops on skill drift rather than overwriting newer guidance; the operator still reviews the PR on GitHub and either merges it or closes it.
+ ```sh
+ rm ~/dsh-code-review-outputs/2026-07-16T02-00-00Z.{diff,SKILL.md,manifest.json}
+ ```
+ - **Batch.** Keep the candidate aside if the update is small and could combine with a future one. The source-skill check still applies; rerun the analysis or manually rebase and re-review the diff if `master` changes first.
+ - **Promote.** From a clean `master` checkout of the repo, run the promote helper. It refreshes `master`, verifies that the current skill matches the recorded source blob, applies the saved diff, and opens a draft PR whose body lists the source feedback URLs or IDs, landed commit range, originating run, checks, and operator edits. It stops on skill drift rather than overwriting newer guidance; the operator still reviews the PR on GitHub and either merges it or closes it.
 
-     ```sh
-     cd ~/path/to/deepseek-harness   # clean master
-     dsh-code-review-promote 2026-07-16T02-00-00Z
-     ```
+ ```sh
+ cd ~/path/to/deepseek-harness # clean master
+ dsh-code-review-promote 2026-07-16T02-00-00Z
+ ```
 
 4. **Do not commit adapter output verbatim.** Small edits during promotion — tightening wording, removing an example that only makes sense with the source PR's context, folding a rule into an existing one — are expected and preserve the "reviewer judgment" the workflow depends on. Amend the branch before merging.
 

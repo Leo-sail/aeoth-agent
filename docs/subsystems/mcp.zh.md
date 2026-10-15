@@ -31,7 +31,7 @@ MCP 服务器需要主动配置。在目标 Cordis 作用域中，为每台服�
 | 服务器指令大小限制 | 客户端 `maxInstructionBytes`；组合提供[系统提示词装配](system-prompt.zh.md) |
 | 权限决策和受支持的图像输出 | [工具执行](tools.zh.md)和[附件](attachment.zh.md) |
 
-协议协商遵循 SDK 支持的修订版；产品没有强制指定协议修订版的设置。[配置目录](../config-catalog.zh.md#deepseek-aidsh-mcp-client) 列出客户端接受的字段和默认值。
+协议协商遵循 SDK 支持的修订版；产品没有强制指定协议修订版的设置。配置目录 列出客户端接受的字段和默认值。
 
 -----
 
@@ -108,7 +108,7 @@ interface McpResourceProvider {
 - [MCP 包组](../../packages/mcp/README.zh.md) — 包入口。
 - [MCP 资源](../../packages/mcp/mcp-resources/README.zh.md) — 共享工具与资源提供方语义。
 - 资源可见性决策 — profile 统一挂载及由已配置服务器决定的可见性。
-- [第三方记忆服务器](../user/guide/mcp-memory.zh.md) — 产品配置指南。
+- 第三方记忆服务器 — 产品配置指南。
 - 协议协商决策 — SDK 职责与兼容性决策。
 
 <!-- BEGIN GENERATED cordis-surface (gen-cordis-catalog.ts) — do not edit between markers -->

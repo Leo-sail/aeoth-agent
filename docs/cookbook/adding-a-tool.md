@@ -2,7 +2,7 @@
 
 English | [中文](adding-a-tool.zh.md)
 
-Reference for the contracts a model-facing tool must satisfy. For an ordered first tool, follow [Build a tool](../user/develop/basic/tool.md). `packages/shell/tool-bash` is the production-grade three-package example.
+Reference for the contracts a model-facing tool must satisfy. For an ordered first tool, follow Build a tool. `packages/shell/tool-bash` is the production-grade three-package example.
 
 ## The minimal shape
 
@@ -98,4 +98,4 @@ Use `output.presentationMeta(args, value)` when an existing Web card needs bound
 
 ## Verification
 
-Follow the [repository testing policy](../testing.md) and the owning package's test documentation. A shipped model- or UI-visible change requires the assembled coverage specified there.
+Follow the repository testing policy and the owning package's test documentation. A shipped model- or UI-visible change requires the assembled coverage specified there.

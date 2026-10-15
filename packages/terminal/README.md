@@ -19,4 +19,4 @@ Persistent PTY sessions and interactive terminal tools. This page indexes the pa
 
 ## Development
 
-Build the full composition with `pnpm run build:official`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).
+Build the full composition with `pnpm run build`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).

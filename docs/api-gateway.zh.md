@@ -20,36 +20,36 @@ import { TypertRemoteService, Remote, RemoteScope } from '@deepseek-ai/dsh-typer
 import type { Context } from '@deepseek-ai/cordis'
 
 export interface CreateGoalRequest {
-  objective: string
+ objective: string
 }
 
 export interface CreateGoalResult {
-  accepted: boolean
+ accepted: boolean
 }
 
 export class GoalService extends TypertRemoteService {
-  constructor(ctx: Context) {
-    super(ctx, 'goals')
-  }
+ constructor(ctx: Context) {
+ super(ctx, 'goals')
+ }
 
-  @Remote('create')
-  createForClient(
-    agent: Agent,
-    request: CreateGoalRequest,
-    signal: AbortSignal,
-  ): CreateGoalResult {
-    signal.throwIfAborted()
-    return this.create(agent, request)
-  }
+ @Remote('create')
+ createForClient(
+ agent: Agent,
+ request: CreateGoalRequest,
+ signal: AbortSignal,
+ ): CreateGoalResult {
+ signal.throwIfAborted()
+ return this.create(agent, request)
+ }
 
-  @RemoteScope('agent', 'current')
-  currentForClient(): CreateGoalResult {
-    return { accepted: true }
-  }
+ @RemoteScope('agent', 'current')
+ currentForClient(): CreateGoalResult {
+ return { accepted: true }
+ }
 
-  private create(_agent: Agent, request: CreateGoalRequest): CreateGoalResult {
-    return { accepted: request.objective.length > 0 }
-  }
+ private create(_agent: Agent, request: CreateGoalRequest): CreateGoalResult {
+ return { accepted: request.objective.length > 0 }
+ }
 }
 ```
 
@@ -142,9 +142,6 @@ SRC 只解决 Host 源码进程的分发问题。Client 不会从运行中的 Ho
 
 Web 开发只需一条命令：它先构建当前 Host、Client 与 Web 产物，再启动源码 Host，并持续重建 Client bundle：
 
-```sh
-pnpm run dev:web
-```
 
 `dsh` 通过 tsx 启动 Host 源码，所以 Host 可以使用 SRC 回退；`dev:web` 的 watcher 会在源码修改时重建 client 侧类型输出、Client 插件与库 bundle 以及 Web 壳层。它们不会分析 Host decorator，也不会生成 Remote Client DTS；只有 `dev:web` 首先执行的完整构建（或 `pnpm run build`）才会。
 

@@ -10,7 +10,7 @@ The `./landlock-run` entry owns Landlock path resolution, grant argv, and the fu
 
 ## Separate mechanisms
 
-`landlock-run` remains a static musl executable with the [existing CLI contract](cli-contract.md). It installs confinement on itself before exec, and refuses to exec if enforcement is unavailable. A missing launcher or unsupported kernel produces an unusable probe.
+`landlock-run` remains a static musl executable with the existing CLI contract. It installs confinement on itself before exec, and refuses to exec if enforcement is unavailable. A missing launcher or unsupported kernel produces an unusable probe.
 
 `system.node` uses stable Node-API v8. Its flock operation follows [fs-ext's asynchronous callback model](https://github.com/baudehlo/node-fs-ext/blob/v2.1.1/fs-ext.cc): it runs `flock(fd, LOCK_EX | LOCK_NB)` in asynchronous work and records errno on that worker. The native callback receives zero or positive errno; JavaScript owns the promise and syscall error construction. Setup errors throw into that promise. Callback exceptions are reported through Node's uncaught-exception handler; unexpected Node-API failures terminate the process. A terminating environment may suppress JavaScript completion, but its cleanup waits for queued or running native work before freeing storage.
 

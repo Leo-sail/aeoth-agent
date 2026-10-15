@@ -3,14 +3,14 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/cookbook/maintaining-dsh-code-review.md
 /maintaining-the-dsh-code-review-skill:
-  en: 7356eb0a9cc41144
-  zh: 3194fbcf27f4fac1
+  en: be312f8dad7d7e0b
+  zh: d153064a877ea29d
 /maintaining-the-dsh-code-review-skill/what-the-maintainer-receives:
-  en: 1c4d0f340591ca39
-  zh: 81bd728a7c2296cb
+  en: 5125301af77d9784
+  zh: 2bc7b95a84452bf1
 /maintaining-the-dsh-code-review-skill/what-the-operator-does-with-a-candidate-diff:
-  en: 1423d67e7c440cc6
-  zh: bc6d30d6615377f5
+  en: 1d5355b5af9e0577
+  zh: a67c93ffd189ded2
 /maintaining-the-dsh-code-review-skill/when-a-run-produces-no-candidate:
   en: feb6d261939d6c19
   zh: 044d8238cd6537d3

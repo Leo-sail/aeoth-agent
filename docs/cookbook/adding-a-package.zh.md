@@ -8,18 +8,18 @@
 
 ```
 packages/<group>/<pkg>/
-  package.json     # copy from packages/core/tools, adjust name/description/deps
-  tsconfig.json    # extends ../../../tsconfig.base.json, rootDir src,
-                   # outDir lib/types, references: ../../../vendor/cosmokit,
-                   # ../../../vendor/cordis (+ ../../../vendor/schemastery if
-                   # you use Config, + ../../<group>/<dep> for each dsh dep)
-  src/index.ts     # service default export or plugin (name/inject/apply/Config)
-  locale/en.json   # optional display metadata: meta.title and meta.description
-  locale/zh.json   # translations using the same fields
-  README.md        # service API, events, extension points, design notes,
-                   # + gated Model Experience context blocks or short form
-                   # + the gated "Known Limitations and Deferred Work" section
-                   # (or a whitelist entry in scripts/verify-package-readme-limitations.ts)
+ package.json # copy from packages/core/tools, adjust name/description/deps
+ tsconfig.json # extends ../../../tsconfig.base.json, rootDir src,
+ # outDir lib/types, references: ../../../vendor/cosmokit,
+ # ../../../vendor/cordis (+ ../../../vendor/schemastery if
+ # you use Config, + ../../<group>/<dep> for each dsh dep)
+ src/index.ts # service default export or plugin (name/inject/apply/Config)
+ locale/en.json # optional display metadata: meta.title and meta.description
+ locale/zh.json # translations using the same fields
+ README.md # service API, events, extension points, design notes,
+ # + gated Model Experience context blocks or short form
+ # + the gated "Known Limitations and Deferred Work" section
+ # (or a whitelist entry in scripts/verify-package-readme-limitations.ts)
 ```
 
 当已有分组与包的角色匹配时，选择该分组（`core`、`llm`、`shell`、`compaction`、`subagent`、`todo`、`session`、`client`/`host`、`util` 或 `test-support`）。允许新建分组，但分组只是纯容器：没有 `package.json`，没有源文件，包仍然恰好位于其下一层。
@@ -35,7 +35,7 @@ package.json 不变式（由 `pnpm run constraints` / `scripts/check-workspace-c
 | `tsconfig.base.json` | 已有分组无需编辑；新分组需为 `@deepseek-ai/dsh-*` 通配符添加 `./packages/<group>/*/src` 候选路径 |
 | `tsconfig.host.json`（Host 包）或 `tsconfig.client.json`（Client 包） | 在 `references` 中添加 `{ "path": "./packages/<group>/<pkg>" }`——普通包恰好属于一个 aggregate，绝不两个都加。`api/remotes` 因 Host 生成约定与 Client 消费约定之间存在顺序依赖而使用仓库专属拆分，新增包不得仿照（[布局](../development.zh.md#typescript-project-layout)） |
 
-`packages/client/*` 包改为 extends `tsconfig.base.client.json`（而非 `tsconfig.base.json`）；client 插件包还需在 package.json 声明 `dsh.client`、导出 `./client`、调用共享 tsdown preset（`packages/client/tsdown.client.ts`）——client 侧见 [packages/client/AGENTS.md](../../packages/client/AGENTS.md)。
+`packages/client/*` 包改为 extends `tsconfig.base.client.json`（而非 `tsconfig.base.json`）；client 插件包还需在 package.json 声明 `dsh.client`、导出 `./client`、调用共享 tsdown preset（`packages/client/tsdown.client.ts`）——client 侧见 packages/client/AGENTS.md。
 
 以下内容由 glob 或包 manifest（元数据清单）发现机制自动覆盖，无需手动编辑：根 `package.json` workspaces、`scripts/publint-all.ts`、`tsdown.config.ts`、`.oxlintrc.json`、`scripts/check-workspace-constraints.ts`。
 
@@ -107,7 +107,7 @@ Append-only, prefix-stable, replacing, or independent behavior, including the ex
 
 根据实现填写 Model Experience。每个直接、条件、上限、生命周期或辅助的模型上下文条目使用一个 H3，包含上述三个有序 H4 字段，每个字段下有一个正文段落。引用包拥有的稳定文本：系统提示词放在引出它的字段下，用带标题的 H5 加 `markdown` 围栏表示，通常归入 `What the model sees`；其他短文本以命名占位符内联，其他长文本使用相同的嵌套形式。仅概述数据依赖或提供方拥有的文本。工具 schema 条目链接到生成的[工具目录](../tool-catalog.zh.md)中对应的锚定章节，仅说明该处缺失的差异。当作用域可以隐藏 prompt 或 schema 其中之一而不影响另一个时，将二者分开。填写 `KV Cache effect` 时，应区分仅追加增长、稳定重复的前缀、替换既有请求 token 和独立模型请求，并列出会使缓存复用失效、且由本包拥有的变化。“不使缓存失效”仅表示本包保留了已有的可复用前缀；缓存是否可用以及何时淘汰不属于本包约定。行文标准约束完整性与归属；验证器强制执行所需章节结构。
 
-没有上下文效果或仅有消费方拥有路径的包使用 [`SENTENCE_MODEL_EXPERIENCE`](../../scripts/verify-package-readme-model-experience.ts) 中经过审计的 `None, as ` 或 `Indirectly, through ` 语句，随后添加 `KV Cache effect` H4 和一个非空正文段落；与模型无关的通用包可以改为加入 `NO_MODEL_EXPERIENCE_SECTION`。两种情况都不要展开为对另一个包工作的描述。limitations [allowlist](../../scripts/verify-package-readme-limitations.ts) 独立管理。Model Experience Agent Note 记录了设计动机。
+没有上下文效果或仅有消费方拥有路径的包使用 `SENTENCE_MODEL_EXPERIENCE` 中经过审计的 `None, as ` 或 `Indirectly, through ` 语句，随后添加 `KV Cache effect` H4 和一个非空正文段落；与模型无关的通用包可以改为加入 `NO_MODEL_EXPERIENCE_SECTION`。两种情况都不要展开为对另一个包工作的描述。limitations allowlist 独立管理。Model Experience Agent Note 记录了设计动机。
 
 <a id="plugin-display-metadata"></a>
 
@@ -117,10 +117,10 @@ Append-only, prefix-stable, replacing, or independent behavior, including the ex
 
 ```json
 {
-  "meta": {
-    "title": "Workspace Tools",
-    "description": "Tools for your workspace."
-  }
+ "meta": {
+ "title": "Workspace Tools",
+ "description": "Tools for your workspace."
+ }
 }
 ```
 
@@ -128,11 +128,11 @@ Append-only, prefix-stable, replacing, or independent behavior, including the ex
 
 ```json
 {
-  "exports": {
-    "./package.json": "./package.json",
-    "./locale/*.json": "./locale/*.json"
-  },
-  "files": ["locale/*.json"]
+ "exports": {
+ "./package.json": "./package.json",
+ "./locale/*.json": "./locale/*.json"
+ },
+ "files": ["locale/*.json"]
 }
 ```
 
@@ -155,7 +155,7 @@ Install 界面仍使用 `pnpm view` 返回的 npm registry 信息，不用 local
 
 验证结果：
 
-1. 在仓库根目录运行 `pnpm run verify-package-meta`，检查字段、资源 exports 和发布文件覆盖。
+1. 在仓库根目录运行 包元数据校验，检查字段、资源 exports 和发布文件覆盖。
 2. 对已安装插件，在适用的插件管理页与设置条目中切换中英文，检查标题、描述、逐字段回退，以及仅设置页使用的技术短名。
 
 资源归属与不激活插件的原因见插件元信息 Agent Note。
@@ -163,10 +163,9 @@ Install 界面仍使用 `pnpm view` 返回的 npm registry 信息，不用 local
 ## 6. 验证
 
 ```sh
-pnpm install        # registers the workspace
-pnpm run doc-sync
+pnpm install # registers the workspace
 pnpm run constraints && pnpm run typecheck && pnpm run lint
-pnpm run build && pnpm run hygiene
+pnpm run build
 ```
 
-请遵循[仓库测试政策](../testing.zh.md)，执行新包所需的行为专项检查并达到相应覆盖率。
+请遵循仓库测试政策，执行新包所需的行为专项检查并达到相应覆盖率。

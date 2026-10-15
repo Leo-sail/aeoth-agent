@@ -40,4 +40,4 @@ export function apply(ctx: Context, config: Config) {
 
 ## 验证
 
-遵循[仓库测试策略](../testing.zh.md)，该策略负责适配器覆盖、真实提供方检查和已发布入口要求。
+遵循仓库测试策略，该策略负责适配器覆盖、真实提供方检查和已发布入口要求。

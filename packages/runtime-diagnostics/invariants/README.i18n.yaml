@@ -1,6 +1,7 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/runtime-diagnostics/invariants/README.md
 /:
   en: 1b5cdfce73a16057
   zh: 1b5cdfce73a16057
@@ -35,8 +36,8 @@
   en: 5b23215f6331afac
   zh: e2beea6daa73b614
 /deepseek-ai-dsh-invariants/understand-the-implementation/design-philosophy:
-  en: 04d5b07e70a968f2
-  zh: 651a7e9e8f540a24
+  en: 54934e68a384feaa
+  zh: eed6a883881259bd
 /deepseek-ai-dsh-invariants/understand-the-implementation/source-map:
   en: 08ade90614209295
   zh: d4862b249cb44379

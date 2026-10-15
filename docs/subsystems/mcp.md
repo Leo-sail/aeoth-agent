@@ -31,7 +31,7 @@ MCP servers are opt-in. Configure one `@deepseek-ai/dsh-mcp-client` entry per se
 | Server instruction size limit | Client `maxInstructionBytes`; the composition supplies [system-prompt assembly](system-prompt.md) |
 | Permission decisions and supported image output | [Tool execution](tools.md) and [attachments](attachment.md) |
 
-Protocol negotiation follows the SDK's supported revisions; there is no product setting that forces a protocol revision. The [configuration catalog](../config-catalog.md#deepseek-aidsh-mcp-client) lists accepted client fields and defaults.
+Protocol negotiation follows the SDK's supported revisions; there is no product setting that forces a protocol revision. The configuration catalog lists accepted client fields and defaults.
 
 -----
 
@@ -108,7 +108,7 @@ MCP prompt templates, human-input elicitation, task-based execution, and resourc
 - [MCP package group](../../packages/mcp/README.md) — package entry points.
 - [MCP resources](../../packages/mcp/mcp-resources/README.md) — shared tools and resource-provider semantics.
 - Resource visibility decision — shared profile mounting and visibility from configured servers.
-- [Third-party memory servers](../user/guide/mcp-memory.md) — product configuration guide.
+- Third-party memory servers — product configuration guide.
 - Protocol negotiation decision — SDK ownership and compatibility decisions.
 
 <!-- BEGIN GENERATED cordis-surface (gen-cordis-catalog.ts) — do not edit between markers -->

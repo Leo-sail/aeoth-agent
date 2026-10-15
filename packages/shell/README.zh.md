@@ -26,4 +26,4 @@ Shell 执行、环境处理与面向模型的命令。 本页索引太易桌面�
 
 ## 开发
 
-使用 `pnpm run build:official` 构建完整组合；打包由 [apps/desktop](../../apps/desktop/README.zh.md) 负责。
+使用 `pnpm run build` 构建完整组合；打包由 [apps/desktop](../../apps/desktop/README.zh.md) 负责。

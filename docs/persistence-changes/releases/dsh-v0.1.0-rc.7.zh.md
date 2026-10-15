@@ -49,9 +49,9 @@ tag: dsh-v0.1.0-rc.7
 previous: dsh-v0.1.0-rc.6
 sessionFormatVersion: 0
 changes:
-  - root: event:assistant/chunk
-    before: 7fd942b2189b8dbf6e1a2c7b026e9ddd1e7dba3fbe5645708a76f4cddabb281d
-    after: de04e4ae000cc4422a15fb86dce7c398c8a9970ac963b6f7f785e2276a939e62
+ - root: event:assistant/chunk
+ before: 7fd942b2189b8dbf6e1a2c7b026e9ddd1e7dba3fbe5645708a76f4cddabb281d
+ after: de04e4ae000cc4422a15fb86dce7c398c8a9970ac963b6f7f785e2276a939e62
 ```
 
 <a id="changes"></a>
@@ -72,9 +72,6 @@ changes:
 
 提取结果已通过规范图、根摘要和全部可达类型摘要校验；仅对历史 surface 事件允许源码原有的可选 `surfaceOp`。仓库内检查从前驱重建每个 tag，核对 before/after、快照覆盖和双语机器声明。
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## 开发备注

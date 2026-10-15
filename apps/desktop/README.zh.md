@@ -6,7 +6,7 @@
 
 ## 开发者预览
 
-产品版本为 **0.1.0-preview.3**。模型接口与 API Key 在应用内配置，本地预览不要求登录产品账号。
+产品版本为 **0.1.0-preview.4**。模型接口与 API Key 在应用内配置，本地预览不要求登录产品账号。
 
 ## 开发
 
@@ -14,7 +14,7 @@
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm run build:official
+pnpm run build
 pnpm run start:desktop
 ```
 
@@ -30,7 +30,7 @@ pnpm run package:desktop:mac:arm64:unsigned
 
 打包命令构建应用、准备生产依赖并核对最终 ASAR 文件清单。Node、CPython 和 Python wheel 由 `scripts/primary-runtime/lock.json` 锁定，Electron 使用锁定 npm 包提供的校验和。缓存文件与网络下载文件遵循相同校验。
 
-构建结果位于本目录的 `.desktop-build/targets/mac-arm64/unsigned-artifacts/`。完成归档与隔离启动验证后，将 DMG、ZIP 和校验清单放入仓库根目录的 `release/0.1.0-preview.3/mac-arm64/`。运行验证使用临时目录，不在仓库保留测试套件。
+构建结果位于本目录的 `.desktop-build/targets/mac-arm64/unsigned-artifacts/`。完成归档与隔离启动验证后，将 DMG、ZIP 和校验清单放入仓库根目录的 `dist/<version>/mac-arm64/`。运行验证使用临时目录，不在仓库保留测试套件。
 
 ## 运行时
 

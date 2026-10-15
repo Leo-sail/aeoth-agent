@@ -1,6 +1,7 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/client/hmr/README.md
 /:
   en: 068279591558751c
   zh: 068279591558751c
@@ -17,8 +18,8 @@
   en: 5da9d039ef5ff8a4
   zh: 63cd12c0ad40bd88
 /deepseek-ai-dsh-client-hmr/use-this-package/starting-the-reload-chain:
-  en: e1c5d886bc7da5bc
-  zh: da8f0c309e178b74
+  en: fed4f73e2c709047
+  zh: 5e70d0415bc547d3
 /deepseek-ai-dsh-client-hmr/use-this-package/what-a-reload-does:
   en: d3ac81d404b2d6c6
   zh: a9f9ad9dfa685ac7

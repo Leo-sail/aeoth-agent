@@ -23,7 +23,7 @@ Subpath exports keep their path: `@cordisjs/plugin-loader/repository` becomes `@
 ## What the rename does not touch
 
 - **Directory names and upstream source versions.** `vendor/hmr/` stays `vendor/hmr/`, and the table records the upstream version of the pinned source snapshot, so the manifest reads as an upstream snapshot; the vendored `package.json`'s own `version` field is the harness's released manifest version, which `pnpm run release:vendor` bumps and a re-sync restores to the upstream version.
-- **Dependency ranges.** Renaming changes dependency keys without changing ranges. Workspace manifests use the `workspace:` protocol; [repository rules](../AGENTS.md#conventions) distinguish exact DSH references from vendor/native tilde ranges.
+- **Dependency ranges.** Renaming changes dependency keys without changing ranges. Workspace manifests use the `workspace:` protocol; repository rules distinguish exact DSH references from vendor/native tilde ranges.
 - **The Loader's `cordis:` builtin prefix.** `cordis:include` and `cordis:group` are a protocol prefix, not a package name.
 - **The `cordis.yml` configuration family**, including `*.cordis.yml`, `*.cordis.snapshot.yml`, and `cordis.patch.yml`.
 - **Harness packages whose own names contain the word**, such as `@deepseek-ai/dsh-tool-cordis`.
@@ -41,13 +41,13 @@ Subpath exports keep their path: `@cordisjs/plugin-loader/repository` becomes `@
 
 ## Applying, verifying, and reverting
 
-[`scripts/rescope-vendor.ts`](../scripts/rescope-vendor.ts) owns the mapping above and performs the rename, so no reference is renamed by hand:
+`scripts/rescope-vendor.ts` owns the mapping above and performs the rename, so no reference is renamed by hand:
 
 ```sh
-pnpm run rescope-vendor            # report what would change
-pnpm run rescope-vendor --apply    # rewrite every reference
-pnpm run rescope-vendor:check      # assert the post-state; runs in the hygiene gate
-pnpm run rescope-vendor --apply --reverse   # return to the upstream names
+# rescope-vendor (upstream tooling; not included in this distribution) # report what would change
+# rescope-vendor (upstream tooling; not included in this distribution) --apply # rewrite every reference
+# rescope-vendor:check (upstream tooling; not included in this distribution) # assert the post-state; runs in the hygiene gate
+# rescope-vendor (upstream tooling; not included in this distribution) --apply --reverse # return to the upstream names
 ```
 
-Re-apply it after an upstream sync ([procedure](../vendor/README.md)), and follow it with the regeneration it prints: `pnpm install` for the lockfile, `pnpm run gen-third-party-notices`, and `pnpm run verify-translation-pairing --write` for the bilingual pairs it touched.
+Re-apply it after an upstream sync ([procedure](../vendor/README.md)), and follow it with the regeneration it prints: `pnpm install` for the lockfile, the notices generator, and `pnpm run verify-translation-pairing --write` for the bilingual pairs it touched.

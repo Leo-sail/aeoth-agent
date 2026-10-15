@@ -49,9 +49,9 @@ tag: dsh-v0.1.1-rc.1
 previous: dsh-v0.1.0-rc.8
 sessionFormatVersion: 0
 changes:
-  - root: event:permission/preset
-    before: 5c45bf4c544a7211dcd8ba6ba7e5f1bc39b49e7a9df9d5cbdc8e87c22771b37b
-    after: 7271e4b771406aaf06014c2269edd6cb68055bb8b8686571730813ce0ababc22
+ - root: event:permission/preset
+ before: 5c45bf4c544a7211dcd8ba6ba7e5f1bc39b49e7a9df9d5cbdc8e87c22771b37b
+ after: 7271e4b771406aaf06014c2269edd6cb68055bb8b8686571730813ce0ababc22
 ```
 
 <a id="changes"></a>
@@ -72,9 +72,6 @@ changes:
 
 提取结果已通过规范图、根摘要和全部可达类型摘要校验；仅对历史 surface 事件允许源码原有的可选 `surfaceOp`。仓库内检查从前驱重建每个 tag，核对 before/after、快照覆盖和双语机器声明。
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## 开发备注

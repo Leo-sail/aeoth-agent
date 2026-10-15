@@ -27,19 +27,19 @@ import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 type HeaderActionProps = PropsRuntime<'conversation.session.header.actions'>
 
 function HeaderAction({ useSession }: HeaderActionProps) {
-  const running = useSession(snapshot => snapshot.running)
-  return <button disabled={running}>Review</button>
+ const running = useSession(snapshot => snapshot.running)
+ return <button disabled={running}>Review</button>
 }
 
 export const inject = ['slots']
 
 export function apply(ctx: Context): void {
-  ctx.slots.inject('conversation.session.header.actions', () =>
-    ctx.slots.register({
-      name: 'conversation.session.header.actions',
-      id: 'review',
-      order: 100,
-    }, HeaderAction))
+ ctx.slots.inject('conversation.session.header.actions', () =>
+ ctx.slots.register({
+ name: 'conversation.session.header.actions',
+ id: 'review',
+ order: 100,
+ }, HeaderAction))
 }
 ```
 
@@ -113,81 +113,81 @@ Renderer 还会根据声明的 store 创建 `useStore`，并根据声明的 loca
 ```text
 root
 ├─ sidebar
-│  ├─ sidebar.brand.mark
-│  ├─ sidebar.brand.name
-│  ├─ sidebar.panellist
-│  ├─ sidebar.footer.action
-│  ├─ sidebar.workspaces
-│  │  ├─ sidebar.workspaces.directoryFlow
-│  │  ├─ sidebar.workspaces.session.menu.item
-│  │  └─ sidebar.workspaces.session.row.action
-│  └─ sidebar.settings
-│     ├─ settings.trigger
-│     ├─ settings.header
-│     ├─ settings.action
-│     ├─ settings.close
-│     ├─ settings.onboarding
-│     └─ settings.section
-│        ├─ settings.general.item
-│        ├─ settings.models.provider-card
-│        ├─ settings.models.footer
-│        └─ settings.plugins.tab
+│ ├─ sidebar.brand.mark
+│ ├─ sidebar.brand.name
+│ ├─ sidebar.panellist
+│ ├─ sidebar.footer.action
+│ ├─ sidebar.workspaces
+│ │ ├─ sidebar.workspaces.directoryFlow
+│ │ ├─ sidebar.workspaces.session.menu.item
+│ │ └─ sidebar.workspaces.session.row.action
+│ └─ sidebar.settings
+│ ├─ settings.trigger
+│ ├─ settings.header
+│ ├─ settings.action
+│ ├─ settings.close
+│ ├─ settings.onboarding
+│ └─ settings.section
+│ ├─ settings.general.item
+│ ├─ settings.models.provider-card
+│ ├─ settings.models.footer
+│ └─ settings.plugins.tab
 ├─ main
-│  ├─ plugins.item
-│  ├─ plugins.bundle.config
-│  ├─ plugins.row.config
-│  ├─ plugins.detail.actions
-│  ├─ plugins.detail.badge
-│  ├─ plugins.detail.section
-│  └─ main.conversation
-│     ├─ conversation.session
-│     │  └─ conversation.view
-│     │     ├─ conversation.chat.node
-│     │     │  ├─ conversation.chat.assistant-actions
-│     │     │  ├─ conversation.chat.commandview
-│     │     │  ├─ conversation.chat.turnTail
-│     │     │  └─ tool.call.toolview
-│     │     │     ├─ tool.call.images
-│     │     │     └─ tool.view.cordis
-│     │     ├─ conversation.message.images
-│     │     └─ conversation.trajectory.images
-│     ├─ conversation.header
-│     │  ├─ conversation.header.leading
-│     │  └─ conversation.session.header
-│     │     ├─ conversation.session.header.lineage
-│     │     ├─ conversation.session.header.actions
-│     │     ├─ conversation.session.header.utilities
-│     │     └─ conversation.session.header.corner
-│     ├─ conversation.composer
-│     │  ├─ conversation.approval.detail
-│     │  └─ conversation.plan-review.actions
-│     ├─ conversation.composer.bar
-│     │  ├─ conversation.input.attachments
-│     │  ├─ conversation.input.permission
-│     │  ├─ conversation.input.plan
-│     │  └─ conversation.input.model
-│     ├─ conversation.input.overlay
-│     ├─ conversation.input.dock
-│     ├─ conversation.composer.dock
-│     ├─ conversation.input.left
-│     ├─ conversation.input.right
-│     ├─ conversation.hero.brand.mark
-│     ├─ conversation.hero.workspace
-│     │  └─ conversation.hero.workspace.directoryFlow
-│     └─ conversation.hero.agentPreset
+│ ├─ plugins.item
+│ ├─ plugins.bundle.config
+│ ├─ plugins.row.config
+│ ├─ plugins.detail.actions
+│ ├─ plugins.detail.badge
+│ ├─ plugins.detail.section
+│ └─ main.conversation
+│ ├─ conversation.session
+│ │ └─ conversation.view
+│ │ ├─ conversation.chat.node
+│ │ │ ├─ conversation.chat.assistant-actions
+│ │ │ ├─ conversation.chat.commandview
+│ │ │ ├─ conversation.chat.turnTail
+│ │ │ └─ tool.call.toolview
+│ │ │ ├─ tool.call.images
+│ │ │ └─ tool.view.cordis
+│ │ ├─ conversation.message.images
+│ │ └─ conversation.trajectory.images
+│ ├─ conversation.header
+│ │ ├─ conversation.header.leading
+│ │ └─ conversation.session.header
+│ │ ├─ conversation.session.header.lineage
+│ │ ├─ conversation.session.header.actions
+│ │ ├─ conversation.session.header.utilities
+│ │ └─ conversation.session.header.corner
+│ ├─ conversation.composer
+│ │ ├─ conversation.approval.detail
+│ │ └─ conversation.plan-review.actions
+│ ├─ conversation.composer.bar
+│ │ ├─ conversation.input.attachments
+│ │ ├─ conversation.input.permission
+│ │ ├─ conversation.input.plan
+│ │ └─ conversation.input.model
+│ ├─ conversation.input.overlay
+│ ├─ conversation.input.dock
+│ ├─ conversation.composer.dock
+│ ├─ conversation.input.left
+│ ├─ conversation.input.right
+│ ├─ conversation.hero.brand.mark
+│ ├─ conversation.hero.workspace
+│ │ └─ conversation.hero.workspace.directoryFlow
+│ └─ conversation.hero.agentPreset
 ├─ rightbar
-│  └─ rightbar.session
-│     ├─ sidebar.right.pane.tab
-│     │  ├─ sidebar.right.tab.guide
-│     │  └─ sidebar.right.tab.guide.entry
-│     ├─ sidebar.right.pane.tab.title
-│     └─ sidebar.right.tab.menu.item
+│ └─ rightbar.session
+│ ├─ sidebar.right.pane.tab
+│ │ ├─ sidebar.right.tab.guide
+│ │ └─ sidebar.right.tab.guide.entry
+│ ├─ sidebar.right.pane.tab.title
+│ └─ sidebar.right.tab.menu.item
 ├─ shell.leading
 └─ shell.overlay
-   └─ shell.quota-notice
+ └─ shell.quota-notice
 ```
 
-生成的 Client inspect catalog 是每个 key 的完整参考，包含 cardinality、scope、owner props、标准 props、当前 occupant、声明 owner 与替换风险。运行中的动态包可以用 `cordis_inspect what:"client"` 查询实时树与某个精确 key；源码 catalog 由 `pnpm run gen-client-catalog` 根据 `SlotMap` 声明和 `slots.register()` 调用点生成。
+生成的 Client inspect catalog 是每个 key 的完整参考，包含 cardinality、scope、owner props、标准 props、当前 occupant、声明 owner 与替换风险。运行中的动态包可以用 `cordis_inspect what:"client"` 查询实时树与某个精确 key；源码 catalog 由 客户端目录生成器 根据 `SlotMap` 声明和 `slots.register()` 调用点生成。
 
 ## 扩展规则
 

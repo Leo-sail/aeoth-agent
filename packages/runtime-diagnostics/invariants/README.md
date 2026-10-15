@@ -38,10 +38,10 @@ The registry is enabled by default and checks every registered package unless fi
 
 ```yaml
 - name: '@deepseek-ai/dsh-invariants'
-  config:
-    enabled: true
-    package_allowlist:
-      - '^@deepseek-ai/dsh-'
+ config:
+ enabled: true
+ package_allowlist:
+ - '^@deepseek-ai/dsh-'
 ```
 
 | Field | Default | Meaning |
@@ -105,7 +105,7 @@ This section explains the design behind the registry; the observable behavior is
 - **Product-independent registry.** The service imports no session, agent, scope, or agent-loop package and contains none of their checks; companions carry checks next to their owners.
 - **Real relationships, not synthetic assertions.** A companion checks an event-stream or mutable-data relationship its package owns; confirming a method, plugin name, injection, or fixed pure result is a type, load, or unit-test concern, never a runtime invariant.
 - **Registration reserves ownership.** A package name is reserved even when filters keep its installer inactive, so two plugins can never silently claim the same name.
-- **Companion wiring is mechanically enforced.** `pnpm run verify-package-invariants` rejects empty installers, installers that omit or ignore the reporter, wrong registration names, incomplete publication wiring, and stale wiring for omitted companions (companion-omission note).
+- **Companion wiring is mechanically enforced.** the package invariant verification rejects empty installers, installers that omit or ignore the reporter, wrong registration names, incomplete publication wiring, and stale wiring for omitted companions (companion-omission note).
 
 ### Source map
 

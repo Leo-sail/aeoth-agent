@@ -8,18 +8,18 @@ The file-by-file checklist for a new `@deepseek-ai/dsh-<name>` package. This che
 
 ```
 packages/<group>/<pkg>/
-  package.json     # copy from packages/core/tools, adjust name/description/deps
-  tsconfig.json    # extends ../../../tsconfig.base.json, rootDir src,
-                   # outDir lib/types, references: ../../../vendor/cosmokit,
-                   # ../../../vendor/cordis (+ ../../../vendor/schemastery if
-                   # you use Config, + ../../<group>/<dep> for each dsh dep)
-  src/index.ts     # service default export or plugin (name/inject/apply/Config)
-  locale/en.json   # optional display metadata: meta.title and meta.description
-  locale/zh.json   # translations using the same fields
-  README.md        # service API, events, extension points, design notes,
-                   # + gated Model Experience context blocks or short form
-                   # + the gated "Known Limitations and Deferred Work" section
-                   # (or a whitelist entry in scripts/verify-package-readme-limitations.ts)
+ package.json # copy from packages/core/tools, adjust name/description/deps
+ tsconfig.json # extends ../../../tsconfig.base.json, rootDir src,
+ # outDir lib/types, references: ../../../vendor/cosmokit,
+ # ../../../vendor/cordis (+ ../../../vendor/schemastery if
+ # you use Config, + ../../<group>/<dep> for each dsh dep)
+ src/index.ts # service default export or plugin (name/inject/apply/Config)
+ locale/en.json # optional display metadata: meta.title and meta.description
+ locale/zh.json # translations using the same fields
+ README.md # service API, events, extension points, design notes,
+ # + gated Model Experience context blocks or short form
+ # + the gated "Known Limitations and Deferred Work" section
+ # (or a whitelist entry in scripts/verify-package-readme-limitations.ts)
 ```
 
 Choose an existing group when one matches the package's role (`core`, `llm`, `shell`, `compaction`, `subagent`, `todo`, `session`, `client`/`host`, `util`, or `test-support`). A new group is allowed, but it is a pure container: no `package.json`, no source files, and packages still sit exactly one level below it.
@@ -35,7 +35,7 @@ In-package relative imports use explicit `.ts` specifiers in source (for example
 | `tsconfig.base.json` | no edit for an existing group; for a new group, add a `./packages/<group>/*/src` candidate to the `@deepseek-ai/dsh-*` wildcard |
 | `tsconfig.host.json` (Host package) or `tsconfig.client.json` (Client package) | add `{ "path": "./packages/<group>/<pkg>" }` to `references` — an ordinary package belongs to exactly one aggregate, never both. `api/remotes` uses a repository-specific split because the Host generates a contract that the Client consumes in a later phase; new packages must not copy it ([layout](../development.md#typescript-project-layout)) |
 
-A `packages/client/*` package additionally extends `tsconfig.base.client.json` instead of `tsconfig.base.json`, and a client plugin package declares `dsh.client` in package.json, exports `./client`, and calls the shared tsdown preset (`packages/client/tsdown.client.ts`) — see [packages/client/AGENTS.md](../../packages/client/AGENTS.md) for the client-side contract.
+A `packages/client/*` package additionally extends `tsconfig.base.client.json` instead of `tsconfig.base.json`, and a client plugin package declares `dsh.client` in package.json, exports `./client`, and calls the shared tsdown preset (`packages/client/tsdown.client.ts`) — see packages/client/AGENTS.md for the client-side contract.
 
 Covered automatically by globs or package-manifest discovery — no edits needed: root `package.json` workspaces, `scripts/publint-all.ts`, `tsdown.config.ts`, `.oxlintrc.json`, `scripts/check-workspace-constraints.ts`.
 
@@ -107,7 +107,7 @@ Append-only, prefix-stable, replacing, or independent behavior, including the ex
 
 Fill Model Experience from the implementation. Use one H3 per direct, conditional, capped, lifetime, or auxiliary model-context entry, with the three ordered H4 fields shown above and one prose paragraph under each. Quote stable text owned by the package: system-prompt prose goes in a titled H5 plus `markdown` fence under the field that introduces it—normally `What the model sees`—other short literals stay inline with named placeholders, and other long literals use the same nested form. Summarize only data-dependent or provider-owned text. A tool-schema entry links its anchored section in the generated [tool catalog](../tool-catalog.md) and states only deltas absent there. Keep prompt and schema entries separate when scoping can hide one without the other. In `KV Cache effect`, distinguish append-only growth, a stable repeated prefix, replacement of earlier request tokens, and an independent model request, then name the package-owned changes that can invalidate reuse. “Does not invalidate” means the package preserves an already-reusable prefix; provider cache availability and eviction remain outside the package contract. The prose standard governs completeness and ownership; the verifier enforces the required section structure.
 
-A package with no context effect or one consumer-owned path uses the audited `None, as ` or `Indirectly, through ` sentence in [`SENTENCE_MODEL_EXPERIENCE`](../../scripts/verify-package-readme-model-experience.ts), followed by a `KV Cache effect` H4 and one non-empty paragraph; a model-agnostic generic package may instead join `NO_MODEL_EXPERIENCE_SECTION`. Do not expand either case into a description of another package's work. The limitations [allowlist](../../scripts/verify-package-readme-limitations.ts) is independent. The Model Experience Agent Note records the rationale.
+A package with no context effect or one consumer-owned path uses the audited `None, as ` or `Indirectly, through ` sentence in `SENTENCE_MODEL_EXPERIENCE`, followed by a `KV Cache effect` H4 and one non-empty paragraph; a model-agnostic generic package may instead join `NO_MODEL_EXPERIENCE_SECTION`. Do not expand either case into a description of another package's work. The limitations allowlist is independent. The Model Experience Agent Note records the rationale.
 
 <a id="plugin-display-metadata"></a>
 
@@ -117,10 +117,10 @@ For an npm package plugin, define its title and description in `locale/en.json`.
 
 ```json
 {
-  "meta": {
-    "title": "Workspace Tools",
-    "description": "Tools for your workspace."
-  }
+ "meta": {
+ "title": "Workspace Tools",
+ "description": "Tools for your workspace."
+ }
 }
 ```
 
@@ -128,11 +128,11 @@ Merge these entries into `package.json`, retaining existing runtime exports and 
 
 ```json
 {
-  "exports": {
-    "./package.json": "./package.json",
-    "./locale/*.json": "./locale/*.json"
-  },
-  "files": ["locale/*.json"]
+ "exports": {
+ "./package.json": "./package.json",
+ "./locale/*.json": "./locale/*.json"
+ },
+ "files": ["locale/*.json"]
 }
 ```
 
@@ -155,7 +155,7 @@ The Install view still uses npm registry information from `pnpm view`, not local
 
 Verify the result:
 
-1. Run `pnpm run verify-package-meta` from the repository root to check fields, resource exports, and publication coverage.
+1. Run the package metadata verification from the repository root to check fields, resource exports, and publication coverage.
 2. Switch an installed plugin's applicable Plugin Manager and Settings entries between English and Chinese; check the title, description, per-field fallback, and Settings-only compact technical names.
 
 See the plugin metadata Agent Note for resource ownership and non-activation rationale.
@@ -163,10 +163,9 @@ See the plugin metadata Agent Note for resource ownership and non-activation rat
 ## 6. Verify
 
 ```sh
-pnpm install        # registers the workspace
-pnpm run doc-sync
+pnpm install # registers the workspace
 pnpm run constraints && pnpm run typecheck && pnpm run lint
-pnpm run build && pnpm run hygiene
+pnpm run build
 ```
 
-Follow the [repository testing policy](../testing.md) for the behavior-specific checks and coverage required by the new package.
+Follow the repository testing policy for the behavior-specific checks and coverage required by the new package.

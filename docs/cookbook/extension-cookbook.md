@@ -2,7 +2,7 @@
 
 English | [中文](extension-cookbook.zh.md)
 
-Reference patterns for harness extensions. The snippets omit imports and helper implementations and are not copy-paste-complete. For concrete authoring paths, see the [package checklist](adding-a-package.md), [first-tool tutorial](../user/develop/basic/tool.md), [tool reference](adding-a-tool.md), [LLM adapter guide](adding-an-llm-adapter.md), and [Session format version tutorial](adding-a-session-format-version.md); the [architecture](../architecture.md) owns the system and extension-point map.
+Reference patterns for harness extensions. The snippets omit imports and helper implementations and are not copy-paste-complete. For concrete authoring paths, see the [package checklist](adding-a-package.md), first-tool tutorial, [tool reference](adding-a-tool.md), [LLM adapter guide](adding-an-llm-adapter.md), and [Session format version tutorial](adding-a-session-format-version.md); the [architecture](../architecture.md) owns the system and extension-point map.
 
 ## A tool plugin
 
@@ -65,7 +65,7 @@ export function apply(ctx: Context) {
 
 A *protocol driver* adapts a wire peer to `ctx.agents`; it may serve a UI or an automation client. A stdio driver owns stdout, creates or resumes agents through the factory, and maps protocol requests to `followup()` or `cancel()`. A low-level prompt request returns its durable enqueue receipt; it does not acquire a result by correlating `MessageId` with `turn/end`. Publish whole-agent status separately. An automation method may wait from its receipt through the next idle and summarize that explicitly owned interval, while a UI normally keeps observing the open-ended event stream. Tear agents down with `AgentHandle.dispose()` so disposal reaches quiescence.
 
-[`packages/acp/acp`](../../packages/acp/acp) is the automation-only worked example: it exposes fresh text sessions over Agent Client Protocol JSON-RPC stdio, emits committed assistant text, and registers a one-shot machine permission answerer for agents it owns. Its [README](../../packages/acp/acp/README.md) defines the exact methods, event order, and lifecycle contract.
+[`packages/acp/acp`](../../packages/acp/acp) is the automation-only worked example: it exposes fresh text sessions over Agent Client Protocol JSON-RPC stdio, emits committed assistant text, and registers a one-shot machine permission answerer for agents it owns. Its README defines the exact methods, event order, and lifecycle contract.
 
 ```ts
 import type { Context } from '@deepseek-ai/cordis'

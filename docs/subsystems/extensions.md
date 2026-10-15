@@ -274,7 +274,7 @@ Shared Host/Client service façade over the realm's source publisher.
 publish(topic: string, payload: InspectorJsonValue, monotonicMs?: number): void
 ```
 
-Source: [`packages/experimental/inspector/src/index.ts`](../../packages/experimental/inspector/src/index.ts)
+Source: `packages/experimental/inspector/src/index.ts`
 
 <a id="cordis-events"></a>
 

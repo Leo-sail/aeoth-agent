@@ -1,6 +1,7 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/experimental/computer-use-cua-driver-native/README.md
 /:
   en: 374e91a304d07da6
   zh: 374e91a304d07da6
@@ -17,11 +18,11 @@
   en: ac0924c0e6b76f8c
   zh: 09538aabbea32f77
 /deepseek-ai-dsh-experimental-computer-use-cua-driver-native/source:
-  en: 0eca17fc2244bba1
-  zh: 2b1be08b9d133f85
+  en: 6d42220efd328666
+  zh: 08f2b87dd3b270fc
 /deepseek-ai-dsh-experimental-computer-use-cua-driver-native/desktop-delivery:
   en: af0f806a1899cdbd
   zh: fc0a8a407162bcb6
 /deepseek-ai-dsh-experimental-computer-use-cua-driver-native/license:
-  en: 037a9bfdfc7370e5
-  zh: 9203e226a55e1373
+  en: 60df8808f7ff0843
+  zh: 8b0548d60b67ffe6

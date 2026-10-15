@@ -40,4 +40,4 @@ Keep wire types, request serialization, transport parsing, chunk translation, an
 
 ## Verification
 
-Follow the [repository testing policy](../testing.md), which owns adapter coverage, real-provider checks, and published-entry requirements.
+Follow the repository testing policy, which owns adapter coverage, real-provider checks, and published-entry requirements.

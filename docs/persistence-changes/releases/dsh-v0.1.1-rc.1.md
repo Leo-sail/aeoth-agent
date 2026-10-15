@@ -49,9 +49,9 @@ tag: dsh-v0.1.1-rc.1
 previous: dsh-v0.1.0-rc.8
 sessionFormatVersion: 0
 changes:
-  - root: event:permission/preset
-    before: 5c45bf4c544a7211dcd8ba6ba7e5f1bc39b49e7a9df9d5cbdc8e87c22771b37b
-    after: 7271e4b771406aaf06014c2269edd6cb68055bb8b8686571730813ce0ababc22
+ - root: event:permission/preset
+ before: 5c45bf4c544a7211dcd8ba6ba7e5f1bc39b49e7a9df9d5cbdc8e87c22771b37b
+ after: 7271e4b771406aaf06014c2269edd6cb68055bb8b8686571730813ce0ababc22
 ```
 
 <a id="changes"></a>
@@ -72,9 +72,6 @@ Detected 1 changed root and 1 structural difference. The minimum below is calcul
 
 Extraction passed canonical-graph, root-digest, and reachable-type-digest validation, permitting the original optional `surfaceOp` only for historical surface events. The in-tree check reconstructs each tag from its predecessor and verifies before/after values, snapshot coverage, and bilingual machine declarations.
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## Dev Note

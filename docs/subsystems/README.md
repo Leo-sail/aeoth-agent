@@ -47,7 +47,6 @@ One page per subsystem of the Aeoth Agent: what it is, the data structures it mo
 | [compaction.md](compaction.md) | the compaction seam: the `compaction/*` session events, `CompactionResult`, the `CompactionEngine` interface |
 | [subagent.md](subagent.md) | the subagent seam: the named-provider registry, `SubagentStartRequest`/`Result`/`Run`, the start-time-vs-runtime capability split |
 | [voice-input.md](voice-input.md) | experimental named recognizers, transient audio and revision-guarded draft insertion |
-| [agent-team.md](agent-team.md) | Agent Teams: implicit Lead identity, named continuable teammates, durable peer mailbox, and shared task DAG |
 | [web.md](web.md) | the web access seam: `WebSearchRequest`/`Result`, `WebFetchRequest`/`Result`, `WebFetchBody`, provider availability, `WebError` |
 | [spill.md](spill.md) | the spill storage seam: `SaveTextSpill`, `SpillOwner`/`SpillSource`, `SpillRef`, the branded `SpillLocator` |
 | [workflow.md](workflow.md) | the workflow seam: `WorkflowStartRequest`, `WorkflowMeta`, `WorkflowRun`/`Result`, the `workflow/*` event payloads, `WorkflowError` fatality |
@@ -70,4 +69,4 @@ One page per subsystem of the Aeoth Agent: what it is, the data structures it mo
 | [otel.md](otel.md) | Shared ordinary-event and Session-log OTLP channels |
 | [product-telemetry.md](product-telemetry.md) | Explicit product analytics submission and OTLP/HTTP transport |
 
-> Type declarations and their JSDoc on these pages are source-equivalent and drift-checked by `pnpm run verify-type-equiv` (see [development.md](../development.md#documenting-types-verbatim-ts-type-equiv)). Ordinary blocks preserve complete declarations; `public-api` blocks preserve body-stripped public class declarations. Cordis services and events use each page's generated **Cordis API** section.
+> Type declarations and their JSDoc on these pages are source-equivalent and drift-checked by the type-equivalence verification (see [development.md](../development.md#documenting-types-verbatim-ts-type-equiv)). Ordinary blocks preserve complete declarations; `public-api` blocks preserve body-stripped public class declarations. Cordis services and events use each page's generated **Cordis API** section.

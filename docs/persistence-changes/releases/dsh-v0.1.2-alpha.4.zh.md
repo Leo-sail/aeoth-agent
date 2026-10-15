@@ -49,18 +49,18 @@ tag: dsh-v0.1.2-alpha.4
 previous: dsh-v0.1.2-alpha.3
 sessionFormatVersion: 0
 changes:
-  - root: SessionHeader
-    before: a50373168c4935222b1681223d919a56d095ce37ad45c5ba2c20d75235adf937
-    after: 001ed6f66d67fac9cb9594b55f13557db94174fe5d5954789bb5a2d6d5927226
-  - root: event:agent/inbox/spliced
-    before: ee796690277eafbcda4437478de7a8f01d983424d6238fe472df9b3b0d97a89f
-    after: 15cdff6391d58ea00d7e2fe113b663d5479cbb3fd1af26717ad933c770bca081
-  - root: event:session/title-llm-request
-    before: 61651f4ca07ab9ebef773d82fafbcb74d39190a255c69ecc36084046123a9cb4
-    after: 2cfb71f7819bc88a6bccbffa8b7ae5664233af6f6e1dfb068db25e2e17ddd8c7
-  - root: event:user/message
-    before: e23368db1646a9ac10d2bd4629084fdff583a1db2c83ffaa3f2f201d0c45f3e4
-    after: e950c87ba49bd8175b8a670b319a599d5ed14cde996540d5ba91a141fad68781
+ - root: SessionHeader
+ before: a50373168c4935222b1681223d919a56d095ce37ad45c5ba2c20d75235adf937
+ after: 001ed6f66d67fac9cb9594b55f13557db94174fe5d5954789bb5a2d6d5927226
+ - root: event:agent/inbox/spliced
+ before: ee796690277eafbcda4437478de7a8f01d983424d6238fe472df9b3b0d97a89f
+ after: 15cdff6391d58ea00d7e2fe113b663d5479cbb3fd1af26717ad933c770bca081
+ - root: event:session/title-llm-request
+ before: 61651f4ca07ab9ebef773d82fafbcb74d39190a255c69ecc36084046123a9cb4
+ after: 2cfb71f7819bc88a6bccbffa8b7ae5664233af6f6e1dfb068db25e2e17ddd8c7
+ - root: event:user/message
+ before: e23368db1646a9ac10d2bd4629084fdff583a1db2c83ffaa3f2f201d0c45f3e4
+ after: e950c87ba49bd8175b8a670b319a599d5ed14cde996540d5ba91a141fad68781
 ```
 
 <a id="changes"></a>
@@ -85,9 +85,6 @@ changes:
 
 提取结果已通过规范图、根摘要和全部可达类型摘要校验；仅对历史 surface 事件允许源码原有的可选 `surfaceOp`。仓库内检查从前驱重建每个 tag，核对 before/after、快照覆盖和双语机器声明。
 
-```sh
-pnpm run verify-persistence-releases
-```
 
 <a id="dev-note"></a>
 ## 开发备注

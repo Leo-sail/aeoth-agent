@@ -20,4 +20,4 @@ Runtime plugin creation and bounded extension execution. This page indexes the p
 
 ## Development
 
-Build the full composition with `pnpm run build:official`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).
+Build the full composition with `pnpm run build`; packaging is owned by [apps/desktop](../../apps/desktop/README.md).
