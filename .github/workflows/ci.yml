@@ -35,8 +35,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build the Host face of the workspace libraries
-        run: pnpm run build:lib:host
+      # Both faces: the typecheck reads the Host declarations, and the built-package
+      # invariants probe each package's compiled `lib/invariant.js`, client packages included.
+      - name: Build the workspace libraries
+        run: pnpm run build:lib
 
       - name: Bilingual pairing
         run: pnpm run verify-translation-pairing
