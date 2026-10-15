@@ -76,15 +76,15 @@ pnpm run package:desktop:mac:arm64:unsigned
 ## 目录结构
 
 ```
-apps/desktop/          Electron 壳、原生窗口、更新流程、打包资源
-apps/desktop-host/     Electron 应用持有的私有 Node Host 进程
-packages/desktop/      桌面运行时与渲染器入口包
-packages/bundle/       桌面 Profile 组合
-packages/client/       浏览器侧 UI 插件（对话、工作区、设置等）
-packages/core/         核心服务（会话、存储等）
-packages/api/          Host 侧 Remote API 控制器
-packages/host/         本地传输和静态资源服务
-docs/                  架构和子系统文档
+apps/desktop/          Electron shell, native windows, update flow, packaged resources
+apps/desktop-host/     Private Node host process owned by the Electron app
+packages/desktop/      Desktop runtime and renderer entry packages
+packages/bundle/       Desktop profile composition
+packages/client/       Browser-side UI plugins (chat, workspace, settings, etc.)
+packages/core/         Core services (session, storage, etc.)
+packages/api/          Host-side Remote API controllers
+packages/host/         Local transport and static asset serving
+docs/                  Architecture and subsystem documentation
 ```
 
 ---

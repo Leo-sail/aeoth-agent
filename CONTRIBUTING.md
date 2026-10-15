@@ -1,5 +1,7 @@
 # Contributing
 
+English | [中文](CONTRIBUTING.zh.md)
+
 This private Aeoth distribution retains the runtime and build toolchain but intentionally excludes automated tests and test-only assets.
 
 1. Keep changes scoped to the current product and preserve third-party licenses and protocol compatibility.

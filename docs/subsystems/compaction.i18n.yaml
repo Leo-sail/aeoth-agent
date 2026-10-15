@@ -3,11 +3,11 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/subsystems/compaction.md
 /compaction:
-  en: 7eb1d2d84fb85447
-  zh: 1927119f75c0dd45
+  en: e17b8d144e1ee6f5
+  zh: 24cdaf62fbdafc5c
 /compaction/the-compaction-session-events:
-  en: e75ae617952aa929
-  zh: a0e5780f46dff510
+  en: 56dc23317a205f7b
+  zh: 95b933e22046c2f6
 /compaction/image-offload:
   en: 19632b674911826b
   zh: b29ef7ff4ae58e58
