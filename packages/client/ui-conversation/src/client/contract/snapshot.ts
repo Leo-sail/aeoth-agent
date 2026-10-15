@@ -27,7 +27,12 @@ export function conversationPhase(
   session: SessionSnapshot,
   conversation: ConversationSnapshot,
 ): ConversationPhase {
-  const active = conversation.activeTargets.size > 0
+  // A subscribed view (an entry in `activeTargets`) proves a shell view is listening, not
+  // that the Session has content — subscribing activates the target permanently. A blank
+  // Session therefore stays on the centered hero, and only a running turn may dock the
+  // composer before its first turn has landed.
+  const blank = session.blank || session.awaitingFirstTurn
+  const active = (!blank && conversation.activeTargets.size > 0)
     || (!session.blank && !session.awaitingFirstTurn)
     || session.running
   return active ? 'active' : session.promptAttempted ? 'engaging' : 'blank'

@@ -131,7 +131,10 @@ export function ConversationSlotPanel({
 }: ConversationSlotPanelProps) {
   const session = useSession(value => value)
   const conversation = useConversation(value => value)
-  const active = conversation.activeTargets.size > 0
+  // Same rule as the main Conversation panel: a subscribed view proves a listener, not
+  // content, so a blank Session keeps the hero until a turn is running.
+  const contentless = session.blank || session.awaitingFirstTurn
+  const active = (!contentless && conversation.activeTargets.size > 0)
     || (!session.blank && !session.awaitingFirstTurn)
     || session.running
   const shellPhase = active ? 'active' : session.promptAttempted ? 'engaging' : 'blank'
