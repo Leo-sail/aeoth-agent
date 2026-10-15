@@ -106,7 +106,7 @@ docs/                  架构和子系统文档
 
 Bug 反馈和功能建议请提 [GitHub Issues](https://github.com/Leo-sail/aeoth-agent/issues)。
 
-代码贡献请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。简版：一个 PR 一个逻辑变更，Conventional Commits 格式，不在 commit 里放密钥或本机路径。
+代码贡献请先阅读 [CONTRIBUTING.md](CONTRIBUTING.zh.md)。简版：一个 PR 一个逻辑变更，Conventional Commits 格式，不在 commit 里放密钥或本机路径。
 
 ---
 

@@ -4,7 +4,6 @@
  * the `./shared` subpath. Browser-safe: constants and types only. Each route
  * carries the absolute pathname the Host registers beside the
  * document-relative form the browser addresses; see
- * .agents/notes/implemented/architecture/2026-09-14-web-document-relative-app-routes.md.
  */
 
 /** GET route path serving the probed application ids. */

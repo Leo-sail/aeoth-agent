@@ -43,7 +43,6 @@ packages/desktop/frontend/dist/
 .orig
 .worktrees/
 worktrees/
-.agents/worktrees/
 .typert-*/
 native/system/test/bin/
 

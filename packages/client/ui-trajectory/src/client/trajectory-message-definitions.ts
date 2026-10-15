@@ -8,8 +8,7 @@ import { trajectoryNode } from './trajectory-definition-common.ts'
 import { contextForm, contextProducer } from './trajectory-event-projection.ts'
 
 /* jscpd:ignore-start -- Target-owned Definitions intentionally keep their event
- * state machines independent; see ../../../../../.agents/notes/implemented/
- * architecture/2026-08-09-client-conversation-node-assembly.md. */
+state machines independent. */
 interface InboxIdentity {
   readonly id: string
 }

@@ -101,7 +101,7 @@ pnpm --silent run persistence-changes --update 2026-09-11-poc-optional --prose .
 
 The command refreshes the machine declaration, schemas, catalogs, and pairing. Without `--prose`, it preserves the existing explanation. Update refuses the initial baseline, records that another record depends on, and finalized checkpoint records. Outside finalized checkpoints, the tree does not infer review acceptance: preserve accepted history and create a successor instead.
 
-When integration creates competing terminal records, update the unaccepted record against the remaining history, then reassess the resulting diff. An unrelated root's acknowledgement does not need refreshing. The [mechanism decision](../../.agents/notes/implemented/process/2026-09-11-persistence-type-history.md) explains why complete snapshots and per-root predecessors are retained.
+When integration creates competing terminal records, update the unaccepted record against the remaining history, then reassess the resulting diff. An unrelated root's acknowledgement does not need refreshing. The mechanism decision explains why complete snapshots and per-root predecessors are retained.
 
 An explicit `--decision` remains a checked assertion. For an existing property's value-type change, the following deliberately wrong assertion fails before writing:
 

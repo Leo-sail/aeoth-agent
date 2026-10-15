@@ -83,8 +83,7 @@ export type OptionalSessionSeq = SessionSeq | null
  * {@link SessionEvent.ignorable} guard covers vocabulary growth instead. When
  * in doubt, bump: a near-identity upgrade step is almost free, a missed bump
  * makes older runtimes read new logs wrong silently. The released migration,
- * immutable prior-generation, and current fast-path rules are recorded in
- * `.agents/notes/implemented/architecture/2026-08-31-released-session-format-migrations.md`.
+ * immutable prior-generation, and current fast-path rules are enforced here.
  */
 export const SESSION_FORMAT_VERSION = 4
 

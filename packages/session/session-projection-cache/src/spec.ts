@@ -84,7 +84,6 @@ export type CheckpointRecord = z.infer<typeof checkpointRecord>
  * checkpoint rewrite. Records without `formatVersion` remain unusable as fold
  * shortcuts because they cannot prove which Session event semantics produced
  * their rows; the per-record version map and disposition live in the read-compat Agent Note
- * (.agents/notes/implemented/architecture/2026-09-02-projcache-cross-version-read-compat.md).
  * The per-row `ver` guard and the identity match still discard anything the
  * current fold semantics cannot vouch for.
  *

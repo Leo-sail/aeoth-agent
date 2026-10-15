@@ -134,7 +134,6 @@ export function deriveEventMessage(
     // if reintroduced, must be driven by the event `meta` map and a dedicated
     // renderer, keeping this projection a verbatim pass-through. See the
     // deferred design note in
-    // ../../../../.agents/notes/implemented/simplification/2026-07-20-unwrap-injected-content-envelopes.md
     case 'user/message': {
       return event.data
     }

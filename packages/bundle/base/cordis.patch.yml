@@ -431,8 +431,6 @@
     # the inherited history remains eligible for KV Cache reuse. This base row
     # stays one-shot; preset layers may select continuable mode without adding a
     # child-only system-prompt section or tool schema ahead of that history.
-    # See .agents/notes/implemented/feature/2026-08-18-model-selected-subagent-routes.md
-    # and .agents/notes/implemented/architecture/2026-08-10-fork-children-stay-one-shot.md.
     - id: tool-subagent-fork
       name: '@deepseek-ai/dsh-tool-subagent'
       config:

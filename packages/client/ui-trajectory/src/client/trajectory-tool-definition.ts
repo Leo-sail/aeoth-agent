@@ -7,8 +7,7 @@ import type {} from '@deepseek-ai/dsh-tools/types'
 import { trajectoryNode } from './trajectory-definition-common.ts'
 
 /* jscpd:ignore-start -- Target-owned Definitions intentionally keep their event
- * state machines independent; see ../../../../../.agents/notes/implemented/
- * architecture/2026-08-09-client-conversation-node-assembly.md. */
+state machines independent. */
 const MAX_DEPTH = 256
 
 type ToolCallBlock = StartedToolCall | ToolResultNode

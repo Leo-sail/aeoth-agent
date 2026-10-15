@@ -13,8 +13,7 @@ import {
 } from './trajectory-event-projection.ts'
 
 /* jscpd:ignore-start -- Target-owned Definitions intentionally keep their event
- * state machines independent; see ../../../../../.agents/notes/implemented/
- * architecture/2026-08-09-client-conversation-node-assembly.md. */
+state machines independent. */
 interface UsageValue {
   readonly inputTokens: number
   readonly outputTokens: number

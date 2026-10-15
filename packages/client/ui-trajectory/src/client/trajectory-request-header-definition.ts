@@ -15,8 +15,7 @@ export interface TrajectorySystemMessageState extends SystemPromptState {
 }
 
 /* jscpd:ignore-start -- Target-owned Definitions intentionally keep their event
- * state machines independent; see ../../../../../.agents/notes/implemented/
- * architecture/2026-08-09-client-conversation-node-assembly.md. */
+state machines independent. */
 /**
  * Definition retaining each `system/message` surface node for the Trajectory
  * request-header Definition, which reads it through `reader.previous` and

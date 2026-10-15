@@ -479,8 +479,7 @@
 # reads it moves. It owns the context-meter projection units, and that table is
 # process-wide, so preset ownership would make the meter a function of which
 # presets happen to be mounted rather than a per-session fact. Same criterion as
-# `tasks` and `goals`; the reasoning has one home in
-# `.agents/notes/implemented/architecture/2026-08-10-host-plane-ownership-after-presets.md`.
+# `tasks` and `goals`; the reasoning has one home in those rows.
 
 - id: compaction-basic
   disabled: true

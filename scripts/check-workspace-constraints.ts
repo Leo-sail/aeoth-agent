@@ -548,7 +548,6 @@ const runtimeDependencySections = ['dependencies', 'optionalDependencies', 'peer
 /**
  * Prevent an official runtime from requiring an experimental package. The dsh installation's `dependencies`
  * may hold the bundles the launcher's `OPTIONAL_BUNDLES` names: shipped switched off, they are not a requirement
- * ([rationale](../.agents/notes/implemented/process/2026-09-15-shipped-optional-bundles.md)).
  * @param manifests - release, private experimental, and deployment-root manifests.
  * @param optionalBundles - the bundles the installation ships switched off; the launcher's list by default.
  * @returns One error for each forbidden runtime dependency.

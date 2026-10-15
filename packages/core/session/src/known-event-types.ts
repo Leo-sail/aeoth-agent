@@ -16,8 +16,7 @@
  * construction. The persisted `SessionEvent.ignorable` marker is the
  * compatibility mechanism; event-name registration was rejected because
  * it does not classify omission safety and would make reads
- * composition-dependent. The rationale is in
- * `.agents/notes/implemented/architecture/2026-08-30-retain-ignorable-external-session-events.md`.
+ * composition-dependent.
  */
 export const KNOWN_SESSION_EVENT_TYPES: ReadonlySet<string> = new Set([
   'agent-preset/selected',

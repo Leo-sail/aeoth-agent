@@ -14,7 +14,6 @@ kind: "package-group"
 ## 包
 
 - [`@deepseek-ai/dsh-api-account-controller`](account-controller/README.zh.md) — Expose safe account operations over authenticated Remote
-- [`@deepseek-ai/dsh-api-agent-link`](agent-link/README.zh.md) — Native A2A HTTP adapter for Aeoth Agent Link
 - [`@deepseek-ai/dsh-api-gateway`](gateway/README.zh.md) — Typert Remote Host dispatcher and Client API endpoint
 - [`@deepseek-ai/dsh-api-job-controller`](job-controller/README.zh.md) — Job Remote observation stream and the reference-counted client job-output service
 - [`@deepseek-ai/dsh-api-memory-controller`](memory-controller/README.zh.md) — Memory and skill management Remote namespace for Desktop runtime
