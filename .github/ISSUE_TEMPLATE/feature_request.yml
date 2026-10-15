@@ -1,4 +1,5 @@
 name: Feature request
+title: "[Feature] "
 description: Propose a capability or a change in behaviour for the Aeoth Agent desktop application.
 labels: [enhancement]
 body:
