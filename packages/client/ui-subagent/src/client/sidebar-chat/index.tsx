@@ -131,22 +131,16 @@ export function ConversationSlotPanel({
 }: ConversationSlotPanelProps) {
   const session = useSession(value => value)
   const conversation = useConversation(value => value)
-  // Same rule as the main Conversation panel: a subscribed view proves a listener, not
-  // content, so a blank Session keeps the hero until a turn is running.
-  const contentless = session.blank || session.awaitingFirstTurn
-  const active = (!contentless && conversation.activeTargets.size > 0)
+  const active = conversation.activeTargets.size > 0
     || (!session.blank && !session.awaitingFirstTurn)
     || session.running
   const shellPhase = active ? 'active' : session.promptAttempted ? 'engaging' : 'blank'
   const summaryBlank = useSessions(state => state.byId[sessionId]?.blank)
-  // Same resolution as the main Conversation panel: an unlisted Session still knows its
-  // own blank state, and that must win over a list row that has not arrived yet.
-  const blank = summaryBlank ?? session.blank
   const parentAvailabilityPending = session.subagent?.address.mode === 'continuable'
     && session.subagent.parentAvailable === undefined
-  const settling = (shellPhase === 'blank' && session.openState === 'loading' && blank !== true)
+  const settling = (shellPhase === 'blank' && session.openState === 'loading' && summaryBlank !== true)
     || parentAvailabilityPending
-  const hero = shellPhase === 'blank' && (session.openState === 'open' || blank === true)
+  const hero = shellPhase === 'blank' && (session.openState === 'open' || summaryBlank === true)
   const phase = settling ? 'settling' : hero ? 'hero' : 'active'
   return renderFactorySlot('conversation.content', { variant: 'embedded', phase, hero }, {
     slots: { views: FixedChatConversationView },

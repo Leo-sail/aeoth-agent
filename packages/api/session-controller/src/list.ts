@@ -112,12 +112,7 @@ export class ApiSessionList {
       updatedAt: updatedAt(session.header, metadata),
       agentAvailable: this.ctx.agents.get(session.id)?.session === session,
       running: this.ctx.agents.get(session.id)?.status === 'running',
-      // A live Session that has not started a turn is blank. The metadata projection owns
-      // that answer once it exists, but a Session created moments ago already carries its
-      // seed events (`permission/preset`, `sandbox/mode`, `approval/policy`) before the
-      // projection attaches, so `seq === 0` would call it non-blank and dock its composer
-      // instead of leaving it on the centered hero.
-      blank: metadata?.blank ?? !session.ownEvents().some(event => event.type === 'turn/start'),
+      blank: metadata?.blank ?? session.seq === 0,
       ...listFields(session.header),
       ...(projections === undefined ? {} : { projections }),
     }
