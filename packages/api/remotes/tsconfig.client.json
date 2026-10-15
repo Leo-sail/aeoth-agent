@@ -110,9 +110,6 @@
     },
     {
       "path": "../../credentials/deepseek-account"
-    },
-    {
-      "path": "../agent-community/tsconfig.client.json"
     }
   ]
 }

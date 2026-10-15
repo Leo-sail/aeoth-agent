@@ -8,7 +8,6 @@ import commandsRemote from '@deepseek-ai/dsh-commands/remote'
 import accountRemote from '@deepseek-ai/dsh-api-account-controller/remote'
 import settingsControllerRemote from '@deepseek-ai/dsh-api-settings-controller/remote'
 import memoryControllerRemote from '@deepseek-ai/dsh-api-memory-controller/remote'
-import agentCommunityRemote from '@deepseek-ai/dsh-api-agent-community/remote'
 import officeToPdfRemote from '@deepseek-ai/dsh-office-to-pdf/remote'
 import goalsRemote from '@deepseek-ai/dsh-goal/remote'
 import scheduleRemote from '@deepseek-ai/dsh-schedule/remote'
@@ -46,8 +45,6 @@ export type {} from '@deepseek-ai/dsh-user-questions/remote'
 export type {} from '@deepseek-ai/dsh-commands/remote'
 export type {} from '@deepseek-ai/dsh-api-settings-controller/remote'
 export type {} from '@deepseek-ai/dsh-api-memory-controller/remote'
-export type {} from '@deepseek-ai/dsh-api-agent-community/remote'
-export type * from '@deepseek-ai/dsh-api-agent-community/types'
 export type { MemoryCuratorCandidate, MemoryDescribeValue, MemoryMigrationPlan, MemorySkillSummary, MemorySkillValue, MemorySourceView, MemorySourceRequest, MemorySourceResolution, MemorySnapshotView, MemorySearchHitView } from '@deepseek-ai/dsh-api-memory-controller/types'
 export type {} from '@deepseek-ai/dsh-api-account-controller/remote'
 export type {} from '@deepseek-ai/dsh-goal/remote'
@@ -184,7 +181,7 @@ export async function apply(ctx: Context): Promise<() => Promise<void>> {
   const disposers: Array<() => Promise<void>> = []
   try {
     for (const contribution of [
-      productAnalyticsRemote, agentPresetsRemote, commandsRemote, settingsControllerRemote, memoryControllerRemote, agentCommunityRemote, accountRemote, goalsRemote, llmRemote, dynamicRemote, scheduleRemote,
+      productAnalyticsRemote, agentPresetsRemote, commandsRemote, settingsControllerRemote, memoryControllerRemote, accountRemote, goalsRemote, llmRemote, dynamicRemote, scheduleRemote,
       pluginInventoryRemote, pluginManagerRemote, pluginRegistryProbeRemote, messageFeedbackRemote, sessionFeedbackRemote,
       fileUploadsRemote, sessionReferencesRemote,
       permissionPresetsRemote, subagentsRemote, sessionRemote, jobRemote, workspaceRemote, workspaceFilesRemote, terminalRemote,
