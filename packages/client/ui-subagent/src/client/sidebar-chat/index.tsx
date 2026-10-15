@@ -136,11 +136,14 @@ export function ConversationSlotPanel({
     || session.running
   const shellPhase = active ? 'active' : session.promptAttempted ? 'engaging' : 'blank'
   const summaryBlank = useSessions(state => state.byId[sessionId]?.blank)
+  // Same resolution as the main Conversation panel: an unlisted Session still knows its
+  // own blank state, and that must win over a list row that has not arrived yet.
+  const blank = summaryBlank ?? session.blank
   const parentAvailabilityPending = session.subagent?.address.mode === 'continuable'
     && session.subagent.parentAvailable === undefined
-  const settling = (shellPhase === 'blank' && session.openState === 'loading' && summaryBlank !== true)
+  const settling = (shellPhase === 'blank' && session.openState === 'loading' && blank !== true)
     || parentAvailabilityPending
-  const hero = shellPhase === 'blank' && (session.openState === 'open' || summaryBlank === true)
+  const hero = shellPhase === 'blank' && (session.openState === 'open' || blank === true)
   const phase = settling ? 'settling' : hero ? 'hero' : 'active'
   return renderFactorySlot('conversation.content', { variant: 'embedded', phase, hero }, {
     slots: { views: FixedChatConversationView },

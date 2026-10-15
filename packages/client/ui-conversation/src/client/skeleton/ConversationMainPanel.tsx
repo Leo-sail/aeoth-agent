@@ -19,27 +19,33 @@ export function ConversationMainPanel(props: ConversationSlotProps) {
     : conversationPhase(session, conversation)
   const openState = session?.openState
   const summaryBlank = useSessions(s => sessionId === undefined ? undefined : s.byId[sessionId]?.blank)
+  // The list row trails a Session's own snapshot: a Session that has not produced a turn
+  // yet is not listed, so `summaryBlank` stays undefined while the Session already reports
+  // `blank`. Resolving the two here keeps a brand-new Session off `settling` and on the
+  // hero, instead of leaving the composer suspended between the centered and docked
+  // layouts until the list catches up (which, for an empty Session, may not happen at all).
+  const blank = summaryBlank ?? session?.blank
 
   // While a session is still replaying (loading + blank) the hero/docked
   // choice is unknowable — render the composer hidden instead of flashing
   // the centered hero and snapping to the docked bar (or vice versa).
-  // Exemption: a session the list summary already proves blank can only
-  // land on the hero, so hiding would blank the column for the whole
-  // history round-trip (the startup auto-selection flash) for nothing.
-  // The exemption is deliberately open-state-wide, not loading-only: a
-  // summary-blank session is the hero before its open starts (`cold`) and
-  // after one fails (`error`) for the same reason — there is no history.
+  // Exemption: a session proven blank can only land on the hero, so hiding
+  // would blank the column for the whole history round-trip (the startup
+  // auto-selection flash) for nothing. The exemption is deliberately
+  // open-state-wide, not loading-only: a blank session is the hero before
+  // its open starts (`cold`) and after one fails (`error`) for the same
+  // reason — there is no history.
   // A restored continuable subagent waits for a Host summary to establish
   // parent availability. This keeps the composer
   // hidden instead of briefly rendering the parent-offline takeover.
   const parentAvailabilityPending = session?.subagent?.address.mode === 'continuable'
     && session.subagent.parentAvailable === undefined
   const settling = sessionId !== undefined && (
-    (shellPhase === 'blank' && openState === 'loading' && summaryBlank !== true)
+    (shellPhase === 'blank' && openState === 'loading' && blank !== true)
     || parentAvailabilityPending
   )
   const hero = sessionId === undefined
-    || (shellPhase === 'blank' && (openState === 'open' || summaryBlank === true))
+    || (shellPhase === 'blank' && (openState === 'open' || blank === true))
   const phase = settling ? 'settling' : hero ? 'hero' : 'active'
 
   return (
