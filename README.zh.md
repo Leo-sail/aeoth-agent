@@ -6,7 +6,7 @@
 
 项目完全开源，欢迎通过 GitHub Issues 和 Discussions 提交反馈和 Bug。
 
-**创作者：** leochang — leochang210@gmail.com
+**创作者：** [@Leo-sail](https://github.com/Leo-sail)
 
 ---
 

@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a capability or a change in behaviour for the Aeoth Agent desktop application.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do, and what gets in the way today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: What should happen instead. Sketches or examples are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Existing workarounds, other products, or approaches you rejected.
+    validations:
+      required: false
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope notes
+      description: |
+        Which layer does this belong to — the Electron shell, the private Node host, a bundled
+        plugin, or the packaging and release toolchain? Anything that must stay out of scope?
+    validations:
+      required: false

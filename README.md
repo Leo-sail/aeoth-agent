@@ -6,7 +6,7 @@ Aeoth is a desktop AI agent built on top of [DeepSeek Harness (dsh)](https://git
 
 The project is open source. Contributions, feedback, and bug reports are welcome via GitHub Issues and Discussions.
 
-**Creator:** leochang — leochang210@gmail.com
+**Creator:** [@Leo-sail](https://github.com/Leo-sail)
 
 ---
 

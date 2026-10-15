@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-gates:
+    # macOS arm64 matches the platform the packaged Desktop application targets, so the
+    # optional native platform packages resolve exactly as they do for a release build.
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the Host face of the workspace libraries
+        run: pnpm run build:lib:host
+
+      - name: Bilingual pairing
+        run: pnpm run verify-translation-pairing
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Documentation code blocks
+        run: pnpm run doc-typecheck:contracts-ready
+
+      - name: Workspace constraints
+        run: pnpm run constraints
+
+      - name: tsconfig aliases
+        run: pnpm run verify-tsconfig-paths
+
+      - name: Cordis catalog
+        run: pnpm run verify-cordis-catalog
+
+      - name: Cordis API
+        run: pnpm run verify-cordis-api
+
+      - name: Cordis inspect catalog
+        run: pnpm run verify-cordis-inspect-catalog
+
+      - name: Scoped events
+        run: pnpm run verify-scoped-events
+
+      - name: Session format catalog
+        run: pnpm run verify-session-format-catalog
+
+      - name: Built package invariants
+        run: pnpm run verify-built-package-invariants
+
+      - name: Workflow guest
+        run: pnpm run verify-workflow-guest

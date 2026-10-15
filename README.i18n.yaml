@@ -3,8 +3,8 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write README.md
 /aeoth-agent:
-  en: ef463a5157d0694e
-  zh: 4d9768c95022b1de
+  en: ace24148431881de
+  zh: 28bdb0fc6effc6b6
 /aeoth-agent/what-it-does:
   en: 0ff68c888b2a1971
   zh: 3b0a58185a1717e6
