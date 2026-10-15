@@ -64,7 +64,7 @@ Three mandatory points always write: session creation persists the seed-derived 
 
 ### Removing a session record
 
-`remove(id)` deletes the stored record of a session whose log was deleted, so no fold shortcut (prompt text included) outlives it. The caller disposes the live session first; its detach checkpoint is enqueued on the same domain write chain ahead of the delete, so it cannot re-create the record. Aeoth Agent Community calls it when an Agent, a direct chat, or a group chat is permanently deleted.
+`remove(id)` deletes the stored record of a session whose log was deleted, so no fold shortcut (prompt text included) outlives it. The caller disposes the live session first; its detach checkpoint is enqueued on the same domain write chain ahead of the delete, so it cannot re-create the record.
 
 ### What the cache guarantees
 

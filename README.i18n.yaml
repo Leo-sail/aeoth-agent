@@ -1,21 +1,31 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write README.md
 /aeoth-agent:
-  en: 3ed22427818e99d4
-  zh: b0cc15cb00fab17c
-/aeoth-agent/developer-preview:
-  en: 926903ad9f4ec85e
-  zh: 79d0b1f10d8a230d
-/aeoth-agent/run-from-source:
-  en: 3f0f3deb1fbc6607
-  zh: 423226f4648a926c
-/aeoth-agent/desktop-distribution:
-  en: af342e4a73e1b578
-  zh: db6f37d1ee475f7b
+  en: ef463a5157d0694e
+  zh: 4d9768c95022b1de
+/aeoth-agent/what-it-does:
+  en: 0ff68c888b2a1971
+  zh: 3b0a58185a1717e6
+/aeoth-agent/quick-start-install-the-app:
+  en: 8022ce185a5ab6c8
+  zh: c96a16a48c89fe57
+/aeoth-agent/first-time-setup:
+  en: 60627a2340d75767
+  zh: bd6db5f2351fbd8e
+/aeoth-agent/build-from-source:
+  en: b3e8cc70703cf9e2
+  zh: bff09adf7a90334a
 /aeoth-agent/project-layout:
-  en: 8815770792f37c14
-  zh: 95240530d6a2a573
-/aeoth-agent/privacy-and-provenance:
-  en: 18136cc1cd7f842b
-  zh: 8de97717928e8171
+  en: 62101c89b8ee5ee4
+  zh: 98cabc994f1cc32c
+/aeoth-agent/baseline-and-provenance:
+  en: e2e02ab2850bab26
+  zh: 97b9930f9d7bc28d
+/aeoth-agent/contributing:
+  en: e95e8a4932e99c7a
+  zh: 0eab3e1184ff9668
+/aeoth-agent/license:
+  en: b73ffd31f2acc2ea
+  zh: d7bce80d14462218

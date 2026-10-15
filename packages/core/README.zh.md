@@ -14,7 +14,6 @@ Agent 执行、Session 事件、工具与提示词组装。 本页索引太易�
 ## 包
 
 - [`@deepseek-ai/dsh-agent`](agent/README.zh.md) — Agent interface, registry, initiator scope, and event vocabulary for the Aeoth Agent
-- [`@deepseek-ai/dsh-agent-community`](agent-community/README.zh.md) — Native Bot Mode community, durable rooms, bot runs, and live control
 - [`@deepseek-ai/dsh-agent-default-model`](agent-default-model/README.zh.md) — Default model selection shared by Agent entry points
 - [`@deepseek-ai/dsh-agent-link`](agent-link/README.zh.md) — Native bidirectional A2A client, task registry, and Agent Card contract
 - [`@deepseek-ai/dsh-agent-loop`](agent-loop/README.zh.md) — The concrete agent loop plugin for the Aeoth Agent

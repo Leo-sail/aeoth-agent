@@ -44,7 +44,7 @@ const BATCHES: string[][] = [
    'packages/client/product-analytics', 'packages/client/resources', 'packages/client/shortcuts',
    'packages/client/store', 'packages/client/ui-primitives', 'packages/client/ui-slots'],
   // Batch 13: client UI packages part 1
-  ['packages/client/ui-agent-community', 'packages/client/ui-agent-preset', 'packages/client/ui-approval',
+  ['packages/client/ui-agent-preset', 'packages/client/ui-approval',
    'packages/client/ui-attachment', 'packages/client/ui-brand-official', 'packages/client/ui-chat',
    'packages/client/ui-commands', 'packages/client/ui-conversation', 'packages/client/ui-deliverables',
    'packages/client/ui-directory-picker-browse', 'packages/client/ui-directory-picker-native'],

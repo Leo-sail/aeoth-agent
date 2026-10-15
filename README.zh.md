@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-太易是一款基于 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) 的开源桌面 AI Agent 应用。它把 dsh 运行时封装进一个 Electron 桌面应用，加入了 Agent 直聊和多 Agent 协作团队功能，打包成可以直接安装的 macOS 应用。
+太易是一款基于 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) 的开源桌面 AI Agent 应用。它把 dsh 运行时封装进一个 Electron 桌面应用，打包成可以直接安装的 macOS 应用。
 
 项目完全开源，欢迎通过 GitHub Issues 和 Discussions 提交反馈和 Bug。
 
@@ -14,9 +14,7 @@
 
 打开太易，你得到的是一个完整的 dsh 运行时跑在本地。它在 dsh 基础上额外提供：
 
-- **Agent 面板** — 创建有名字的 Bot，配置自定义系统提示词，选择任意已配置的模型，与 Bot 保持持续对话。每个 Bot 的聊天记录跨会话保留。
-- **团队面板** — 把多个 Bot 放进一个群聊房间，指定一个 Leader，发送任务后 Leader 会自动把子任务分配给其他成员，结果汇聚到同一个对话线程。可以暂停、中断或重试任意一步。
-- **桌面壳** — 原生窗口管理、自动更新、本地 Profile 隔离、托盘图标。除了模型调用，数据不出本机。
+- **桌面壳** — 原生窗口管理、本地 Profile 隔离、托盘图标。除了模型调用，数据不出本机。
 
 其他功能——Agent 执行引擎、LLM 路由、工具调用、会话管理、Skills、MCP 服务支持——全部直接继承自 dsh 核心，太易没有替换或重写这些层。
 
@@ -46,10 +44,6 @@
 3. 选择一个默认模型。
 4. 关闭设置，可以开始用了。
 
-打开 Agent 面板：点击左侧边栏的机器人图标，点 **+** 创建第一个 Bot，填写名称、可选的系统提示词，选择模型，聊天房间会自动打开。
-
-使用协作团队：切换到同一面板的「团队」标签，创建群聊房间，添加成员 Bot，指定 Leader，发送任务即可。
-
 ---
 
 ## 从源码构建
@@ -58,7 +52,7 @@
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm run build:official
+pnpm run build
 pnpm run start:desktop
 ```
 
@@ -75,7 +69,7 @@ cp apps/desktop/.env.macos.example apps/desktop/.env.macos
 pnpm run package:desktop:mac:arm64:unsigned
 ```
 
-产物输出到 `release/` 目录下对应版本号的子目录。
+产物输出到 `apps/desktop/.desktop-build/targets/mac-arm64/unsigned-artifacts/`。
 
 ---
 
@@ -86,11 +80,10 @@ apps/desktop/          Electron 壳、原生窗口、更新流程、打包资源
 apps/desktop-host/     Electron 应用持有的私有 Node Host 进程
 packages/desktop/      桌面运行时与渲染器入口包
 packages/bundle/       桌面 Profile 组合
-packages/client/       浏览器侧 UI 插件（Agent 面板、团队面板、设置等）
-packages/core/         核心服务（agent community、会话、存储等）
+packages/client/       浏览器侧 UI 插件（对话、工作区、设置等）
+packages/core/         核心服务（会话、存储等）
 packages/api/          Host 侧 Remote API 控制器
 packages/host/         本地传输和静态资源服务
-migrations/            持久化状态迁移
 docs/                  架构和子系统文档
 ```
 
@@ -101,7 +94,7 @@ docs/                  架构和子系统文档
 太易基于 dsh 的一个固定快照构建：
 
 - **基线：** `dsh-v0.2.0-rc.2`，commit `639ed015397290b3745d163aafe02ffee4aa3f84`
-- **产品版本：** `0.1.0-preview.3`
+- **产品版本：** `0.1.0-preview.4`
 
 按上游许可，本仓库不包含自动化测试套件、测试夹具、基准数据和用户凭据。
 

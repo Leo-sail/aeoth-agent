@@ -23,7 +23,6 @@ kind: "package-group"
 - [`@deepseek-ai/dsh-client-resources`](resources/README.zh.md) — Unified client resource model: protocol-registered providers turn URL addresses into live values, consumed through the useResource global standard hook
 - [`@deepseek-ai/dsh-client-shortcuts`](shortcuts/README.zh.md) — Application keyboard command registry and physical-key routing
 - [`@deepseek-ai/dsh-client-store`](store/README.zh.md) — React-free observable and snapshot-store contracts with the shared Zustand/Immer engine
-- [`@deepseek-ai/dsh-client-ui-agent-community`](ui-agent-community/README.zh.md) — Native Bot Mode and Agent Community Web/Desktop surface
 - [`@deepseek-ai/dsh-client-ui-agent-preset`](ui-agent-preset/README.zh.md) — Agent-preset surfaces: the default for later sessions, this session's seat, and the composition editor
 - [`@deepseek-ai/dsh-client-ui-approval`](ui-approval/README.zh.md) — Approval composer takeover over the scoped Remote Event waterfall
 - [`@deepseek-ai/dsh-client-ui-attachment`](ui-attachment/README.zh.md) — Dynamic attachment presentation plugin for conversation input, message-image, and trajectory image slots

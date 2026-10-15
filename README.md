@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-Aeoth is a desktop AI agent built on top of [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness). It wraps the harness runtime into a standalone Electron application, adds an Agent community panel for direct Bot chat and multi-agent team collaboration, and ships everything as a single installable app for macOS.
+Aeoth is a desktop AI agent built on top of [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness). It wraps the harness runtime into a standalone Electron application and ships everything as a single installable app for macOS.
 
 The project is open source. Contributions, feedback, and bug reports are welcome via GitHub Issues and Discussions.
 
@@ -12,11 +12,9 @@ The project is open source. Contributions, feedback, and bug reports are welcome
 
 ## What it does
 
-When you open Aeoth, you get a full dsh runtime running locally. The main things it adds on top of plain dsh:
+When you open Aeoth, you get a full dsh runtime running locally. The main thing it adds on top of plain dsh:
 
-- **Agent panel** — create named Bots with custom system prompts, pick any model you have configured, and chat with them in persistent rooms. Each Bot keeps its own conversation history across sessions.
-- **Team panel** — put multiple Bots in a group room. Assign one as Leader and send a task; the Leader routes subtasks to the other members and the results come back in a single thread. You can pause, interrupt, or retry any run step.
-- **Desktop shell** — native window management, auto-update, local profile isolation, and a tray icon. Nothing leaves your machine unless the model call does.
+- **Desktop shell** — native window management, local profile isolation, and a tray icon. Nothing leaves your machine unless the model call does.
 
 Everything else — the Agent execution engine, LLM routing, tool calling, session management, skills, MCP server support — is inherited directly from the dsh core. Aeoth does not replace or reinvent those layers.
 
@@ -46,10 +44,6 @@ On first launch, Aeoth creates a local profile under `~/.aeoth/`. Nothing is con
 3. Select a default model.
 4. Close Settings. You're ready.
 
-To open the Agent panel, click the robot icon in the left sidebar. Click **+** to create your first Bot — give it a name, optionally a system prompt, and pick a model. A chat room opens automatically.
-
-To set up a Team, switch to the Team tab in the same panel. Create a group room, add the Bots you want, designate a Leader, and send a task.
-
 ---
 
 ## Build from source
@@ -58,7 +52,7 @@ Requirements: Node.js `^22.19.0` or `>=24.0.0`, pnpm `11.7.0`, and Xcode Command
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm run build:official
+pnpm run build
 pnpm run start:desktop
 ```
 
@@ -75,7 +69,7 @@ cp apps/desktop/.env.macos.example apps/desktop/.env.macos
 pnpm run package:desktop:mac:arm64:unsigned
 ```
 
-The output lands in `release/` under the current version directory.
+The output lands in `apps/desktop/.desktop-build/targets/mac-arm64/unsigned-artifacts/`.
 
 ---
 
@@ -86,11 +80,10 @@ apps/desktop/          Electron shell, native windows, update flow, packaged res
 apps/desktop-host/     Private Node host process owned by the Electron app
 packages/desktop/      Desktop runtime and renderer entry packages
 packages/bundle/       Desktop profile composition
-packages/client/       Browser-side UI plugins (Agent panel, Team panel, settings, etc.)
-packages/core/         Core services (agent community, session, storage, etc.)
+packages/client/       Browser-side UI plugins (chat, workspace, settings, etc.)
+packages/core/         Core services (session, storage, etc.)
 packages/api/          Host-side Remote API controllers
 packages/host/         Local transport and static asset serving
-migrations/            Durable state migrations
 docs/                  Architecture and subsystem documentation
 ```
 
@@ -101,7 +94,7 @@ docs/                  Architecture and subsystem documentation
 Aeoth is built on a fixed snapshot of dsh:
 
 - **Baseline:** `dsh-v0.2.0-rc.2` at commit `639ed015397290b3745d163aafe02ffee4aa3f84`
-- **Product version:** `0.1.0-preview.3`
+- **Product version:** `0.1.0-preview.4`
 
 This repository does not contain automated test suites, test fixtures, benchmark data, or user credentials from the upstream — those were removed as permitted by the upstream license before distribution.
 

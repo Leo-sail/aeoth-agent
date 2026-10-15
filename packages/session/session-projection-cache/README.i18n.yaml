@@ -1,6 +1,7 @@
 # Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
-# Keep both languages synchronized when updating this record.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/session/session-projection-cache/README.md
 /:
   en: f48ff92d115557f0
   zh: f48ff92d115557f0
@@ -28,6 +29,9 @@
 /deepseek-ai-dsh-session-projection-cache/use-this-package/reading-cached-values:
   en: e8dc676fbfe97c5b
   zh: 686837459289fd41
+/deepseek-ai-dsh-session-projection-cache/use-this-package/removing-a-session-record:
+  en: 21562c821504f4bd
+  zh: d749992bde835865
 /deepseek-ai-dsh-session-projection-cache/use-this-package/what-the-cache-guarantees:
   en: 6e4878de28ea113e
   zh: 6f940a2220585b5e

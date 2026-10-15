@@ -23,7 +23,6 @@ Desktop renderer services, controls and feature panels. This page indexes the pa
 - [`@deepseek-ai/dsh-client-resources`](resources/README.md) — Unified client resource model: protocol-registered providers turn URL addresses into live values, consumed through the useResource global standard hook
 - [`@deepseek-ai/dsh-client-shortcuts`](shortcuts/README.md) — Application keyboard command registry and physical-key routing
 - [`@deepseek-ai/dsh-client-store`](store/README.md) — React-free observable and snapshot-store contracts with the shared Zustand/Immer engine
-- [`@deepseek-ai/dsh-client-ui-agent-community`](ui-agent-community/README.md) — Native Bot Mode and Agent Community Web/Desktop surface
 - [`@deepseek-ai/dsh-client-ui-agent-preset`](ui-agent-preset/README.md) — Agent-preset surfaces: the default for later sessions, this session's seat, and the composition editor
 - [`@deepseek-ai/dsh-client-ui-approval`](ui-approval/README.md) — Approval composer takeover over the scoped Remote Event waterfall
 - [`@deepseek-ai/dsh-client-ui-attachment`](ui-attachment/README.md) — Dynamic attachment presentation plugin for conversation input, message-image, and trajectory image slots
